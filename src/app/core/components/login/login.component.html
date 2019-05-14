@@ -1,0 +1,14 @@
+<div class="login-component">
+  <form class="login-form" #loginForm="ngForm" (submit)="Login(loginForm)">
+    <mat-form-field class="full-width">
+      <input matInput type="text" name="username" #username="ngModel" ngModel
+      placeholder="Enter your username" >
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Enter your password" name="password" #password="ngModel" ngModel
+       [type]="hide ? 'password' : 'text'">
+      <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit">Login</button>
+  </form>
+</div>

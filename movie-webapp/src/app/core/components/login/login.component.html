@@ -1,14 +1,39 @@
+<ng4-loading-spinner *ngIf="isLoading$ | async" [timeout]="99999" [loadingText]="'Please wait...'" [zIndex]="9999">
+</ng4-loading-spinner>
 <div class="login-component">
-  <form class="login-form" #loginForm="ngForm" (submit)="Login(loginForm)">
-    <mat-form-field class="full-width">
-      <input matInput type="text" name="username" #username="ngModel" ngModel
-      placeholder="Enter your username" >
-    </mat-form-field>
-    <mat-form-field class="full-width">
-      <input matInput placeholder="Enter your password" name="password" #password="ngModel" ngModel
-       [type]="hide ? 'password' : 'text'">
-      <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-    </mat-form-field>
-    <button mat-raised-button color="primary" type="submit">Login</button>
-  </form>
+  <div class="login-top-section">
+    <div class="login-top-section-information">
+      <h3>A site for managing your movies, created by Sahar Ohad</h3>
+    </div>
+  </div>
+  <div class="login-middle-section">
+    <form class="login-form" #loginForm="ngForm" (submit)="Login(loginForm)">
+      <mat-form-field class="full-width">
+        <input matInput type="text" name="username" #username="ngModel" ngModel>
+        <mat-placeholder class="login-details-placeholder">Enter your username</mat-placeholder>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input matInput  name="password" #password="ngModel" ngModel
+          [type]="hide ? 'password' : 'text'">
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-placeholder class="login-details-placeholder">Enter your password</mat-placeholder>
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit">Login</button>
+    </form>
+  </div>
+  <div class="login-bottom-section">
+    <div class="login-footer-section-information">
+      <div class="row">
+        <div class="col-sm-4 ">
+            <a target="_blank" href="https://www.linkedin.com/in/ohad-sahar-b2a7a9129/"><i  class="fab fa-linkedin"></i></a>
+        </div>
+        <div class="col-sm-4 ">
+            <a target="_blank" href="https://www.facebook.com/profile.php?id=100000113828000&ref=bookmarks"><i class="fab fa-facebook-square"></i></a>
+        </div>
+        <div class="col-sm-4 ">
+            <a target="_blank" href="" ><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

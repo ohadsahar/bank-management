@@ -6,6 +6,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './core/components/login/login.component';
 import { AngularMaterialModule } from './angular-material.module';
 import { FormsModule } from '@angular/forms';
+import { StoreModule } from '@ngrx/store';
+import { Reducers } from './app.reducer';
+import { DeviceDetectorModule } from 'ngx-device-detector';
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 
 @NgModule({
@@ -20,8 +24,12 @@ import { FormsModule } from '@angular/forms';
     BrowserAnimationsModule,
     FormsModule,
     AngularMaterialModule,
+    StoreModule.forRoot(Reducers),
+    DeviceDetectorModule.forRoot(),
+    Ng4LoadingSpinnerModule.forRoot()
   ],
   providers: [],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }

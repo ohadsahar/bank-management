@@ -5,10 +5,10 @@ import { MatSnackBar } from '@angular/material';
 export class MessageService {
   constructor(private snackBar: MatSnackBar) {}
 
-  loginSuccessMessage(message: string, action: string) {
+  successMessage(message: string, action: string) {
     this.snackBar.open(message, action, { duration: 3000 });
   }
-  loginFailedMessage(message: string, action: string) {
+  failedMessage(message: string, action: string) {
     this.snackBar.open(message, action, { duration: 3000 });
   }
 }

@@ -1,6 +1,6 @@
 import { ActionReducerMap, createFeatureSelector, createSelector } from '@ngrx/store';
-import * as loginReducer from './shared/reducers/login.reducer';
-import * as deviceReducer from './shared/reducers/device-size.reducer';
+import * as loginReducer from './store/reducers/login.reducer';
+import * as deviceReducer from './store/reducers/device-size.reducer';
 
 export interface State {
 

@@ -1,0 +1,21 @@
+table {
+  width: 100%;
+  direction: rtl;
+
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+td, th {
+  width: 10%;
+  text-align: right !important;
+  padding: 10px;
+}
+
+td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type, th.mat-header-cell:first-of-type {
+
+  padding: 15px;
+}

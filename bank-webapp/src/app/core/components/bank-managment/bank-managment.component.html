@@ -1,0 +1,55 @@
+<mat-form-field>
+  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+</mat-form-field>
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+
+  <!-- Position Column -->
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef> מספר </th>
+    <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+  </ng-container>
+  <!-- Name Column -->
+  <ng-container matColumnDef="cardName">
+    <th mat-header-cell *matHeaderCellDef> שם הכרטיס </th>
+    <td mat-cell *matCellDef="let element"> {{element.cardName}} </td>
+  </ng-container>
+  <!-- Name Column -->
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> שם המוצר </th>
+    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+  </ng-container>
+  <!-- Type of product  Column -->
+  <ng-container matColumnDef="type">
+    <th mat-header-cell *matHeaderCellDef> סוג מוצר </th>
+    <td mat-cell *matCellDef="let element"> {{element.typeProduct}} </td>
+  </ng-container>
+
+  <!-- Total price Column -->
+  <ng-container matColumnDef="price">
+    <th mat-header-cell *matHeaderCellDef> מחיר כללי </th>
+    <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+  </ng-container>
+
+  <!-- Payments Column -->
+  <ng-container matColumnDef="numberofpayments">
+    <th mat-header-cell *matHeaderCellDef> מספר תשלומים </th>
+    <td mat-cell *matCellDef="let element"> {{element.numberofpayments}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="eachMonth">
+    <th mat-header-cell *matHeaderCellDef> כל חודש </th>
+    <td mat-cell *matCellDef="let element"> {{element.eachMonth}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="leftPayments">
+    <th mat-header-cell *matHeaderCellDef> תשלומים שנשארו </th>
+    <td mat-cell *matCellDef="let element"> {{element.leftPayments}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

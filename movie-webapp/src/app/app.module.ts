@@ -10,12 +10,14 @@ import { StoreModule } from '@ngrx/store';
 import { Reducers } from './app.reducer';
 import { DeviceDetectorModule } from 'ngx-device-detector';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
+import { MoviesManagmentComponent } from './core/components/movies-managment/movies-managment.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    MoviesManagmentComponent
 
   ],
   imports: [

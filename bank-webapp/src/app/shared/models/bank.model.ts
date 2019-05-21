@@ -1,10 +1,11 @@
 export class BankValues {
 
-  constructor(public cardName: string,
+  constructor(public _id: string, public cardName: string,
               public name: string,
               public typeProduct: string,
               public price: number,
-              public numberofpayments: string,
-              public eachMonth: string,
-              public leftPayments: string) {}
+              public numberofpayments: number,
+              public eachMonth: number,
+              public leftPayments: number,
+              public purchaseDate: string) {}
 }

@@ -1,7 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const transactionService = require('../services/transcation.service');
-
+const schedule = require('node-schedule');
+ 
+schedule.scheduleJob('0 0 * * *', function(){
+  transactionService.updatePurchaseDate();
+});
 async function registerNewTransaction(req, res) {
    
     try {
@@ -34,7 +38,25 @@ async function getAllTranscations(req,res) {
     }
 }
 
+async function deleteTranscation(req,res) {
+
+    await transactionService.deleteX(req.params.transcationId);
+    try {
+        res.status(200).json({
+            message: req.params.transcationIdDelete,
+            success: true
+        })
+    } catch (error) {
+        res.status(400).json({
+            message: error,
+            success: false,
+        })
+    }
+  
+    
+}
 
 router.post('/transcation', registerNewTransaction);
 router.get('', getAllTranscations);
+router.delete('/:transcationId', deleteTranscation);
 module.exports = router;

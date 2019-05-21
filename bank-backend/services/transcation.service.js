@@ -1,8 +1,8 @@
 const transactionModel = require('../models/transaction');
-
+const moment = require('moment');
 async function register(transcationData) {
     
-    const transactionData = new transactionModel({
+    const transcationToCreate = new transactionModel({
 
         cardName: transcationData.cardName,
         name: transcationData.name,
@@ -10,19 +10,29 @@ async function register(transcationData) {
         price: transcationData.price,
         numberofpayments: transcationData.numberofpayments,
         eachMonth: transcationData.eachMonth,
-        leftPayments: transcationData.leftPayments
+        leftPayments: transcationData.leftPayments,
+        purchaseDate: transcationData.purchaseDate
     })
-    await transactionData.save();
-    return {transactionSaved: transactionData}
+    await transcationToCreate.save();
+    return {transactionSaved: transcationToCreate}
 
 }
-
 async function get() {
 
     const fetchedTranscations = await transactionModel.find();
     return {foundTranscations: fetchedTranscations};
 }
 
+async function updatePurchaseDate() {
+
+    console.log('im here');
+
+}
+
+async function deleteX(transcationId) {
+
+    await transactionModel.findOneAndDelete({_id: transcationId});
+}
 
 
 
@@ -30,5 +40,7 @@ async function get() {
 module.exports = {
 
     register,
-    get
+    get,
+    deleteX,
+    updatePurchaseDate
 }

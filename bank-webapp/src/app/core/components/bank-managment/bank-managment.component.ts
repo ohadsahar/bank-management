@@ -1,11 +1,11 @@
-import { Component, ViewEncapsulation, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Bank } from '../../../shared/models/bank-data.model';
 import { MatTableDataSource, Sort, MatPaginator, MatSort } from '@angular/material';
 import { BankValues } from '../../../shared/models/bank.model';
 import { BankTranscationService } from '../../services/bank-transcation.service';
 import { MessageService } from '../../services/message.service';
 import * as moment from 'moment';
-
+import { Chart } from 'chart.js';
 
 
 
@@ -25,6 +25,7 @@ export class BankManagmentComponent implements OnInit {
   public allTranscations: Bank[];
   public totalExpenses: number;
   public monthExpenses: number;
+  public chart: any;
   public editEnable: boolean;
   public editoptionsable: any = {};
   public numberOfPayments: number;
@@ -41,13 +42,7 @@ export class BankManagmentComponent implements OnInit {
 
 
   displayedColumns: string[] = [
-    'cardName',
-    'name',
-    'type',
-    'price',
-    'numberofpayments',
-    'eachMonth',
-    'leftPayments'
+    'id', 'cardName', 'name', 'type', 'price', 'numberofpayments', 'eachMonth', 'leftPayments', 'purchaseDate'
   ];
   dataSource = new MatTableDataSource();
 
@@ -55,8 +50,8 @@ export class BankManagmentComponent implements OnInit {
     this.onLoadSite();
   }
   onLoadSite() {
+    // this.loadCharts();
     this.getAllTranscations();
-
   }
   getAllTranscations() {
     this.bankTranscationService.getTranscations().subscribe(response => {
@@ -64,6 +59,29 @@ export class BankManagmentComponent implements OnInit {
       this.updateTable();
       this.calculateFinancialExpenses();
     });
+  }
+  loadCharts() {
+    const canvas = document.getElementById('myChart') as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d');
+    this.chart = new Chart(ctx, {
+      // The type of chart we want to create
+      type: 'line',
+
+      // The data for our dataset
+      data: {
+          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+          datasets: [{
+              label: 'My First dataset',
+              backgroundColor: 'rgb(255, 99, 132)',
+              borderColor: 'rgb(255, 99, 132)',
+              data: [0, 10, 5, 2, 20, 30, 45]
+          }]
+      },
+
+      // Configuration options go here
+      options: {}
+  });
+
   }
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -105,6 +123,8 @@ export class BankManagmentComponent implements OnInit {
         this.monthExpenses += transcation.eachMonth;
       }
     });
+
+    this.monthExpenses = Number(this.monthExpenses.toFixed(2));
   }
   compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);

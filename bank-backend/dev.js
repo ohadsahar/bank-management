@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 async function connectMongoDB() {
 
     try {
-        await mongoose.connect("mongodb+srv://ohad:ppd53brx!@cluster0-vw61b.mongodb.net/SocialNETWO?retryWrites=true", {
+        await mongoose.connect("mongodb+srv://ohad:ppd53brx!@cluster0-vw61b.mongodb.net/transcation?retryWrites=true", {
             useNewUrlParser: true
         })
         console.log('Connected successfully!');

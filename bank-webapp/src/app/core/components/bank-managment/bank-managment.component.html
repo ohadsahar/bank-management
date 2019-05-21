@@ -1,17 +1,14 @@
-<mat-form-field>
-  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+<mat-form-field id="search">
+  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="חיפוש" >
 </mat-form-field>
 
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort (matSortChange)="sortData($event)">
 
   <!--- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
 
   <!-- Position Column -->
-  <ng-container matColumnDef="id">
-    <th mat-header-cell *matHeaderCellDef> מספר </th>
-    <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-  </ng-container>
+
   <!-- Name Column -->
   <ng-container matColumnDef="cardName">
     <th mat-header-cell *matHeaderCellDef> שם הכרטיס </th>
@@ -30,7 +27,7 @@
 
   <!-- Total price Column -->
   <ng-container matColumnDef="price">
-    <th mat-header-cell *matHeaderCellDef> מחיר כללי </th>
+    <th mat-sort-header="price" mat-header-cell *matHeaderCellDef> מחיר כללי </th>
     <td mat-cell *matCellDef="let element"> {{element.price}} </td>
   </ng-container>
 
@@ -50,6 +47,59 @@
     <td mat-cell *matCellDef="let element"> {{element.leftPayments}} </td>
   </ng-container>
 
+
+
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
+<ng-container>
+<div class="input-new-transcation">
+  <td>
+    <mat-form-field class="new-transcation">
+        <input matInput type="text"  [(ngModel)]="bankTransaction.cardName"  required>
+        <mat-placeholder class="placeholder">שם הכרטיס</mat-placeholder>
+        <mat-error >חובה למלא שם כרטיס</mat-error>
+    </mat-form-field>
+
+  </td>
+  <td>
+    <mat-form-field class="new-transcation">
+        <input matInput type="text" [(ngModel)]="bankTransaction.name" required>
+        <mat-placeholder class="placeholder">שם המוצר</mat-placeholder>
+        <mat-error>חובה למלא שם מוצר</mat-error>
+    </mat-form-field>
+  </td>
+  <mat-form-field class="new-transcation">
+      <td><input matInput type="text" [(ngModel)]="bankTransaction.typeProduct" required></td>
+      <mat-placeholder class="placeholder">סוג המוצר</mat-placeholder>
+      <mat-error>חובה למלא את סוג המוצר </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="new-transcation">
+      <td><input matInput type="number" [(ngModel)]="bankTransaction.price" required></td>
+      <mat-placeholder class="placeholder">מחיר כללי</mat-placeholder>
+      <mat-error>חובה למלא את המחיר הכללי </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="new-transcation">
+      <td><input matInput type="text" [(ngModel)]="bankTransaction.numberofpayments" ></td>
+      <mat-placeholder class="placeholder">מספר תשלומים</mat-placeholder>
+  </mat-form-field>
+
+  <mat-form-field class="new-transcation">
+      <td><input matInput type="text" [(ngModel)]="bankTransaction.eachMonth" ></td>
+      <mat-placeholder class="placeholder">תשלום חודשי</mat-placeholder>
+
+  </mat-form-field>
+
+  <mat-form-field class="new-transcation">
+      <td><input matInput type="text" [(ngModel)]="bankTransaction.leftPayments" ></td>
+      <mat-placeholder class="placeholder">תשלומים שנותרו</mat-placeholder>
+  </mat-form-field>
+  <td>
+      <button mat-raised-button color="primary" type="button" (click)="registerNewTranscation()" id="new-transcation-button">אישור</button>
+</td>
+
+
+</div>
+</ng-container>

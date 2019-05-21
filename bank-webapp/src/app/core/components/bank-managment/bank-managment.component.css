@@ -1,21 +1,62 @@
+body {
+  padding: 30px;
+}
+
 table {
   width: 100%;
   direction: rtl;
-
 }
 
-.mat-form-field {
-  font-size: 14px;
+
+#search {
+
+  text-align: right;
+  direction: rtl;
+  padding: 0px;
   width: 100%;
 }
+.input-new-transcation td {
 
-td, th {
+  width:12.5%;
+  padding: 3px;
+
+}
+td,
+th {
   width: 10%;
   text-align: right !important;
+}
+
+td.mat-cell:first-of-type,
+td.mat-footer-cell:first-of-type,
+th.mat-header-cell:first-of-type {
   padding: 10px;
 }
 
-td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type, th.mat-header-cell:first-of-type {
+.input-new-transcation {
+  direction: rtl;
+  font-size: 13px;
+  background-image: linear-gradient(#ffffff, #007ea7);
+  display: flex;
+}
 
-  padding: 15px;
+.placeholder {
+  color: black !important;
+  font-weight: bold;
+}
+
+.input-new-transcation .mat-form-field-appearance-legacy .mat-form-field-wrapper  {
+  width: 60%;
+  text-align: right;
+  direction: rtl;
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-wrapper {
+
+  width: 20%;
+}
+
+#new-transcation-button {
+
+  margin-top: 5%;
 }

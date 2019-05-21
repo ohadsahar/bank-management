@@ -1,20 +1,27 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const http = require("http");
-let app = require("./app");
+const app = express();
 const port = process.env.PORT || "3000";
 const server = http.createServer(app);
-const cors = require('cors')
-const dev = require('./dev');
+const transcationRoute = require('./routes/transactions');
+const connection = require('./dev');
 
-dev.connectMongoDB();
-app = express();
+connection.connectMongoDB();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended:true }));
-app.use(cors());
-app.set("port", port);
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    );
+    res.setHeader("Access-Control-Allow-Methods","GET, POST, PATCH, PUT, DELETE, OPTIONS");
+    next();
+  });
 server.listen(port);
 
+
+app.use('/admin/bank',transcationRoute);
 module.exports = app;
 
 

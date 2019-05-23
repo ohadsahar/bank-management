@@ -6,6 +6,7 @@ const schedule = require('node-schedule');
 schedule.scheduleJob('0 0 * * *', function(){
   transactionService.updatePurchaseDate();
 });
+
 async function registerNewTransaction(req, res) {
    
     try {
@@ -28,6 +29,7 @@ async function getAllTranscations(req,res) {
         const resultOfFetchedTranscations = await transactionService.get();
         res.status(200).json({
             message: resultOfFetchedTranscations.foundTranscations,
+            chartData: resultOfFetchedTranscations.chartGroupByCardName,
             success: true
         })  
     } catch (error) {
@@ -37,7 +39,6 @@ async function getAllTranscations(req,res) {
         })
     }
 }
-
 async function deleteTranscation(req,res) {
 
     await transactionService.deleteX(req.params.transcationId);

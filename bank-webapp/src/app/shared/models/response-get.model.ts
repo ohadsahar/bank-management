@@ -8,4 +8,5 @@ export interface TranscationTransform {
   numberofpayments: number;
   price: number;
   typeProduct: string;
+
 }

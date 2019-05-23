@@ -59,32 +59,55 @@
 <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 <ng-container>
 
+  <!-- select card field -->
   <div class="input-new-transcation">
     <td>
       <mat-form-field class="new-transcation">
-        <input matInput type="text" [(ngModel)]="bankTransaction.cardName" required>
+        <mat-select [(ngModel)]="bankTransaction.cardName">
+          <mat-option value="דרים קארד 3215">דרים קארד 3214</mat-option>
+          <mat-option value="דרים קארד 4534">דרים קארד 4534</mat-option>
+          <mat-option value="לאומי קארד 8182">לאומי קארד 8182</mat-option>
+          <mat-option value="7625 נגב">נגב 7625</mat-option>
+          <mat-option value="בנק לאומי 3216">בנק לאומי 3216</mat-option>
+          <mat-option value="ויזה 4811">ויזה 4811</mat-option>
+          <mat-option value="ויזה 4821">ויזה 4821</mat-option>
+        </mat-select>
         <mat-placeholder class="placeholder">שם הכרטיס</mat-placeholder>
         <mat-error>חובה למלא שם כרטיס</mat-error>
+      </mat-form-field>
+
+    </td>
+    <td>
+      <mat-form-field class="new-transcation">
+          <input type="text"  aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
+        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-autocomplete>
+        <mat-placeholder class="placeholder">בית העסק</mat-placeholder>
+        <mat-error>חובה למלא שם מוצר</mat-error>
       </mat-form-field>
     </td>
     <td>
       <mat-form-field class="new-transcation">
-        <input matInput type="text" [(ngModel)]="bankTransaction.name" required>
-        <mat-placeholder class="placeholder">שם המוצר</mat-placeholder>
-        <mat-error>חובה למלא שם מוצר</mat-error>
+
+        <mat-select [(ngModel)]="bankTransaction.typeProduct">
+          <mat-option value="חשמל">חשמל</mat-option>
+          <mat-option value="ביגוד">ביגוד</mat-option>
+          <mat-option value="ריהוט">ריהוט</mat-option>
+          <mat-option value="אוכל">אוכל</mat-option>
+          <mat-option value="תכשיטים">תכשיטים</mat-option>
+          <mat-option value="בריאות">בריאות</mat-option>
+          <mat-option value="אחר">אחר</mat-option>
+        </mat-select>
+        <mat-placeholder class="placeholder">קטגוריה</mat-placeholder>
+        <mat-error>חובה למלא את סוג המוצר </mat-error>
       </mat-form-field>
     </td>
     <mat-form-field class="new-transcation">
-
-      <td>
-        <input matInput type="text" [(ngModel)]="bankTransaction.typeProduct" required></td>
-      <mat-placeholder class="placeholder">סוג המוצר</mat-placeholder>
-      <mat-error>חובה למלא את סוג המוצר </mat-error>
-    </mat-form-field>
-
-    <mat-form-field class="new-transcation">
       <td><input matInput type="number" [(ngModel)]="bankTransaction.price" required></td>
-      <mat-placeholder class="placeholder">מחיר כללי</mat-placeholder>
+      <mat-placeholder class="placeholder">מחיר העסקה</mat-placeholder>
       <mat-error>חובה למלא את המחיר הכללי </mat-error>
     </mat-form-field>
 
@@ -115,9 +138,16 @@
 
 <h1>ניתוח מצב פיננסי</h1>
 
-<!-- <canvas id="myChart" width="400" height="400" *ngIf="chart" >{{chart}}</canvas> -->
-<div class="money-managment-area">
-  <h3 *ngIf="totalExpenses">הוצאות: <i class="fas fa-shekel-sign"></i> {{totalExpenses}}</h3>
-  <h3 *ngIf="numberOfPayments">מספר תשלומים כללי: <i class="fas fa-money-check-alt"></i> {{numberOfPayments}}</h3>
-  <h3 *ngIf="monthExpenses"> הוצאות קבועות כל חודש: <i class="fas fa-shekel-sign"></i> {{monthExpenses}} </h3>
-</div>
+<div>
+  <div class="row">
+    <div class="col-sm-12 col-md-4 col-lg-6">
+      <canvas id="chartDiff">{{chartDiff}}</canvas>
+    </div>
+
+  </div>
+
+  <div class="money-managment-area">
+    <h3 *ngIf="totalExpenses">הוצאות: <i class="fas fa-shekel-sign"></i> {{totalExpenses}}</h3>
+    <h3 *ngIf="numberOfPayments">מספר תשלומים כללי: <i class="fas fa-money-check-alt"></i> {{numberOfPayments}}</h3>
+    <h3 *ngIf="monthExpenses"> הוצאות קבועות כל חודש: <i class="fas fa-shekel-sign"></i> {{monthExpenses}} </h3>
+  </div>

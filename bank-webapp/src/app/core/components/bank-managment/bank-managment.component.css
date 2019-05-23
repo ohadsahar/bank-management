@@ -1,12 +1,19 @@
-body {
+body,html {
   padding: 30px;
-  font-family: 'Varela Round', sans-serif;
+  font-family: "Varela Round", sans-serif;
 }
-
 
 table {
   width: 100%;
   direction: rtl;
+}
+
+.mat-option {
+
+  text-align: right !important;
+  font-weight: 500;
+  font-size: 12px;
+  font-family: "Varela Round", sans-serif;
 }
 
 #search {
@@ -23,7 +30,7 @@ td,
 th {
   width: 10%;
   text-align: right !important;
-  font-family: 'Varela Round', sans-serif;
+  font-family: "Varela Round", sans-serif;
 }
 
 td.mat-cell:first-of-type,
@@ -42,6 +49,7 @@ th.mat-header-cell:first-of-type {
 .placeholder {
   color: black !important;
   font-weight: bold;
+  text-align: right
 }
 
 .input-new-transcation
@@ -50,7 +58,7 @@ th.mat-header-cell:first-of-type {
   width: 60%;
   text-align: right;
   direction: rtl;
-  font-family: 'Varela Round', sans-serif;
+  font-family: "Varela Round", sans-serif;
 }
 
 .mat-form-field-appearance-legacy .mat-form-field-wrapper {
@@ -63,20 +71,47 @@ th.mat-header-cell:first-of-type {
 }
 
 .money-managment-area {
-
   display: inline-flex;
   margin: auto;
   display: block;
 }
 
 h1 {
-
   margin-top: 3%;
   text-align: center;
-  font-size:21px;
+  font-size: 21px;
 }
 h3 {
-
   font-size: 15px;
   text-align: right;
+}
+
+.mat-select-panel .mat-optgroup-label,
+.mat-select-panel .mat-option {
+  text-align: right;
+  font-weight: 500;
+  font-family: "Varela Round", sans-serif;
+}
+
+.mat-option-text {
+
+  font-size: 12px;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { ResponseModel } from '../../shared/models/response.model';
 import { TranscationTransform } from '../../shared/models/response-get.model';
+import { ChartByCardName } from '../../shared/models/chart-by-cardname.model';
 
 const backendUrl = environment.backendUrl;
 
@@ -21,7 +22,7 @@ export class BankTranscationService {
   }
 
   getTranscations() {
-    return this.http.get<{message: TranscationTransform}>(`${backendUrl}`);
+    return this.http.get<{message: TranscationTransform, chartData: ChartByCardName}>(`${backendUrl}`);
   }
 
 }

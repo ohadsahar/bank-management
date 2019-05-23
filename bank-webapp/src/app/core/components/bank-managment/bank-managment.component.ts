@@ -1,11 +1,15 @@
-import { Component, ViewEncapsulation, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { MatPaginator, MatSort, MatTableDataSource, Sort } from '@angular/material';
+import { Chart } from 'chart.js';
+import * as moment from 'moment';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 import { Bank } from '../../../shared/models/bank-data.model';
-import { MatTableDataSource, Sort, MatPaginator, MatSort } from '@angular/material';
 import { BankValues } from '../../../shared/models/bank.model';
 import { BankTranscationService } from '../../services/bank-transcation.service';
 import { MessageService } from '../../services/message.service';
-import * as moment from 'moment';
-import { Chart } from 'chart.js';
+import { ChartByCardName } from '../../../shared/models/chart-by-cardname.model';
 
 
 
@@ -23,13 +27,23 @@ export class BankManagmentComponent implements OnInit {
 
   public sortedData: Bank[];
   public allTranscations: Bank[];
+  public chartTranscations: ChartByCardName;
+  public cardsName: string [];
+  options: string[] = ['רנואר', 'קאסטרו', 'אייבורי'];
+  filteredOptions: Observable<string[]>;
+  myControl = new FormControl();
+
   public totalExpenses: number;
   public monthExpenses: number;
-  public chart: any;
+
   public editEnable: boolean;
   public editoptionsable: any = {};
   public numberOfPayments: number;
   public bankTransaction = new BankValues('', '', '', '', null, null, null, null, '');
+
+  public chartDiff: Chart;
+
+
   constructor(
     private bankTranscationService: BankTranscationService,
     private messageService: MessageService
@@ -50,38 +64,58 @@ export class BankManagmentComponent implements OnInit {
     this.onLoadSite();
   }
   onLoadSite() {
-    // this.loadCharts();
+
+    this.filteredOptions = this.myControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value))
+    );
+
     this.getAllTranscations();
+
+
   }
+
   getAllTranscations() {
     this.bankTranscationService.getTranscations().subscribe(response => {
+      console.log(response.chartData);
       this.allTranscations = response.message as any;
+      this.chartTranscations = response.chartData;
+      console.log(this.chartTranscations);
       this.updateTable();
       this.calculateFinancialExpenses();
+      this.loadCharts();
     });
   }
   loadCharts() {
-    const canvas = document.getElementById('myChart') as HTMLCanvasElement;
-    const ctx = canvas.getContext('2d');
-    this.chart = new Chart(ctx, {
-      // The type of chart we want to create
-      type: 'line',
 
-      // The data for our dataset
-      data: {
-          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-          datasets: [{
-              label: 'My First dataset',
-              backgroundColor: 'rgb(255, 99, 132)',
-              borderColor: 'rgb(255, 99, 132)',
-              data: [0, 10, 5, 2, 20, 30, 45]
-          }]
-      },
+    this.chartOther('doughnut');
+  }
+  chartOther(type: string) {
 
-      // Configuration options go here
-      options: {}
-  });
+    console.log(this.chartTranscations);
+    this.chartDiff = new Chart('chartDiff', {
+    // The type of chart we want to create
+    type,
+    // The data for our dataset
+    data: {
+        // labels: ['7625 נגב', 'לאומי קארד 8182', 'דרים קארד 4534',
+        // 'דרים קארד 3214', 'ויזה 4821', 'ויזה 4811', 'לאומי 3216'],
+        labels: [this.chartTranscations],
+        datasets: [{
 
+            backgroundColor: [
+              '#ff6361',
+              '#bc5090',
+
+          ],
+            borderColor: 'transparent',
+            data: [45, 10]
+        }]
+    },
+
+    // Configuration options go here
+    options: {}
+});
   }
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -116,6 +150,9 @@ export class BankManagmentComponent implements OnInit {
     }
   }
   calculateFinancialExpenses() {
+        // if (!this.options.includes(transcation.name)) {
+      //   this.options.push(transcation.name);
+      // }
     this.allTranscations.forEach(transcation => {
       this.totalExpenses += transcation.price;
       if (transcation.leftPayments > 0) {
@@ -123,17 +160,19 @@ export class BankManagmentComponent implements OnInit {
         this.monthExpenses += transcation.eachMonth;
       }
     });
-
+    this._filter('');
     this.monthExpenses = Number(this.monthExpenses.toFixed(2));
   }
   compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
   registerNewTranscation() {
+
+    this.bankTransaction.name = this.myControl.value;
     if (this.validateNewTranscation()) {
-    const date = moment(Date.now()).format('LL').toString();
-    this.bankTransaction.purchaseDate = date;
-    this.bankTranscationService.registerNewTranscation(this.bankTransaction).subscribe(response => {
+      const date = moment(Date.now()).format('LL').toString();
+      this.bankTransaction.purchaseDate = date;
+      this.bankTranscationService.registerNewTranscation(this.bankTransaction).subscribe(response => {
             this.allTranscations.push(response.message);
             this.updateTable();
             this.updateFinancialExpensesAfterRegister(response);
@@ -147,13 +186,13 @@ export class BankManagmentComponent implements OnInit {
         }
       );
   }
-}
+  }
   updateTable() {
     this.dataSource = new MatTableDataSource(this.allTranscations);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-  editAble(transcationId: string) {
+  editAble() {
     this.editEnable = true;
 
   }
@@ -194,5 +233,15 @@ export class BankManagmentComponent implements OnInit {
 
     this.bankTransaction = new BankValues('', '', '', '', null, null, null, null, '');
   }
-
+  changeChart(type: string) {
+    if (this.chartDiff) {
+      this.chartDiff.destroty();
+    } else {
+      this.chartDiff(type);
+    }
+  }
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.options.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
+  }
 }

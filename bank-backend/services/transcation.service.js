@@ -1,4 +1,5 @@
 const transactionModel = require('../models/transaction');
+const transcationUtil = require('../utils/transcation.util');
 const moment = require('moment');
 async function register(transcationData) {
     
@@ -20,15 +21,14 @@ async function register(transcationData) {
 async function get() {
 
     const fetchedTranscations = await transactionModel.find();
-    return {foundTranscations: fetchedTranscations};
+    const resultLodashTranscations = await transcationUtil.groupCategoreis(fetchedTranscations);
+    return {foundTranscations: fetchedTranscations, chartGroupByCardName: resultLodashTranscations.groupedByCardName};
 }
-
 async function updatePurchaseDate() {
 
     console.log('im here');
 
 }
-
 async function deleteX(transcationId) {
 
     await transactionModel.findOneAndDelete({_id: transcationId});

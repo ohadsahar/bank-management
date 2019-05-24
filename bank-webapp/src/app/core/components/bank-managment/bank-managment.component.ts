@@ -100,30 +100,25 @@ export class BankManagmentComponent implements OnInit {
   }
   chartOther(type: string) {
 
-    console.log(this.chartTranscations);
     this.chartDiff = new Chart('chartDiff', {
-    // The type of chart we want to create
     type,
-    // The data for our dataset
     data: {
-        // labels: ['7625 נגב', 'לאומי קארד 8182', 'דרים קארד 4534',
-        // 'דרים קארד 3214', 'ויזה 4821', 'ויזה 4811', 'לאומי 3216'],
         labels: this.arrayCardsNames,
         datasets: [{
-
             backgroundColor: [
               '#ff6361',
               '#bc5090',
+              'blue',
+              'orange',
 
           ],
             borderColor: 'transparent',
             data: this.arrayCardsTotalPrice
         }]
     },
-
-    // Configuration options go here
     options: {}
 });
+
   }
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();

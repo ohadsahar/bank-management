@@ -39,6 +39,23 @@ async function getAllTranscations(req,res) {
         })
     }
 }
+
+async function getAllCharts(req,res) {
+
+    try {
+        const resultOfFetchedChartData = await transactionService.getCharts();
+        res.status(200).json({
+            message: resultOfFetchedChartData.chartGroupByCardName,
+            success: true
+        })  
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({
+            message: error,
+            success: false
+        })
+    }
+}
 async function deleteTranscation(req,res) {
 
     await transactionService.deleteX(req.params.transcationId);
@@ -59,5 +76,6 @@ async function deleteTranscation(req,res) {
 
 router.post('/transcation', registerNewTransaction);
 router.get('', getAllTranscations);
+router.get('/charts', getAllCharts);
 router.delete('/:transcationId', deleteTranscation);
 module.exports = router;

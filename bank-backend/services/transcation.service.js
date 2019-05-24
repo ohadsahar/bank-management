@@ -34,6 +34,15 @@ async function deleteX(transcationId) {
     await transactionModel.findOneAndDelete({_id: transcationId});
 }
 
+async function getCharts() {
+
+    const fetchedTranscations = await transactionModel.find();
+    const resultLodashTranscations = await transcationUtil.groupCategoreis(fetchedTranscations);
+    return {chartGroupByCardName: resultLodashTranscations.groupedByCardName};
+}
+
+
+
 
 
 
@@ -42,5 +51,6 @@ module.exports = {
     register,
     get,
     deleteX,
+    getCharts,
     updatePurchaseDate
 }

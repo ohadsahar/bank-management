@@ -27,22 +27,19 @@ export class BankManagmentComponent implements OnInit {
 
   public sortedData: Bank[];
   public allTranscations: Bank[];
-  public chartTranscations: ChartByCardName;
-  public cardsName: string [];
+  public chartTranscations: ChartByCardName[];
+  public arrayCardsNames: string [] = [];
+  public arrayCardsTotalPrice: number [] = [];
   options: string[] = ['רנואר', 'קאסטרו', 'אייבורי'];
   filteredOptions: Observable<string[]>;
   myControl = new FormControl();
-
   public totalExpenses: number;
   public monthExpenses: number;
-
-  public editEnable: boolean;
-  public editoptionsable: any = {};
   public numberOfPayments: number;
-  public bankTransaction = new BankValues('', '', '', '', null, null, null, null, '');
-
+  public editEnable: boolean;
   public chartDiff: Chart;
-
+  public editoptionsable: any = {};
+  public bankTransaction = new BankValues('', '', '', '', null, null, null, null, '');
 
   constructor(
     private bankTranscationService: BankTranscationService,
@@ -69,22 +66,33 @@ export class BankManagmentComponent implements OnInit {
       startWith(''),
       map(value => this._filter(value))
     );
-
     this.getAllTranscations();
-
-
   }
-
   getAllTranscations() {
     this.bankTranscationService.getTranscations().subscribe(response => {
-      console.log(response.chartData);
       this.allTranscations = response.message as any;
-      this.chartTranscations = response.chartData;
-      console.log(this.chartTranscations);
       this.updateTable();
       this.calculateFinancialExpenses();
-      this.loadCharts();
+      this.getAllCharts();
+
     });
+  }
+   getAllCharts() {
+
+    this.bankTranscationService.getCharts().subscribe(response => {
+      this.chartTranscations = response.message as any;
+      this.assignCardNames();
+    });
+  }
+
+   assignCardNames() {
+
+    this.chartTranscations.forEach(transcationData => {
+         this.arrayCardsNames.push(transcationData.cardName);
+         this.arrayCardsTotalPrice.push(transcationData.price);
+    });
+    this.loadCharts();
+
   }
   loadCharts() {
 
@@ -100,7 +108,7 @@ export class BankManagmentComponent implements OnInit {
     data: {
         // labels: ['7625 נגב', 'לאומי קארד 8182', 'דרים קארד 4534',
         // 'דרים קארד 3214', 'ויזה 4821', 'ויזה 4811', 'לאומי 3216'],
-        labels: [this.chartTranscations],
+        labels: this.arrayCardsNames,
         datasets: [{
 
             backgroundColor: [
@@ -109,7 +117,7 @@ export class BankManagmentComponent implements OnInit {
 
           ],
             borderColor: 'transparent',
-            data: [45, 10]
+            data: this.arrayCardsTotalPrice
         }]
     },
 

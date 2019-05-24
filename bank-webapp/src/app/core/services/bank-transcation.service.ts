@@ -25,4 +25,8 @@ export class BankTranscationService {
     return this.http.get<{message: TranscationTransform, chartData: ChartByCardName}>(`${backendUrl}`);
   }
 
+  getCharts() {
+    return this.http.get<{message: ChartByCardName}>(`${backendUrl}charts`);
+  }
+
 }

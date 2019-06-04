@@ -7,5 +7,6 @@ export class BankValues {
               public numberofpayments: number,
               public eachMonth: number,
               public leftPayments: number,
-              public purchaseDate: string) {}
+              public purchaseDate: string,
+              public monthPurchase: string) {}
 }

@@ -39,7 +39,7 @@ export class BankManagmentComponent implements OnInit {
   public editEnable: boolean;
   public chartDiff: Chart;
   public editoptionsable: any = {};
-  public bankTransaction = new BankValues('', '', '', '', null, null, null, null, '');
+  public bankTransaction = new BankValues('', '', '', '', null, null, null, null, '', '');
 
   constructor(
     private bankTranscationService: BankTranscationService,
@@ -87,6 +87,7 @@ export class BankManagmentComponent implements OnInit {
 
    assignCardNames() {
 
+    this.arrayCardsTotalPrice = [];
     this.chartTranscations.forEach(transcationData => {
          this.arrayCardsNames.push(transcationData.cardName);
          this.arrayCardsTotalPrice.push(transcationData.price);
@@ -110,9 +111,13 @@ export class BankManagmentComponent implements OnInit {
               '#bc5090',
               'blue',
               'orange',
+              'purple',
+              'red',
+              'yellow',
+              'lightblue'
 
           ],
-            borderColor: 'transparent',
+            borderColor: 'black',
             data: this.arrayCardsTotalPrice
         }]
     },
@@ -153,9 +158,7 @@ export class BankManagmentComponent implements OnInit {
     }
   }
   calculateFinancialExpenses() {
-        // if (!this.options.includes(transcation.name)) {
-      //   this.options.push(transcation.name);
-      // }
+
     this.allTranscations.forEach(transcation => {
       this.totalExpenses += transcation.price;
       if (transcation.leftPayments > 0) {
@@ -173,13 +176,18 @@ export class BankManagmentComponent implements OnInit {
 
     this.bankTransaction.name = this.myControl.value;
     if (this.validateNewTranscation()) {
-      const date = moment(Date.now()).format('LL').toString();
-      this.bankTransaction.purchaseDate = date;
+      const date = moment(Date.now()).calendar().toString();
+      console.log(date);
+      const purchaseMonth = moment(Date.now()).month().toString();
+      this.bankTransaction.purchaseDate = date + 1;
+      this.bankTransaction.monthPurchase = purchaseMonth;
+      this.arrayCardsNames = [];
       this.bankTranscationService.registerNewTranscation(this.bankTransaction).subscribe(response => {
             this.allTranscations.push(response.message);
             this.updateTable();
             this.updateFinancialExpensesAfterRegister(response);
             this.resetValues();
+            this.getAllCharts();
             this.messageService.successMessage('הקנייה התווספה בהצלחה', 'סגור');
         },
         error => {
@@ -195,10 +203,7 @@ export class BankManagmentComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-  editAble() {
-    this.editEnable = true;
 
-  }
   deleteTranscation(transcationId: string, trancsationData: Bank) {
       this.bankTranscationService.deleteTranscation(transcationId).subscribe(response => {
       const deleteTranscation = this.allTranscations.filter(transcation => transcation._id !== transcationId);
@@ -207,6 +212,11 @@ export class BankManagmentComponent implements OnInit {
       this.updateTable();
 
     });
+  }
+
+  editTranscation() {
+    this.editEnable = true;
+
   }
   updateFinancialExpensesAfterDelete(trancsationData: Bank) {
 
@@ -234,7 +244,7 @@ export class BankManagmentComponent implements OnInit {
   }
   resetValues() {
 
-    this.bankTransaction = new BankValues('', '', '', '', null, null, null, null, '');
+    this.bankTransaction = new BankValues('', '', '', '', null, null, null, null, '', '');
   }
   changeChart(type: string) {
     if (this.chartDiff) {

@@ -39,7 +39,6 @@ async function getAllTranscations(req,res) {
         })
     }
 }
-
 async function getAllCharts(req,res) {
 
     try {

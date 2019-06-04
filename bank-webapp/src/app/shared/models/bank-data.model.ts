@@ -9,6 +9,8 @@ export interface Bank {
   eachMonth: number;
   leftPayments: number;
   purchaseDate: string;
+  monthPurchase: string;
+
 }
 
 

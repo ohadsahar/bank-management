@@ -9,7 +9,8 @@ const transaction = mongoose.Schema({
     numberofpayments:{type: Number, required: true},
     eachMonth: {type: Number, required: true},
     leftPayments: {type: Number, required: true},
-    purchaseDate: {type: String, required: true}
+    purchaseDate: {type: String, required: true},
+    monthPurchase: {type: String, required: true}
 
 })
 

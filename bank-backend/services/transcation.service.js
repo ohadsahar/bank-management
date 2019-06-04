@@ -12,7 +12,8 @@ async function register(transcationData) {
         numberofpayments: transcationData.numberofpayments,
         eachMonth: transcationData.eachMonth,
         leftPayments: transcationData.leftPayments,
-        purchaseDate: transcationData.purchaseDate
+        purchaseDate: transcationData.purchaseDate,
+        monthPurchase: transcationData.monthPurchase
     })
     await transcationToCreate.save();
     return {transactionSaved: transcationToCreate}

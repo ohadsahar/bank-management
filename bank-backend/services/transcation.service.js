@@ -1,57 +1,52 @@
-const transactionModel = require('../models/transaction');
-const transcationUtil = require('../utils/transcation.util');
-const moment = require('moment');
-async function register(transcationData) {
-    
-    const transcationToCreate = new transactionModel({
+const TransactionModel = require('../models/transaction');
+const transactionUtil = require('../utils/transcation');
+const validatorUtil = require('../utils/validator');
 
-        cardName: transcationData.cardName,
-        name: transcationData.name,
-        typeProduct: transcationData.typeProduct,
-        price: transcationData.price,
-        numberofpayments: transcationData.numberofpayments,
-        eachMonth: transcationData.eachMonth,
-        leftPayments: transcationData.leftPayments,
-        purchaseDate: transcationData.purchaseDate,
-        monthPurchase: transcationData.monthPurchase
-    })
-    await transcationToCreate.save();
-    return {transactionSaved: transcationToCreate}
-
+async function register(transactionData) {
+  const transactionToCreate = new TransactionModel({
+    cardName: transactionData.cardName,
+    name: transactionData.name,
+    typeProduct: transactionData.typeProduct,
+    price: transactionData.price,
+    numberofpayments: transactionData.numberofpayments,
+    eachMonth: transactionData.eachMonth,
+    leftPayments: transactionData.leftPayments,
+    purchaseDate: transactionData.purchaseDate,
+    monthPurchase: transactionData.monthPurchase,
+  });
+  await transactionToCreate.save();
+  return { transactionSaved: transactionToCreate };
 }
 async function get() {
-
-    const fetchedTranscations = await transactionModel.find();
-    const resultLodashTranscations = await transcationUtil.groupCategoreis(fetchedTranscations);
-    return {foundTranscations: fetchedTranscations, chartGroupByCardName: resultLodashTranscations.groupedByCardName};
+  const fetchedTransactions = await TransactionModel.find();
+  const resultLodashTransactions = await transactionUtil.groupCategories(fetchedTransactions);
+  return {
+    foundTranscations: fetchedTransactions,
+    chartGroupByCardName: resultLodashTransactions.groupedByCardName,
+  };
 }
-async function updatePurchaseDate() {
-
-    console.log('im here');
-
+async function updatePurchaseDate(transactionData) {
+  const resultOfValidateTransactionData = await validatorUtil.validateUpdateData(transactionData);
+  // eslint-disable-next-line no-underscore-dangle
+  await TransactionModel.findByIdAndUpdate({ _id: resultOfValidateTransactionData._id },
+    resultOfValidateTransactionData);
+  return { bankData: resultOfValidateTransactionData };
 }
-async function deleteX(transcationId) {
-
-    await transactionModel.findOneAndDelete({_id: transcationId});
+async function deleteX(transactionId) {
+  await TransactionModel.findOneAndDelete({ _id: transactionId });
 }
-
 async function getCharts() {
-
-    const fetchedTranscations = await transactionModel.find();
-    const resultLodashTranscations = await transcationUtil.groupCategoreis(fetchedTranscations);
-    return {chartGroupByCardName: resultLodashTranscations.groupedByCardName};
+  const fetchedTransactions = await TransactionModel.find();
+  const resultLodashTransactions = await transactionUtil.groupCategories(fetchedTransactions);
+  return { chartGroupByCardName: resultLodashTransactions.groupedByCardName };
 }
-
-
-
-
 
 
 module.exports = {
 
-    register,
-    get,
-    deleteX,
-    getCharts,
-    updatePurchaseDate
-}
+  register,
+  get,
+  deleteX,
+  getCharts,
+  updatePurchaseDate,
+};

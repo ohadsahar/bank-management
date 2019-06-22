@@ -153,7 +153,6 @@ export class BankManagmentComponent implements OnInit {
       this.bankTransaction.leftPayments = null;
     }
   }
-
   calculateEachMonthEdit() {
     if (this.bankEditTransaction.numberofpayments) {
       this.bankEditTransaction.eachMonth = this.bankEditTransaction.price / this.bankEditTransaction.numberofpayments;
@@ -184,7 +183,6 @@ export class BankManagmentComponent implements OnInit {
     this.bankTransaction.name = this.myControl.value;
     if (this.validateNewTranscation()) {
       const date = moment(Date.now()).calendar().toString();
-      console.log(date);
       const purchaseMonth = moment(Date.now()).month().toString();
       this.bankTransaction.purchaseDate = date + 1;
       this.bankTransaction.monthPurchase = purchaseMonth;
@@ -230,9 +228,12 @@ export class BankManagmentComponent implements OnInit {
       this.editEnable = false;
     }
   }
-
   updateTransaction() {
-    console.log(this.bankEditTransaction);
+    this.bankTranscationService.updateTransaction(this.bankEditTransaction).subscribe(response => {
+      const index = this.allTranscations.findIndex(transaction => transaction._id === response.message.bankData._id);
+      this.allTranscations[index] = response.message.bankData;
+
+    })
   }
   updateFinancialExpensesAfterDelete(transactionData: Bank) {
 

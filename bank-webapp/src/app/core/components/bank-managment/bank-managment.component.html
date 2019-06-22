@@ -1,24 +1,21 @@
 <mat-form-field id="search">
   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="חיפוש חופשי">
 </mat-form-field>
-
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort (matSortChange)="sortData($event)">
-
-
   <ng-container matColumnDef="id">
     <th mat-header-cell *matHeaderCellDef> <i class="fab fa-cc-visa"></i> אפשרויות </th>
+
     <td mat-cell *matCellDef="let element; let i = index"> <i class="fas fa-trash"
         (click)="deleteTransaction(element._id, element)"></i>
-      <i class="fas fa-edit" (click)="editTransaction(element)" *ngIf="!editEnable"></i>
-      <i class="fas fa-check-double" *ngIf="editEnable" (click)="updateTransaction()"></i>
+      <i class="fas fa-edit" (click)="editTransaction(element);editoptionsable[i] = !editoptionsable[i]"></i>
+      <i class="fas fa-check-double" *ngIf="editEnable && editoptionsable[i]" (click)="updateTransaction();editoptionsable[i] = !editoptionsable[i]"></i>
     </td>
   </ng-container>
-
   <ng-container matColumnDef="cardName">
     <th mat-header-cell *matHeaderCellDef> <i class="fab fa-cc-visa"></i> שם הכרטיס </th>
     <td mat-cell *matCellDef="let element; let i = index">
-      <div *ngIf="!editEnable">{{element.cardName}}</div>
-      <div *ngIf="editEnable" class="edit-section">
+      <div *ngIf="!editoptionsable[i]">{{element.cardName}}</div>
+      <div *ngIf="editEnable && editoptionsable[i]" class="edit-section">
         <mat-form-field class="new-transaction">
           <mat-select [(ngModel)]="bankEditTransaction.cardName" value="{{bankEditTransaction.cardName}}">
             <mat-option value="דרים קארד 3215">דרים קארד 3214</mat-option>
@@ -38,27 +35,29 @@
   <!-- Name Column -->
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef> <i class="fab fa-product-hunt"></i> בית העסק </th>
-    <td mat-cell *matCellDef="let element">
-      <div *ngIf="!editEnable">{{element.name}}</div>
-      <mat-form-field class="new-transaction edit-section" *ngIf="editEnable">
-        <input type="text" aria-label="Number" matInput [(ngModel)]="bankEditTransaction.name" [matAutocomplete]="auto"
-          value="{{bankEditTransaction.name}}">
-        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-          <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-            {{option}}
-          </mat-option>
-        </mat-autocomplete>
-        <mat-placeholder class="placeholder">בית העסק</mat-placeholder>
-        <mat-error>חובה למלא שם מוצר</mat-error>
-      </mat-form-field>
+    <td mat-cell *matCellDef="let element; let  i = index">
+      <div *ngIf="!editoptionsable[i]">{{element.name}}</div>
+      <div *ngIf="editEnable && editoptionsable[i]">
+        <mat-form-field class="new-transaction edit-section" *ngIf="editEnable">
+          <input type="text" aria-label="Number" matInput [(ngModel)]="bankEditTransaction.name"
+            [matAutocomplete]="auto" value="{{bankEditTransaction.name}}">
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-placeholder class="placeholder">בית העסק</mat-placeholder>
+          <mat-error>חובה למלא שם מוצר</mat-error>
+        </mat-form-field>
+      </div>
     </td>
   </ng-container>
   <!-- Type of product  Column -->
   <ng-container matColumnDef="type">
     <th mat-header-cell *matHeaderCellDef><i class="fas fa-sitemap"></i> קטגוריה </th>
-    <td mat-cell *matCellDef="let element">
-      <div *ngIf="!editEnable">{{element.typeProduct}} </div>
-      <div *ngIf="editEnable">
+    <td mat-cell *matCellDef="let element; let i = index">
+      <div *ngIf="!editoptionsable[i]">{{element.typeProduct}}</div>
+      <div *ngIf="editEnable && editoptionsable[i]">
         <mat-form-field class="new-transaction">
           <mat-select [(ngModel)]="bankEditTransaction.typeProduct" value="bankEditTransaction.typeProduct">
             <mat-option value="חשמל">חשמל</mat-option>
@@ -78,9 +77,9 @@
   <!-- Total price Column -->
   <ng-container matColumnDef="price">
     <th mat-sort-header="price" mat-header-cell *matHeaderCellDef> <i class="fas fa-shekel-sign"></i> מחיר כללי </th>
-    <td mat-cell *matCellDef="let element">
-      <div *ngIf="!editEnable">{{element.price}} </div>
-      <div *ngIf="editEnable">
+    <td mat-cell *matCellDef="let element; let  i = index">
+      <div *ngIf="!editoptionsable[i]">{{element.price}}</div>
+      <div *ngIf="editEnable && editoptionsable[i]">
         <mat-form-field class="new-transaction">
           <input matInput type="number" [(ngModel)]="bankEditTransaction.price" value="bankEditTransaction.price"
             required>
@@ -94,9 +93,9 @@
   <ng-container matColumnDef="numberofpayments">
     <th mat-sort-header="numberofpayments" mat-header-cell *matHeaderCellDef> <i class="fas fa-shopping-bag"></i> מספר
       תשלומים </th>
-    <td mat-cell *matCellDef="let element">
-      <div *ngIf="!editEnable"> {{element.numberofpayments}}</div>
-      <div *ngIf="editEnable">
+    <td mat-cell *matCellDef="let element; let i = index">
+      <div *ngIf="!editoptionsable[i]">{{element.numberofpayments}}</div>
+      <div *ngIf="editEnable && editoptionsable[i]">
         <mat-form-field class="new-transaction">
     <td><input matInput type="number" [(ngModel)]="bankEditTransaction.numberofpayments"
         (input)="calculateEachMonthEdit()" value="bankEditTransaction.numberOfPayments">

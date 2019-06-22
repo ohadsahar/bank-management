@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { ResponseModel } from '../../shared/models/response.model';
 import { TranscationTransform } from '../../shared/models/response-get.model';
 import { ChartByCardName } from '../../shared/models/chart-by-cardname.model';
+import { BankResponse } from '../../shared/models/bank-response.model';
 
 const backendUrl = environment.backendUrl;
 
@@ -15,6 +16,10 @@ export class BankTranscationService {
   constructor(private http: HttpClient) {}
   registerNewTranscation(transcationData: Bank) {
     return this.http.post<{message: Bank}>(`${backendUrl}transcation`, transcationData);
+  }
+
+  updateTransaction(transactionData: Bank) {
+      return this.http.put<{message: BankResponse}>(backendUrl, transactionData);
   }
 
   deleteTranscation(transcationId: string) {

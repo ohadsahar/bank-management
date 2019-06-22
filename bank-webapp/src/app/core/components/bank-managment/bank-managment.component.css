@@ -3,6 +3,8 @@ body,html {
   font-family: "Varela Round", sans-serif;
 }
 
+
+
 table {
   width: 100%;
   direction: rtl;
@@ -22,7 +24,7 @@ table {
   padding: 0px;
   width: 100%;
 }
-.input-new-transcation td {
+.input-new-transaction td {
   width: 12.5%;
   padding: 3px;
 }
@@ -39,7 +41,7 @@ th.mat-header-cell:first-of-type {
   padding: 10px;
 }
 
-.input-new-transcation {
+.input-new-transaction {
   direction: rtl;
   font-size: 13px;
   background-image: linear-gradient(#ffffff, #007ea7);
@@ -52,7 +54,7 @@ th.mat-header-cell:first-of-type {
   text-align: right
 }
 
-.input-new-transcation
+.input-new-transaction
   .mat-form-field-appearance-legacy
   .mat-form-field-wrapper {
   width: 60%;
@@ -62,15 +64,34 @@ th.mat-header-cell:first-of-type {
 }
 
 .mat-form-field-appearance-legacy .mat-form-field-wrapper {
-  width: 100%;
+  width: 70%;
   text-align: right;
 }
 
-#new-transcation-button {
+.edit-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+
+  width: 70% !important;
+}
+.fa-edit:before {
+
+  margin-right: 15px;
+}
+#new-transaction-button {
   margin-top: 5%;
 }
 
-.money-managment-area {
+.fa-check-double:before {
+
+  margin-right: 15px;
+}
+
+
+
+
+.edit-section .placeholder {
+  font-weight: 100;
+}
+.money-management-area {
   display: inline-flex;
   margin: auto;
   display: block;

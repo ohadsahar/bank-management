@@ -1,5 +1,4 @@
 body,html {
-  padding: 30px;
   font-family: "Varela Round", sans-serif;
 }
 
@@ -21,7 +20,6 @@ table {
 #search {
   text-align: right;
   direction: rtl;
-  padding: 0px;
   width: 100%;
 }
 .input-new-transaction td {
@@ -98,7 +96,6 @@ th.mat-header-cell:first-of-type {
 }
 
 h1 {
-  margin-top: 3%;
   text-align: center;
   font-size: 21px;
 }
@@ -135,4 +132,20 @@ h3 {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.bank-component .purchase-list {
+  height: 100vh;
+  background-color: #3A1772;
+}
+
+.bank-component .purchase-list .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper{
+
+  width: 30%;
+}
+
+.bank-component .statstic-section {
+
+  background-color: #5398BE;
+  overflow-x: hidden;
 }

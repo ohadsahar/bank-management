@@ -35,6 +35,7 @@ export class BankManagmentComponent implements OnInit {
   public monthExpenses: number;
   public numberOfPayments: number;
   public editEnable: boolean;
+  public updateAble: boolean;
   public chartDiff: Chart;
   public editoptionsable: any = {};
   public bankTransaction = new BankValues('', '', '', '', null, null, null, null, '', '');
@@ -48,6 +49,7 @@ export class BankManagmentComponent implements OnInit {
     this.monthExpenses = 0;
     this.numberOfPayments = 0;
     this.editEnable = false;
+    this.updateAble = false;
   }
 
   displayedColumns: string[] = [
@@ -219,19 +221,21 @@ export class BankManagmentComponent implements OnInit {
   }
   editTransaction(transcationData: Bank) {
 
+    this.updateAble = true;
     this.bankEditTransaction = transcationData;
     this.counter = this.counter + 1;
     if (this.counter === 1) {
       this.editEnable = true;
     } else {
       this.counter = 0;
-      this.editEnable = false;
+
     }
   }
   updateTransaction() {
     this.bankTranscationService.updateTransaction(this.bankEditTransaction).subscribe(response => {
       const index = this.allTranscations.findIndex(transaction => transaction._id === response.message.bankData._id);
       this.allTranscations[index] = response.message.bankData;
+      this.updateAble = false;
 
     })
   }

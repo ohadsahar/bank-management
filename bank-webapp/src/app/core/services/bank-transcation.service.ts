@@ -26,7 +26,7 @@ export class BankTranscationService {
     return this.http.delete<{message: ResponseModel}>(`${backendUrl}${transcationId}`);
   }
 
-  getTranscations() {
+  getTransactions() {
     return this.http.get<{message: TranscationTransform, chartData: ChartByCardName}>(`${backendUrl}`);
   }
 

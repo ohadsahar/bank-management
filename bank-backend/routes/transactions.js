@@ -4,14 +4,14 @@ const router = express.Router();
 const schedule = require('node-schedule');
 const transactionService = require('../services/transcation.service');
 
-schedule.scheduleJob('0 0 * * *', () => {
-  transactionService.updatePurchaseDate();
+schedule.scheduleJob('* * * * *', () => {
+  transactionService.checkPayCheck();
 });
 
 async function registerNewTransaction(req, res) {
   try {
-    const transcationData = req.body;
-    const resultOfRegister = await transactionService.register(transcationData);
+    const transactionData = req.body;
+    const resultOfRegister = await transactionService.register(transactionData);
     res.status(200).json({
       message: resultOfRegister.transactionSaved,
       success: true,
@@ -26,14 +26,12 @@ async function registerNewTransaction(req, res) {
 async function getAllTransactions(req, res) {
   try {
     const resultOfFetchedTranscations = await transactionService.get();
-    console.log(resultOfFetchedTranscations);
     res.status(200).json({
       message: resultOfFetchedTranscations.foundTranscations,
       chartData: resultOfFetchedTranscations.chartGroupByCardName,
       success: true,
     });
   } catch (error) {
-    console.log(error);
     res.status(400).json({
       message: error,
       success: false,
@@ -48,7 +46,6 @@ async function getAllCharts(req, res) {
       success: true,
     });
   } catch (error) {
-    console.log(error);
     res.status(400).json({
       message: error,
       success: false,

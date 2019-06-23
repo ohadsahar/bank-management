@@ -11,6 +11,7 @@ import { BankTranscationService } from '../../services/bank-transcation.service'
 import { MessageService } from '../../services/message.service';
 import { ChartByCardName } from '../../../shared/models/chart-by-cardname.model';
 
+
 @Component({
   selector: 'app-bank-managment',
   templateUrl: './bank-managment.component.html',
@@ -41,7 +42,7 @@ export class BankManagmentComponent implements OnInit {
   public bankTransaction = new BankValues('', '', '', '', null, null, null, null, '', '');
   public bankEditTransaction = new BankValues('', '', '', '', null, null, null, null, '', '');
   constructor(
-    private bankTranscationService: BankTranscationService,
+    private bankTransactionService: BankTranscationService,
     private messageService: MessageService
   ) {
     this.counter = 0;
@@ -55,21 +56,24 @@ export class BankManagmentComponent implements OnInit {
   displayedColumns: string[] = [
     'id', 'cardName', 'name', 'type', 'price', 'numberofpayments', 'eachMonth', 'leftPayments', 'purchaseDate'
   ];
+  cards: any[] = [{ value: 'הוט' }, { value: 'שופרסל' }, { value: 'נגב' }, { value: 'יוניק' },
+  { value: 'דרים קארד' }, { value: 'מאסטר-קארד אוהד' }, { value: 'דרים קארד אוהד' }];
+  categories: any[] = [{ value: 'חשמל' }, { value: 'ביגוד' }, { value: 'ריהוט' },
+  { value: 'אוכל' }, { value: 'תכשיטים' }, { value: 'בריאות' }, { value: 'אחר' }];
   dataSource = new MatTableDataSource();
 
   ngOnInit() {
     this.onLoadSite();
   }
   onLoadSite() {
-
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value))
     );
-    this.getAllTranscations();
+    this.getAllTransactions();
   }
-  getAllTranscations() {
-    this.bankTranscationService.getTranscations().subscribe(response => {
+  getAllTransactions() {
+    this.bankTransactionService.getTransactions().subscribe(response => {
       this.allTranscations = response.message as any;
       this.updateTable();
       this.calculateFinancialExpenses();
@@ -78,7 +82,7 @@ export class BankManagmentComponent implements OnInit {
   }
   getAllCharts() {
 
-    this.bankTranscationService.getCharts().subscribe(response => {
+    this.bankTransactionService.getCharts().subscribe(response => {
       this.chartTranscations = response.message as any;
       this.assignCardNames();
     });
@@ -94,11 +98,9 @@ export class BankManagmentComponent implements OnInit {
 
   }
   loadCharts() {
-
     this.chartOther('doughnut');
   }
   chartOther(type: string) {
-
     this.chartDiff = new Chart('chartDiff', {
       type,
       data: {
@@ -113,7 +115,6 @@ export class BankManagmentComponent implements OnInit {
             'red',
             'yellow',
             'lightblue'
-
           ],
           borderColor: 'black',
           data: this.arrayCardsTotalPrice
@@ -121,7 +122,6 @@ export class BankManagmentComponent implements OnInit {
       },
       options: {}
     });
-
   }
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -183,13 +183,13 @@ export class BankManagmentComponent implements OnInit {
   registerNewTranscation() {
 
     this.bankTransaction.name = this.myControl.value;
-    if (this.validateNewTranscation()) {
+    if (this.validateNewTransaction()) {
       const date = moment(Date.now()).calendar().toString();
       const purchaseMonth = moment(Date.now()).month().toString();
       this.bankTransaction.purchaseDate = date + 1;
       this.bankTransaction.monthPurchase = purchaseMonth;
       this.arrayCardsNames = [];
-      this.bankTranscationService.registerNewTranscation(this.bankTransaction).subscribe(response => {
+      this.bankTransactionService.registerNewTranscation(this.bankTransaction).subscribe(response => {
         this.allTranscations.push(response.message);
         this.updateTable();
         this.updateFinancialExpensesAfterRegister(response);
@@ -211,7 +211,7 @@ export class BankManagmentComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
   deleteTransaction(transcationId: string, transactionData: Bank) {
-    this.bankTranscationService.deleteTranscation(transcationId).subscribe(response => {
+    this.bankTransactionService.deleteTranscation(transcationId).subscribe(response => {
       const deleteTranscation = this.allTranscations.filter(transcation => transcation._id !== transcationId);
       this.allTranscations = deleteTranscation;
       this.updateFinancialExpensesAfterDelete(transactionData);
@@ -220,7 +220,6 @@ export class BankManagmentComponent implements OnInit {
     });
   }
   editTransaction(transcationData: Bank) {
-
     this.updateAble = true;
     this.bankEditTransaction = transcationData;
     this.counter = this.counter + 1;
@@ -228,16 +227,15 @@ export class BankManagmentComponent implements OnInit {
       this.editEnable = true;
     } else {
       this.counter = 0;
-
     }
   }
   updateTransaction() {
-    this.bankTranscationService.updateTransaction(this.bankEditTransaction).subscribe(response => {
+    this.bankTransactionService.updateTransaction(this.bankEditTransaction).subscribe(response => {
       const index = this.allTranscations.findIndex(transaction => transaction._id === response.message.bankData._id);
       this.allTranscations[index] = response.message.bankData;
       this.updateAble = false;
 
-    })
+    });
   }
   updateFinancialExpensesAfterDelete(transactionData: Bank) {
 
@@ -255,7 +253,7 @@ export class BankManagmentComponent implements OnInit {
       this.monthExpenses += response.message.eachMonth;
     }
   }
-  validateNewTranscation() {
+  validateNewTransaction() {
 
     if (this.bankTransaction.cardName && this.bankTransaction.name &&
       this.bankTransaction.price && this.bankTransaction.typeProduct) {

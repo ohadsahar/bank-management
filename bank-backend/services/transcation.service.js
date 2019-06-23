@@ -27,9 +27,7 @@ async function get() {
 }
 async function updatePurchaseDate(transactionData) {
   const resultOfValidateTransactionData = await validatorUtil.validateUpdateData(transactionData);
-  // eslint-disable-next-line no-underscore-dangle
-  await TransactionModel.findByIdAndUpdate({ _id: resultOfValidateTransactionData._id },
-    resultOfValidateTransactionData);
+  await transactionUtil.update(resultOfValidateTransactionData);
   return { bankData: resultOfValidateTransactionData };
 }
 async function deleteX(transactionId) {
@@ -40,6 +38,10 @@ async function getCharts() {
   const resultLodashTransactions = await transactionUtil.groupCategories(fetchedTransactions);
   return { chartGroupByCardName: resultLodashTransactions.groupedByCardName };
 }
+async function checkPayCheck() {
+  const fetchedTransactions = await TransactionModel.find();
+  await transactionUtil.paymentsTime(fetchedTransactions);
+}
 
 
 module.exports = {
@@ -49,4 +51,5 @@ module.exports = {
   deleteX,
   getCharts,
   updatePurchaseDate,
+  checkPayCheck,
 };

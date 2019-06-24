@@ -1,18 +1,16 @@
 import { ChartActions, GET_CHARTS_SUCCESS, GET_CHARTS, GET_CHART_FAILED } from '../actions/chart.actions';
+import { ChartByCardName } from '../../shared/models/chart-by-cardname.model';
 
 export interface State {
-
-  data: any[],
+  data: ChartByCardName[],
   loading: boolean;
   loaded: boolean;
 }
 
 const initialState: State = {
-
   data: [],
   loading: false,
   loaded: false
-
 }
 
 export function chartReducer(state = initialState, action: ChartActions) {
@@ -24,16 +22,13 @@ export function chartReducer(state = initialState, action: ChartActions) {
         loading: true,
         loaded: false
       };
-
     case GET_CHARTS_SUCCESS:
-      console.log(action.payload);
       return {
         ...state,
         loading: false,
         loaded: true,
         data: action.payload
       };
-
     case GET_CHART_FAILED:
       return {
         ...state,

@@ -3,8 +3,8 @@ import { FormControl } from '@angular/forms';
 import { MatPaginator, MatSort, MatTableDataSource, Sort } from '@angular/material';
 import { Chart } from 'chart.js';
 import * as moment from 'moment';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { map, startWith, takeUntil } from 'rxjs/operators';
 import { Bank } from '../../../shared/models/bank-data.model';
 import { BankValues } from '../../../shared/models/bank.model';
 import { BankTranscationService } from '../../services/bank-transcation.service';
@@ -41,7 +41,8 @@ export class BankManagmentComponent implements OnInit {
   public editEnable: boolean;
   public updateAble: boolean;
   public chartDiff: Chart;
-  public allChartsDatangrx$:Observable<any>;
+
+  private allChartsDatangrx: Subject<void> = new Subject<void>();
   public editoptionsable: any = {};
   public bankTransaction = new BankValues('', '', '', '', null, null, null, null, '', '');
   public bankEditTransaction = new BankValues('', '', '', '', null, null, null, null, '', '');
@@ -69,9 +70,7 @@ export class BankManagmentComponent implements OnInit {
 
   ngOnInit() {
 
-    this.store.dispatch(new chartActions.GetCharts());
-    this.allChartsDatangrx$ = this.store.select(fromRoot.getChartsData);
-    console.log(this.allChartsDatangrx$);
+
     this.onLoadSite();
   }
   onLoadSite() {
@@ -91,21 +90,21 @@ export class BankManagmentComponent implements OnInit {
     });
   }
   getAllCharts() {
-
-    this.bankTransactionService.getCharts().subscribe(response => {
-      this.chartTranscations = response.message as any;
-      this.assignCardNames();
-    });
+    this.store.dispatch(new chartActions.GetCharts());
+    this.store.select(fromRoot.getChartsData).pipe(takeUntil(this.allChartsDatangrx))
+      .subscribe((data) => {
+        this.chartTranscations = data.data as any;
+        this.assignCardNames();
+      });
   }
-  assignCardNames() {
 
+  assignCardNames() {
     this.arrayCardsTotalPrice = [];
-    this.chartTranscations.forEach(transcationData => {
-      this.arrayCardsNames.push(transcationData.cardName);
-      this.arrayCardsTotalPrice.push(transcationData.price);
+    this.chartTranscations.forEach(transactionData => {
+      this.arrayCardsNames.push(transactionData.cardName);
+      this.arrayCardsTotalPrice.push(transactionData.price);
     });
     this.loadCharts();
-
   }
   loadCharts() {
     this.chartOther('doughnut');

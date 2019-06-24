@@ -12,6 +12,9 @@ import { DeviceDetectorModule } from 'ngx-device-detector';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 import { BankManagmentComponent } from './core/components/bank-managment/bank-managment.component';
 import { HttpClientModule } from '@angular/common/http';
+import { EffectsModule } from '@ngrx/effects';
+import { BankManagementEffects } from './store/effects/bank-managment.effect';
+
 
 
 @NgModule({
@@ -28,7 +31,9 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     AngularMaterialModule,
     HttpClientModule,
+    EffectsModule,
     StoreModule.forRoot(Reducers),
+    EffectsModule.forRoot([BankManagementEffects]),
     DeviceDetectorModule.forRoot(),
     Ng4LoadingSpinnerModule.forRoot()
   ],

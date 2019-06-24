@@ -10,7 +10,10 @@ import { BankValues } from '../../../shared/models/bank.model';
 import { BankTranscationService } from '../../services/bank-transcation.service';
 import { MessageService } from '../../services/message.service';
 import { ChartByCardName } from '../../../shared/models/chart-by-cardname.model';
-
+import * as loginActions from '../../../store/actions/login.actions';
+import * as chartActions from '../../../store/actions/chart.actions';
+import * as fromRoot from '../../../app.reducer';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-bank-managment',
@@ -38,12 +41,14 @@ export class BankManagmentComponent implements OnInit {
   public editEnable: boolean;
   public updateAble: boolean;
   public chartDiff: Chart;
+  public allChartsDatangrx$:Observable<any>;
   public editoptionsable: any = {};
   public bankTransaction = new BankValues('', '', '', '', null, null, null, null, '', '');
   public bankEditTransaction = new BankValues('', '', '', '', null, null, null, null, '', '');
   constructor(
     private bankTransactionService: BankTranscationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private store: Store<fromRoot.State>
   ) {
     this.counter = 0;
     this.totalExpenses = 0;
@@ -63,6 +68,10 @@ export class BankManagmentComponent implements OnInit {
   dataSource = new MatTableDataSource();
 
   ngOnInit() {
+
+    this.store.dispatch(new chartActions.GetCharts());
+    this.allChartsDatangrx$ = this.store.select(fromRoot.getChartsData);
+    console.log(this.allChartsDatangrx$);
     this.onLoadSite();
   }
   onLoadSite() {
@@ -74,7 +83,6 @@ export class BankManagmentComponent implements OnInit {
   }
   getAllTransactions() {
     this.bankTransactionService.getTransactions().subscribe(response => {
-      console.log(response.message);
       this.allTranscations = response.message.foundTranscations;
       //this.filteredOptions = response.message.bushinessNames.groupByBusinessName;
       this.updateTable();

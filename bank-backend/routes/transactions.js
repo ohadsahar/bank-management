@@ -26,9 +26,9 @@ async function registerNewTransaction(req, res) {
 async function getAllTransactions(req, res) {
   try {
     const resultOfFetchedTranscations = await transactionService.get();
+    console.log(resultOfFetchedTranscations);
     res.status(200).json({
-      message: resultOfFetchedTranscations.foundTranscations,
-      chartData: resultOfFetchedTranscations.chartGroupByCardName,
+      message: resultOfFetchedTranscations,
       success: true,
     });
   } catch (error) {

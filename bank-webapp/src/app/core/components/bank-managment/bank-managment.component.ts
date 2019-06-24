@@ -74,7 +74,9 @@ export class BankManagmentComponent implements OnInit {
   }
   getAllTransactions() {
     this.bankTransactionService.getTransactions().subscribe(response => {
-      this.allTranscations = response.message as any;
+      console.log(response.message);
+      this.allTranscations = response.message.foundTranscations;
+      //this.filteredOptions = response.message.bushinessNames.groupByBusinessName;
       this.updateTable();
       this.calculateFinancialExpenses();
       this.getAllCharts();

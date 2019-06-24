@@ -20,8 +20,10 @@ async function register(transactionData) {
 async function get() {
   const fetchedTransactions = await TransactionModel.find();
   const resultLodashTransactions = await transactionUtil.groupCategories(fetchedTransactions);
+  const resultOfAllBushinessNames = await transactionUtil.allBushinessNames(fetchedTransactions);
   return {
     foundTranscations: fetchedTransactions,
+    bushinessNames: resultOfAllBushinessNames,
     chartGroupByCardName: resultLodashTransactions.groupedByCardName,
   };
 }

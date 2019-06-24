@@ -6,6 +6,7 @@ import { ResponseModel } from '../../shared/models/response.model';
 import { TranscationTransform } from '../../shared/models/response-get.model';
 import { ChartByCardName } from '../../shared/models/chart-by-cardname.model';
 import { BankResponse } from '../../shared/models/bank-response.model';
+import { FirstFetch } from '../../shared/models/first-fetch.model';
 
 const backendUrl = environment.backendUrl;
 
@@ -27,7 +28,7 @@ export class BankTranscationService {
   }
 
   getTransactions() {
-    return this.http.get<{message: TranscationTransform, chartData: ChartByCardName}>(`${backendUrl}`);
+    return this.http.get<{message: FirstFetch}>(`${backendUrl}`);
   }
 
   getCharts() {

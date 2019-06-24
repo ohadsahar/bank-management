@@ -16,6 +16,7 @@ async function groupCategories(transcations) {
       purchaseDate,
       price: lodash.sumBy(items, 'price'),
     })).value();
+
   return {
     groupedByCardName: groupByCardName,
   };
@@ -26,7 +27,7 @@ async function update(resultOfValidateTransactionData) {
 }
 async function paymentsTime(transactionData) {
   const dayOfMonth = moment().get('date');
-  if (dayOfMonth === 23) {
+  if (dayOfMonth === 10) {
     transactionData.forEach((transaction) => {
       if (transaction.numberofpayments > 0) {
         // eslint-disable-next-line no-param-reassign
@@ -36,10 +37,21 @@ async function paymentsTime(transactionData) {
     });
   }
 }
+async function allBushinessNames(transcations) {
+
+  let groupByBusinessName = lodash.uniqBy(transcations, 'name');
+  groupByBusinessName = lodash(groupByBusinessName).groupBy('name')
+    .map((items, name) => ({
+      name,
+    })).value();
+
+  return { groupByBusinessName };
+}
 
 module.exports = {
 
   groupCategories,
   paymentsTime,
   update,
+  allBushinessNames,
 };

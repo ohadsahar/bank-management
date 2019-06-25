@@ -16,6 +16,7 @@ export class BankTranscationService {
 
   constructor(private http: HttpClient) {}
   registerNewTranscation(transcationData: Bank) {
+    console.log('came from effect');
     return this.http.post<{message: Bank}>(`${backendUrl}transcation`, transcationData);
   }
 

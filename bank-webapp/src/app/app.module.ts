@@ -14,6 +14,7 @@ import { BankManagmentComponent } from './core/components/bank-managment/bank-ma
 import { HttpClientModule } from '@angular/common/http';
 import { EffectsModule } from '@ngrx/effects';
 import { BankManagementEffects } from './store/effects/bank-managment.effect';
+import { TransactionEffect } from './store/effects/transaction.effect';
 
 
 
@@ -33,7 +34,7 @@ import { BankManagementEffects } from './store/effects/bank-managment.effect';
     HttpClientModule,
     EffectsModule,
     StoreModule.forRoot(Reducers),
-    EffectsModule.forRoot([BankManagementEffects]),
+    EffectsModule.forRoot([BankManagementEffects, TransactionEffect]),
     DeviceDetectorModule.forRoot(),
     Ng4LoadingSpinnerModule.forRoot()
   ],

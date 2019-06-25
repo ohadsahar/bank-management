@@ -14,6 +14,7 @@ import * as loginActions from '../../../store/actions/login.actions';
 import * as chartActions from '../../../store/actions/chart.actions';
 import * as fromRoot from '../../../app.reducer';
 import { Store } from '@ngrx/store';
+import * as transactionActions from '../../../store/actions/transaction.actions';
 
 @Component({
   selector: 'app-bank-managment',
@@ -43,6 +44,7 @@ export class BankManagmentComponent implements OnInit {
   public chartDiff: Chart;
 
   private allChartsDatangrx: Subject<void> = new Subject<void>();
+  public registerNewTransactionNgrx: Subject<void> = new Subject<void>();
   public editoptionsable: any = {};
   public bankTransaction = new BankValues('', '', '', '', null, null, null, null, '', '');
   public bankEditTransaction = new BankValues('', '', '', '', null, null, null, null, '', '');
@@ -69,8 +71,6 @@ export class BankManagmentComponent implements OnInit {
   dataSource = new MatTableDataSource();
 
   ngOnInit() {
-
-
     this.onLoadSite();
   }
   onLoadSite() {
@@ -83,7 +83,7 @@ export class BankManagmentComponent implements OnInit {
   getAllTransactions() {
     this.bankTransactionService.getTransactions().subscribe(response => {
       this.allTranscations = response.message.foundTranscations;
-      //this.filteredOptions = response.message.bushinessNames.groupByBusinessName;
+      // this.filteredOptions = response.message.bushinessNames.groupByBusinessName;
       this.updateTable();
       this.calculateFinancialExpenses();
       this.getAllCharts();
@@ -98,6 +98,37 @@ export class BankManagmentComponent implements OnInit {
       });
   }
 
+  registerNewTransaction() {
+    this.bankTransaction.name = this.myControl.value;
+    if (this.validateNewTransaction()) {
+      const date = moment(Date.now()).calendar().toString();
+      const purchaseMonth = moment(Date.now()).month().toString();
+      this.bankTransaction.purchaseDate = date + 1;
+      this.bankTransaction.monthPurchase = purchaseMonth;
+      this.arrayCardsNames = [];
+      this.store.dispatch(new transactionActions.RegisterTransaction(this.bankTransaction));
+      this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.registerNewTransactionNgrx))
+      .subscribe((data) => {
+          this.afterRegisterNewCard(data.data);
+          this.messageService.successMessage('הקנייה התווספה בהצלחה', 'סגור');
+      });
+    }
+  }
+  deleteTransaction(transcationId: string, transactionData: Bank) {
+    this.bankTransactionService.deleteTranscation(transcationId).subscribe(response => {
+      const deleteTranscation = this.allTranscations.filter(transcation => transcation._id !== transcationId);
+      this.allTranscations = deleteTranscation;
+      this.updateFinancialExpensesAfterDelete(transactionData);
+      this.updateTable();
+    });
+  }
+  updateTransaction() {
+    this.bankTransactionService.updateTransaction(this.bankEditTransaction).subscribe(response => {
+      const index = this.allTranscations.findIndex(transaction => transaction._id === response.message.bankData._id);
+      this.allTranscations[index] = response.message.bankData;
+      this.updateAble = false;
+    });
+  }
   assignCardNames() {
     this.arrayCardsTotalPrice = [];
     this.chartTranscations.forEach(transactionData => {
@@ -189,44 +220,17 @@ export class BankManagmentComponent implements OnInit {
   compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
-  registerNewTranscation() {
-
-    this.bankTransaction.name = this.myControl.value;
-    if (this.validateNewTransaction()) {
-      const date = moment(Date.now()).calendar().toString();
-      const purchaseMonth = moment(Date.now()).month().toString();
-      this.bankTransaction.purchaseDate = date + 1;
-      this.bankTransaction.monthPurchase = purchaseMonth;
-      this.arrayCardsNames = [];
-      this.bankTransactionService.registerNewTranscation(this.bankTransaction).subscribe(response => {
-        this.allTranscations.push(response.message);
-        this.updateTable();
-        this.updateFinancialExpensesAfterRegister(response);
-        this.resetValues();
-        this.getAllCharts();
-        this.messageService.successMessage('הקנייה התווספה בהצלחה', 'סגור');
-      },
-        error => {
-          this.messageService.failedMessage(
-            'ישנה בעיה בהוספת עסקה חדשה', 'סגור'
-          );
-        }
-      );
-    }
-  }
   updateTable() {
     this.dataSource = new MatTableDataSource(this.allTranscations);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-  deleteTransaction(transcationId: string, transactionData: Bank) {
-    this.bankTransactionService.deleteTranscation(transcationId).subscribe(response => {
-      const deleteTranscation = this.allTranscations.filter(transcation => transcation._id !== transcationId);
-      this.allTranscations = deleteTranscation;
-      this.updateFinancialExpensesAfterDelete(transactionData);
-      this.updateTable();
-
-    });
+  afterRegisterNewCard(response: any) {
+    this.allTranscations.push(response);
+    this.updateTable();
+    this.updateFinancialExpensesAfterRegister(response);
+    this.resetValues();
+    this.getAllCharts();
   }
   editTransaction(transcationData: Bank) {
     this.updateAble = true;
@@ -238,14 +242,6 @@ export class BankManagmentComponent implements OnInit {
       this.counter = 0;
     }
   }
-  updateTransaction() {
-    this.bankTransactionService.updateTransaction(this.bankEditTransaction).subscribe(response => {
-      const index = this.allTranscations.findIndex(transaction => transaction._id === response.message.bankData._id);
-      this.allTranscations[index] = response.message.bankData;
-      this.updateAble = false;
-
-    });
-  }
   updateFinancialExpensesAfterDelete(transactionData: Bank) {
 
     this.totalExpenses -= transactionData.price;
@@ -256,10 +252,10 @@ export class BankManagmentComponent implements OnInit {
   }
   updateFinancialExpensesAfterRegister(response) {
 
-    this.totalExpenses += response.message.price;
-    if (response.message.numberofpayments > 0) {
-      this.numberOfPayments += response.message.numberofpayments;
-      this.monthExpenses += response.message.eachMonth;
+    this.totalExpenses += response.price;
+    if (response.numberofpayments > 0) {
+      this.numberOfPayments += response.numberofpayments;
+      this.monthExpenses += response.eachMonth;
     }
   }
   validateNewTransaction() {
@@ -276,7 +272,7 @@ export class BankManagmentComponent implements OnInit {
   }
   changeChart(type: string) {
     if (this.chartDiff) {
-      this.chartDiff.destroty();
+      this.chartDiff.destroy();
     } else {
       this.chartDiff(type);
     }
@@ -284,5 +280,12 @@ export class BankManagmentComponent implements OnInit {
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.options.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
+  }
+
+  ngOnDestroy() {
+    this.registerNewTransactionNgrx.next();
+    this.registerNewTransactionNgrx.complete();
+    this.allChartsDatangrx.next();
+    this.allChartsDatangrx.complete();
   }
 }

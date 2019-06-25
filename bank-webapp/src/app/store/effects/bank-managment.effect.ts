@@ -5,12 +5,10 @@ import { BankTranscationService } from '../../core/services/bank-transcation.ser
 import * as chartActions from '../actions/chart.actions';
 import { of } from 'rxjs';
 
-
 @Injectable()
 export class BankManagementEffects {
 
   constructor(private actions$: Actions, private bankService: BankTranscationService) { }
-
 
   @Effect()
   public getCharts$ = this.actions$.pipe(ofType<any>(chartActions.GET_CHARTS)).pipe(

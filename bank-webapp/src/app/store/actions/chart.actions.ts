@@ -5,6 +5,8 @@ export const GET_CHART_FAILED = 'LOAD_CHARTS_FAILED!';
 
 export class GetCharts implements Action {
   readonly type = GET_CHARTS;
+
+  constructor() {}
 };
 
 export class ChartSuccess implements Action {

@@ -5,7 +5,8 @@ export const REGISTER_TRANSACTION_FAILED = 'REGISTER_TRANSACTION_FAILED';
 
 export class RegisterTransaction implements Action {
   readonly type = REGISTER_TRANSACTION;
-  constructor(public payload: any) {}
+  constructor(public payload: any) {
+  }
 }
 export class RegisterTransactionSuccess implements Action {
   readonly type = REGISTER_TRANSACTION_SUCCESS;
@@ -14,6 +15,8 @@ export class RegisterTransactionSuccess implements Action {
 }
 export class RegisterTransactionFailed implements Action {
   readonly type = REGISTER_TRANSACTION_FAILED;
-  constructor(public payload: any) {}
+  constructor(public payload: any) {
+    console.log(payload);
+  }
 }
 export type TransactionActions = RegisterTransaction | RegisterTransactionSuccess | RegisterTransactionFailed;

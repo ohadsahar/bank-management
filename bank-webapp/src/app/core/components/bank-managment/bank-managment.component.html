@@ -134,72 +134,7 @@
       </div>
       <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
       <ng-container>
-        <div class="input-new-transaction">
-          <table>
-            <td>
-              <mat-form-field class="new-transaction">
-                <mat-select [(ngModel)]="bankTransaction.cardName" value="{{bankEditTransaction.cardName}}">
-                  <mat-option *ngFor="let card of cards" [value]="card.value">
-                    {{card.value}}
-                  </mat-option>
-                </mat-select>
-                <mat-placeholder class="placeholder">שם הכרטיס</mat-placeholder>
-                <mat-error>חובה למלא שם כרטיס</mat-error>
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field class="new-transaction">
-                <input type="text" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
-                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                  <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                    {{option}}
-                  </mat-option>
-                </mat-autocomplete>
-                <mat-placeholder class="placeholder">בית העסק</mat-placeholder>
-                <mat-error>חובה למלא שם מוצר</mat-error>
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field class="new-transaction">
-                <mat-select [(ngModel)]="bankTransaction.typeProduct">
-                  <mat-option *ngFor="let category of categories" [value]="category.value">
-                    {{category.value}}
-                  </mat-option>
-                </mat-select>
-                <mat-placeholder class="placeholder">קטגוריה</mat-placeholder>
-                <mat-error>חובה למלא את סוג המוצר </mat-error>
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field class="new-transaction">
-                <input matInput type="number" [(ngModel)]="bankTransaction.price" required>
-                <mat-placeholder class="placeholder">מחיר העסקה</mat-placeholder>
-                <mat-error>חובה למלא את המחיר הכללי </mat-error>
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field class="new-transaction">
-                <input matInput type="number" [(ngModel)]="bankTransaction.numberofpayments"
-                  (input)="calculateEachMonth()">
-                <mat-placeholder class="placeholder">מספר תשלומים</mat-placeholder>
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field class="new-transaction">
-                <input matInput type="number" [(ngModel)]="bankTransaction.eachMonth" [disabled]="true">
-                <mat-placeholder class="placeholder">תשלום חודשי</mat-placeholder>
-              </mat-form-field>
-            </td>
-            <mat-form-field class="new-transaction">
-              <td><input matInput type="number" [(ngModel)]="bankTransaction.leftPayments" [disabled]="true"></td>
-              <mat-placeholder class="placeholder">תשלומים שנותרו</mat-placeholder>
-            </mat-form-field>
-            <td>
-              <button mat-raised-button color="primary" type="button" (click)="registerNewTransaction()"
-                id="new-transaction-button">אישור</button>
-            </td>
-          </table>
-        </div>
+        <div (click)="registerNewTransactionDialog()">add</div>
       </ng-container>
     </div>
   </div>

@@ -1,20 +1,19 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatPaginator, MatSort, MatTableDataSource, Sort } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort, MatTableDataSource, Sort } from '@angular/material';
+import { Store } from '@ngrx/store';
 import { Chart } from 'chart.js';
-import * as moment from 'moment';
 import { Observable, Subject } from 'rxjs';
 import { map, startWith, takeUntil } from 'rxjs/operators';
+import { RegisterNewTransactionModalComponent } from 'src/app/shared/modals/register-new-transaction.component';
+import * as fromRoot from '../../../app.reducer';
 import { Bank } from '../../../shared/models/bank-data.model';
 import { BankValues } from '../../../shared/models/bank.model';
+import { ChartByCardName } from '../../../shared/models/chart-by-cardname.model';
+import * as chartActions from '../../../store/actions/chart.actions';
+import * as transactionActions from '../../../store/actions/transaction.actions';
 import { BankTranscationService } from '../../services/bank-transcation.service';
 import { MessageService } from '../../services/message.service';
-import { ChartByCardName } from '../../../shared/models/chart-by-cardname.model';
-import * as loginActions from '../../../store/actions/login.actions';
-import * as chartActions from '../../../store/actions/chart.actions';
-import * as fromRoot from '../../../app.reducer';
-import { Store } from '@ngrx/store';
-import * as transactionActions from '../../../store/actions/transaction.actions';
 
 @Component({
   selector: 'app-bank-managment',
@@ -22,7 +21,7 @@ import * as transactionActions from '../../../store/actions/transaction.actions'
   styleUrls: ['./bank-managment.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class BankManagmentComponent implements OnInit {
+export class BankManagmentComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -42,19 +41,17 @@ export class BankManagmentComponent implements OnInit {
   public editEnable: boolean;
   public updateAble: boolean;
   public chartDiff: Chart;
-
   public loading: boolean;
   public loaded: boolean;
-
   private getCharts$: Subject<void> = new Subject<void>();
   public registerNewTransactionNgrx: Subject<void> = new Subject<void>();
   public editoptionsable: any = {};
-  public bankTransaction = new BankValues('', '', '', '', null, null, null, null, '', '');
   public bankEditTransaction = new BankValues('', '', '', '', null, null, null, null, '', '');
   constructor(
     private bankTransactionService: BankTranscationService,
     private messageService: MessageService,
-    private store: Store<fromRoot.State>
+    private store: Store<fromRoot.State>,
+    public dialog: MatDialog
   ) {
     this.counter = 0;
     this.totalExpenses = 0;
@@ -76,6 +73,7 @@ export class BankManagmentComponent implements OnInit {
   ngOnInit() {
     this.onLoadSite();
   }
+
   onLoadSite() {
 
     this.filteredOptions = this.myControl.valueChanges.pipe(
@@ -101,23 +99,13 @@ export class BankManagmentComponent implements OnInit {
         this.assignCardNames();
       });
   }
-
-  registerNewTransaction() {
-    this.bankTransaction.name = this.myControl.value;
-    if (this.validateNewTransaction()) {
-      const date = moment(Date.now()).calendar().toString();
-      const purchaseMonth = moment(Date.now()).month().toString();
-      this.bankTransaction.purchaseDate = date + 1;
-      this.bankTransaction.monthPurchase = purchaseMonth;
-      this.arrayCardsNames = [];
-      this.store.dispatch(new transactionActions.RegisterTransaction(this.bankTransaction));
-      this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.registerNewTransactionNgrx))
-        .subscribe((dataInfo) => {
-          this.registerNewTransactionNgrx.complete();
-          this.afterRegisterNewCard(dataInfo.data);
-          this.messageService.successMessage('הקנייה התווספה בהצלחה', 'סגור');
-        });
-    }
+  registerNewTransaction(result: any) {
+    this.store.dispatch(new transactionActions.RegisterTransaction(result));
+    this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.registerNewTransactionNgrx))
+      .subscribe((dataInfo) => {
+        this.afterRegisterNewCard(dataInfo.data);
+        this.messageService.successMessage('הקנייה התווספה בהצלחה', 'סגור');
+      });
   }
   deleteTransaction(transcationId: string, transactionData: Bank) {
     this.bankTransactionService.deleteTranscation(transcationId).subscribe(response => {
@@ -189,17 +177,6 @@ export class BankManagmentComponent implements OnInit {
     });
     this.allTranscations = this.sortedData;
   }
-  calculateEachMonth() {
-
-    if (this.bankTransaction.numberofpayments) {
-      this.bankTransaction.eachMonth = this.bankTransaction.price / this.bankTransaction.numberofpayments;
-      this.bankTransaction.eachMonth = Number(this.bankTransaction.eachMonth.toFixed(2));
-      this.bankTransaction.leftPayments = this.bankTransaction.numberofpayments;
-    } else {
-      this.bankTransaction.eachMonth = null;
-      this.bankTransaction.leftPayments = null;
-    }
-  }
   calculateEachMonthEdit() {
     if (this.bankEditTransaction.numberofpayments) {
       this.bankEditTransaction.eachMonth = this.bankEditTransaction.price / this.bankEditTransaction.numberofpayments;
@@ -234,8 +211,8 @@ export class BankManagmentComponent implements OnInit {
     this.allTranscations.push(response);
     this.updateTable();
     this.updateFinancialExpensesAfterRegister(response);
-    this.resetValues();
     this.getAllCharts();
+
   }
   editTransaction(transcationData: Bank) {
     this.updateAble = true;
@@ -262,18 +239,6 @@ export class BankManagmentComponent implements OnInit {
       this.monthExpenses += response.eachMonth;
     }
   }
-  validateNewTransaction() {
-
-    if (this.bankTransaction.cardName && this.bankTransaction.name &&
-      this.bankTransaction.price && this.bankTransaction.typeProduct) {
-      return true;
-    }
-    return false;
-  }
-  resetValues() {
-
-    this.bankTransaction = new BankValues('', '', '', '', null, null, null, null, '', '');
-  }
   changeChart(type: string) {
     if (this.chartDiff) {
       this.chartDiff.destroy();
@@ -285,11 +250,17 @@ export class BankManagmentComponent implements OnInit {
     const filterValue = value.toLowerCase();
     return this.options.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
   }
-
+  registerNewTransactionDialog() {
+    const dialogRef = this.dialog.open(RegisterNewTransactionModalComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      this.registerNewTransaction(result);
+    });
+  }
   ngOnDestroy() {
-    this.registerNewTransactionNgrx.unsubscribe();
-    this.getCharts$.unsubscribe();
     this.getCharts$.complete();
     this.registerNewTransactionNgrx.complete();
+    this.registerNewTransactionNgrx.unsubscribe();
+    this.getCharts$.unsubscribe();
   }
+
 }

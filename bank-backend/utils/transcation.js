@@ -38,7 +38,6 @@ async function paymentsTime(transactionData) {
   }
 }
 async function allBushinessNames(transcations) {
-
   let groupByBusinessName = lodash.uniqBy(transcations, 'name');
   groupByBusinessName = lodash(groupByBusinessName).groupBy('name')
     .map((items, name) => ({

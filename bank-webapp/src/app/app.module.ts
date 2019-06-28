@@ -15,6 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { EffectsModule } from '@ngrx/effects';
 import { BankManagementEffects } from './store/effects/bank-managment.effect';
 import { TransactionEffect } from './store/effects/transaction.effect';
+import { RegisterNewTransactionModalComponent } from './shared/modals/register-new-transaction.component';
 
 
 
@@ -22,7 +23,8 @@ import { TransactionEffect } from './store/effects/transaction.effect';
   declarations: [
     AppComponent,
     LoginComponent,
-    BankManagmentComponent
+    BankManagmentComponent,
+    RegisterNewTransactionModalComponent
   ],
   imports: [
     BrowserModule,
@@ -40,6 +42,7 @@ import { TransactionEffect } from './store/effects/transaction.effect';
   ],
   providers: [],
 
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [RegisterNewTransactionModalComponent]
 })
 export class AppModule { }

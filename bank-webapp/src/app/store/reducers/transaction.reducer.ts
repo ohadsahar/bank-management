@@ -1,5 +1,7 @@
-import { TransactionActions,
-REGISTER_TRANSACTION, REGISTER_TRANSACTION_SUCCESS, REGISTER_TRANSACTION_FAILED } from '../actions/transaction.actions';
+import {
+  TransactionActions,
+  REGISTER_TRANSACTION, REGISTER_TRANSACTION_SUCCESS, REGISTER_TRANSACTION_FAILED
+} from '../actions/transaction.actions';
 
 export interface State {
   loading: boolean;
@@ -16,7 +18,7 @@ const initialState: State = {
 export function transactionReducer(state = initialState, action: TransactionActions) {
   switch (action.type) {
     case REGISTER_TRANSACTION:
-        return {
+      return {
         ...state,
         loading: true,
         loaded: false,
@@ -36,8 +38,8 @@ export function transactionReducer(state = initialState, action: TransactionActi
         loaded: true,
         data: action.payload
       };
-      default:
-          return state;
+    default:
+      return state;
   }
 }
 export const newTransactionData = (state: State) => state;

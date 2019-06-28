@@ -3,19 +3,17 @@ import * as loginReducer from './store/reducers/login.reducer';
 import * as deviceReducer from './store/reducers/device-size.reducer';
 import * as chartReducer from './store/reducers/chart-reducer';
 import * as transactionReducer from './store/reducers/transaction.reducer';
-
 export interface State {
   chartReducer: chartReducer.State;
   loginReducer: loginReducer.State;
   deviceReducer: deviceReducer.State;
   transactionReducer: transactionReducer.State;
 }
-
 export const Reducers: ActionReducerMap<State> = {
   chartReducer: chartReducer.chartReducer,
   loginReducer: loginReducer.loadingReducer,
   deviceReducer: deviceReducer.deviceSizeReducer,
-  transactionReducer: transactionReducer.transactionReducer
+  transactionReducer: transactionReducer.transactionReducer,
 };
 
 export const getTransactionReducer = createFeatureSelector<transactionReducer.State>('transactionReducer');

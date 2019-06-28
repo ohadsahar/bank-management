@@ -14,7 +14,7 @@ import * as chartActions from '../../../store/actions/chart.actions';
 import * as transactionActions from '../../../store/actions/transaction.actions';
 import { BankTranscationService } from '../../services/bank-transcation.service';
 import { MessageService } from '../../services/message.service';
-import { FirstFetch } from '../../../shared/models/first-fetch.model';
+
 
 @Component({
   selector: 'app-bank-managment',
@@ -41,7 +41,8 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   public numberOfPayments: number;
   public editEnable: boolean;
   public updateAble: boolean;
-  public chartDiff: Chart;
+  public allCardChart: Chart;
+  public allExpensesByMonthChart: Chart;
   public loading: boolean;
   public loaded: boolean;
   private getCharts$: Subject<void> = new Subject<void>();
@@ -98,9 +99,9 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     //   .subscribe((data) => {
     //     if (data.loaded) {
     //       console.log(data.data);
-    //       this.updateTable();
-    //       this.calculateFinancialExpenses();
-    //       this.getAllCharts();
+    //       // this.updateTable();
+    //       // this.calculateFinancialExpenses();
+    //       // this.getAllCharts();
     //     }
     //   });
   }
@@ -138,21 +139,20 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
         }
       });
   }
-
   updateTransaction() {
-    // this.bankTransactionService.updateTransaction(this.bankEditTransaction).subscribe(response => {
-    //   const index = this.allTranscations.findIndex(transaction => transaction._id === response.message.bankData._id);
-    //   this.allTranscations[index] = response.message.bankData;
-    //   this.updateAble = false;
-    // });
-    console.log(this.bankEditTransaction);
-    this.store.dispatch(new transactionActions.UpdateTransaction(this.bankEditTransaction));
-    this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.updateTransaction$))
-      .subscribe((data) => {
-        const index = this.allTranscations.findIndex(transaction => transaction._id === data._id);
-        this.allTranscations[index] = data.data;
-        this.updateAble = false;
-      });
+    this.bankTransactionService.updateTransaction(this.bankEditTransaction).subscribe(response => {
+      const index = this.allTranscations.findIndex(transaction => transaction._id === response.message.bankData._id);
+      this.allTranscations[index] = response.message.bankData;
+      this.updateAble = false;
+    });
+    // console.log(this.bankEditTransaction);
+    // this.store.dispatch(new transactionActions.UpdateTransaction(this.bankEditTransaction));
+    // this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.updateTransaction$))
+    //   .subscribe((data) => {
+    //     const index = this.allTranscations.findIndex(transaction => transaction._id === data._id);
+    //     this.allTranscations[index] = data.data;
+    //     this.updateAble = false;
+    //   });
   }
   assignCardNames() {
     this.arrayCardsTotalPrice = [];
@@ -164,10 +164,35 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.loadCharts();
   }
   loadCharts() {
-    this.chartOther('doughnut');
+    this.cardsChart('pie');
+    this.expensesByCurrentMonthChart('bar');
   }
-  chartOther(type: string) {
-    this.chartDiff = new Chart('chartDiff', {
+
+  expensesByCurrentMonthChart(type: string) {
+    this.allExpensesByMonthChart = new Chart('allExpensesByMonthChart', {
+      type,
+      data: {
+        datasets: [{
+          label: 'החודש הנוכחי',
+          data: this.arrayCardsTotalPrice
+        },],
+
+        labels: this.arrayCardsNames,
+      },
+      options: {
+        scales: {
+          xAxes: [{
+            stacked: true
+          }],
+          yAxes: [{
+            stacked: true
+          }]
+        }
+      }
+    });
+  }
+  cardsChart(type: string) {
+    this.allCardChart = new Chart('allCardChart', {
       type,
       data: {
         labels: this.arrayCardsNames,
@@ -270,10 +295,10 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     }
   }
   changeChart(type: string) {
-    if (this.chartDiff) {
-      this.chartDiff.destroy();
+    if (this.allCardChart) {
+      this.allCardChart.destroy();
     } else {
-      this.chartDiff(type);
+      this.allCardChart(type);
     }
   }
   private _filter(value: string): string[] {

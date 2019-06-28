@@ -7,9 +7,30 @@ html {
 th,
 td {
   font-family: 'Varela Round', sans-serif !important;
+  background-color: #F5F1ED;
+  text-align: center !important;
 }
 
+td.mat-cell:first-of-type,
+td.mat-footer-cell:first-of-type,
+th.mat-header-cell:first-of-type {
 
+  text-align: center !important;
+}
+
+.bank-component .purchase-list {
+  text-align: right;
+  background-color: #F5F1ED;
+  padding: 20px;
+}
+
+.mat-paginator-container {
+  background-color: #F5F1ED;
+}
+
+.bank-component .purchase-list .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+  width: 30%;
+}
 
 .list-of-transactions table {
   width: 100%;
@@ -59,7 +80,7 @@ table th {
   text-align: right;
   direction: rtl;
   width: 100%;
-  background-color: white;
+
 }
 
 
@@ -135,7 +156,6 @@ h3 {
 }
 
 .mat-option-text {
-
   font-size: 12px;
 }
 
@@ -158,19 +178,21 @@ h3 {
   background: #555;
 }
 
-.bank-component .purchase-list {
-  background-color: antiquewhite;
+i {
+  cursor: pointer;
 }
 
-.bank-component .purchase-list .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
-
-  width: 30%;
-}
 
 .bank-component .statistic-section {
-
-  background-color: #5398BE;
+  background-color: #F5F1ED;
   overflow-x: hidden;
 }
 
-@media only screen and(max-width:600px) {}
+
+@media only screen and (max-width: 800px) {
+
+  .bank-component .purchase-list {
+
+    padding: 0px !important;
+  }
+}

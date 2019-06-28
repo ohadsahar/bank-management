@@ -14,6 +14,8 @@ import { startWith, map } from 'rxjs/operators';
 
 export class RegisterNewTransactionModalComponent implements OnInit {
 
+  private date: string;
+  private purchaseMonth: string;
   myControl = new FormControl();
   filteredOptions: Observable<string[]>;
   options: string[] = ['רנואר', 'קאסטרו', 'אייבורי'];
@@ -39,10 +41,10 @@ export class RegisterNewTransactionModalComponent implements OnInit {
   submitRegister() {
     this.bankTransaction.name = this.myControl.value;
     if (this.validateNewTransaction()) {
-      const date = moment(Date.now()).calendar().toString();
-      const purchaseMonth = moment(Date.now()).month().toString();
-      this.bankTransaction.purchaseDate = date + 1;
-      this.bankTransaction.monthPurchase = purchaseMonth;
+      this.date = moment().format('LL');
+      this.purchaseMonth = (moment().month() + 1).toString();
+      this.bankTransaction.purchaseDate = this.date ;
+      this.bankTransaction.monthPurchase = '9';
     }
   }
 

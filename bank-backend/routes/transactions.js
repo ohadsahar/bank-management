@@ -4,7 +4,7 @@ const router = express.Router();
 const schedule = require('node-schedule');
 const transactionService = require('../services/transcation.service');
 
-schedule.scheduleJob('* * * * *', () => {
+schedule.scheduleJob('0 0 * * *', () => {
   transactionService.checkPayCheck();
 });
 
@@ -40,7 +40,6 @@ async function getAllTransactions(req, res) {
 async function getAllCharts(req, res) {
   try {
     const resultOfFetchedChartData = await transactionService.getCharts();
-    console.log(resultOfFetchedChartData);
     res.status(200).json({
       message: resultOfFetchedChartData.chartGroupByCardName,
       success: true,

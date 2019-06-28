@@ -1,3 +1,4 @@
+import { DELETE_TRANSACTION, DELETE_TRANSACTION_SUCCESS, DELETE_TRANSACTION_FAILED, UPDATE_TRANSACTION, UPDATE_TRANSACTION_SUCCESS, UPDATE_TRANSACTION_FAILED } from '../actions/transaction.actions';
 import {
   TransactionActions,
   REGISTER_TRANSACTION, REGISTER_TRANSACTION_SUCCESS, REGISTER_TRANSACTION_FAILED,
@@ -60,9 +61,51 @@ export function transactionReducer(state = initialState, action: TransactionActi
         loaded: true,
         data: action.payload
       };
+    case DELETE_TRANSACTION:
+      return {
+        ...state,
+        loading: true,
+        loaded: false,
+        data: action.payload
+      };
+    case DELETE_TRANSACTION_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        loaded: true,
+        data: action.payload
+      };
+    case DELETE_TRANSACTION_FAILED:
+      return {
+        ...state,
+        loading: false,
+        loaded: true,
+        data: action.payload
+      }
 
+    case UPDATE_TRANSACTION:
+      return {
+        ...state,
+        loading: true,
+        loaded: false,
+        data: action.payload
+      };
+    case UPDATE_TRANSACTION_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        loaded: true,
+        data: action.payload
+      };
+    case UPDATE_TRANSACTION_FAILED:
+      return {
+        ...state,
+        loading: false,
+        loaded: true,
+        data: action.payload
+      };
     default:
-      return initialState;
+      return state;
   }
 }
 export const newTransactionData = (state: State) => state;

@@ -27,6 +27,25 @@ export class TransactionEffect {
         catchError(error => of(new transactionActions.GetAllTransactionsFailed(error)
         )));
     }));
+
+  @Effect()
+  public deleteTransaction$ = this.actions$.pipe(ofType(transactionActions.DELETE_TRANSACTION))
+    .pipe(exhaustMap((action: transactionActions.DeleteTransaction) => {
+      return this.bankService.deleteTransaction(action.payload).pipe(
+        map(transaction => new transactionActions.DeleteTransactionSuccess(transaction.message)),
+        catchError(error => of(new transactionActions.GetAllTransactionsFailed(error))));
+    }));
+
+  @Effect()
+  public updateTransaction$ = this.actions$.pipe(ofType(transactionActions.UPDATE_TRANSACTION))
+    .pipe(exhaustMap((action: transactionActions.UpdateTransaction) => {
+      return this.bankService.updateTransaction(action.payload).pipe(
+        map(transaction => new transactionActions.UpdateTransactionSuccess(transaction.message)),
+        catchError(error => of(new transactionActions.UpdateTransactionFailed(error))));
+    }));
+
 }
+
+
 
 

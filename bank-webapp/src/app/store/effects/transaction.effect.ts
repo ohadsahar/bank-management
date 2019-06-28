@@ -12,7 +12,7 @@ export class TransactionEffect {
   @Effect()
   public registerTransaction$ = this.actions$.pipe(ofType(transactionActions.REGISTER_TRANSACTION))
     .pipe(exhaustMap((action: transactionActions.RegisterTransaction) => {
-      return this.bankService.registerNewTranscation(action.payload).pipe(
+      return this.bankService.registerNewTransaction(action.payload).pipe(
         map(transaction => new transactionActions.RegisterTransactionSuccess(transaction.message)),
         catchError(error => of(new transactionActions.RegisterTransactionFailed(error)
         )));

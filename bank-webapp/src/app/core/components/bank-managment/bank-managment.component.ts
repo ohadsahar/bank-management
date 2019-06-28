@@ -95,22 +95,28 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.store.dispatch(new chartActions.GetCharts());
     this.store.select(fromRoot.getChartsData).pipe(takeUntil(this.getCharts$))
       .subscribe((data) => {
+        if (data.loaded) {
         this.chartTranscations = data.data as any;
+        console.log(this.chartTranscations);
         this.assignCardNames();
+        }
       });
   }
   registerNewTransaction(result: any) {
     this.store.dispatch(new transactionActions.RegisterTransaction(result));
     this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.registerNewTransactionNgrx))
-      .subscribe((dataInfo) => {
-        this.afterRegisterNewCard(dataInfo.data);
-        this.messageService.successMessage('הקנייה התווספה בהצלחה', 'סגור');
+      .subscribe((data) => {
+        if (data.loaded) {
+          this.afterRegisterNewCard(data.data);
+          this.registerNewTransactionNgrx.complete();
+          this.messageService.successMessage('הקנייה התווספה בהצלחה', 'סגור');
+        }
       });
   }
-  deleteTransaction(transcationId: string, transactionData: Bank) {
-    this.bankTransactionService.deleteTranscation(transcationId).subscribe(response => {
-      const deleteTranscation = this.allTranscations.filter(transcation => transcation._id !== transcationId);
-      this.allTranscations = deleteTranscation;
+  deleteTransaction(transactionId: string, transactionData: Bank) {
+    this.bankTransactionService.deleteTransaction(transactionId).subscribe(response => {
+      const deleteTransaction = this.allTranscations.filter(transcation => transcation._id !== transactionId);
+      this.allTranscations = deleteTransaction;
       this.updateFinancialExpensesAfterDelete(transactionData);
       this.updateTable();
     });
@@ -128,6 +134,8 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       this.arrayCardsNames.push(transactionData.cardName);
       this.arrayCardsTotalPrice.push(transactionData.price);
     });
+    console.log(this.arrayCardsNames);
+    console.log(this.arrayCardsTotalPrice);
     this.loadCharts();
   }
   loadCharts() {
@@ -167,7 +175,6 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       this.sortedData = data;
       return;
     }
-
     this.sortedData = data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {

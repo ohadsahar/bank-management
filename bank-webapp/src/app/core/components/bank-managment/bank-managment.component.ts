@@ -43,7 +43,10 @@ export class BankManagmentComponent implements OnInit {
   public updateAble: boolean;
   public chartDiff: Chart;
 
-  private allChartsDatangrx: Subject<void> = new Subject<void>();
+  public loading: boolean;
+  public loaded: boolean;
+
+  private getCharts$: Subject<void> = new Subject<void>();
   public registerNewTransactionNgrx: Subject<void> = new Subject<void>();
   public editoptionsable: any = {};
   public bankTransaction = new BankValues('', '', '', '', null, null, null, null, '', '');
@@ -74,6 +77,7 @@ export class BankManagmentComponent implements OnInit {
     this.onLoadSite();
   }
   onLoadSite() {
+
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value))
@@ -91,7 +95,7 @@ export class BankManagmentComponent implements OnInit {
   }
   getAllCharts() {
     this.store.dispatch(new chartActions.GetCharts());
-    this.store.select(fromRoot.getChartsData).pipe(takeUntil(this.allChartsDatangrx))
+    this.store.select(fromRoot.getChartsData).pipe(takeUntil(this.getCharts$))
       .subscribe((data) => {
         this.chartTranscations = data.data as any;
         this.assignCardNames();
@@ -108,10 +112,11 @@ export class BankManagmentComponent implements OnInit {
       this.arrayCardsNames = [];
       this.store.dispatch(new transactionActions.RegisterTransaction(this.bankTransaction));
       this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.registerNewTransactionNgrx))
-      .subscribe((data) => {
-          this.afterRegisterNewCard(data.data);
+        .subscribe((dataInfo) => {
+          this.registerNewTransactionNgrx.complete();
+          this.afterRegisterNewCard(dataInfo.data);
           this.messageService.successMessage('הקנייה התווספה בהצלחה', 'סגור');
-      });
+        });
     }
   }
   deleteTransaction(transcationId: string, transactionData: Bank) {
@@ -251,7 +256,6 @@ export class BankManagmentComponent implements OnInit {
     }
   }
   updateFinancialExpensesAfterRegister(response) {
-
     this.totalExpenses += response.price;
     if (response.numberofpayments > 0) {
       this.numberOfPayments += response.numberofpayments;
@@ -283,9 +287,9 @@ export class BankManagmentComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.registerNewTransactionNgrx.next();
+    this.registerNewTransactionNgrx.unsubscribe();
+    this.getCharts$.unsubscribe();
+    this.getCharts$.complete();
     this.registerNewTransactionNgrx.complete();
-    this.allChartsDatangrx.next();
-    this.allChartsDatangrx.complete();
   }
 }

@@ -8,14 +8,16 @@ import { of } from 'rxjs';
 @Injectable()
 export class BankManagementEffects {
 
-  constructor(private actions$: Actions, private bankService: BankTranscationService) { }
+  constructor(private actions$: Actions, private bankService: BankTranscationService) {
+  }
 
   @Effect()
-  public getCharts$ = this.actions$.pipe(ofType<any>(chartActions.GET_CHARTS)).pipe(
-    switchMap(() => {
-      return this.bankService.getCharts().pipe(
-      map(charts => new chartActions.ChartSuccess(charts.message)),
-      catchError(error => of(new chartActions.ChartFailed(error)
-      ))); }));
+  public getCharts$ = this.actions$.pipe(ofType(chartActions.GET_CHARTS))
+    .pipe(switchMap(() => {
+      return this.bankService.getCharts().pipe(map(
+        charts => new chartActions.ChartSuccess(charts.message)),
+        catchError(error => of(new chartActions.ChartFailed(error)
+        )));
+    }));
 
 }

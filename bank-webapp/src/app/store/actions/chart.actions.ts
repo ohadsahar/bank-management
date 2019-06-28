@@ -5,19 +5,20 @@ export const GET_CHART_FAILED = 'LOAD_CHARTS_FAILED!';
 
 export class GetCharts implements Action {
   readonly type = GET_CHARTS;
-
-  constructor() {}
-};
+  constructor() {
+  }
+}
 
 export class ChartSuccess implements Action {
   readonly type = GET_CHARTS_SUCCESS;
-  constructor(public payload: any) {}
-};
+  constructor(public payload: any) {;
+  }
+}
 
 export class ChartFailed implements Action {
   readonly type = GET_CHART_FAILED;
   constructor(public payload: any) {}
-};
+}
 
 
 export type ChartActions =  ChartSuccess | GetCharts | ChartFailed;

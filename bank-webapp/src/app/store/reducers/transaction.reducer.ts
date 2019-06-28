@@ -36,6 +36,8 @@ export function transactionReducer(state = initialState, action: TransactionActi
         loaded: true,
         data: action.payload
       };
+      default:
+          return state;
   }
 }
 export const newTransactionData = (state: State) => state;

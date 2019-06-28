@@ -7,15 +7,13 @@ export class RegisterTransaction implements Action {
   readonly type = REGISTER_TRANSACTION;
   constructor(public payload: any) {}
 }
-
 export class RegisterTransactionSuccess implements Action {
   readonly type = REGISTER_TRANSACTION_SUCCESS;
-  constructor(public payload: any) {}
+  constructor(public payload: any) {
+  }
 }
-
 export class RegisterTransactionFailed implements Action {
   readonly type = REGISTER_TRANSACTION_FAILED;
   constructor(public payload: any) {}
 }
-
 export type TransactionActions = RegisterTransaction | RegisterTransactionSuccess | RegisterTransactionFailed;

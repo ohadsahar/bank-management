@@ -1,12 +1,50 @@
-body,html {
-  font-family: "Varela Round", sans-serif;
+body,
+html {
+  overflow-x: hidden;
+}
+
+.bank-component table,
+th,
+td {
+  font-family: 'Varela Round', sans-serif !important;
 }
 
 
 
-table {
+.list-of-transactions table {
   width: 100%;
+  table-layout: fixed;
   direction: rtl;
+}
+
+table th {
+
+  font-weight: bold !important;
+}
+
+.list-of-transactions th {
+  text-align: right !important;
+
+
+}
+
+.list-of-transactions td {
+  width: 10%;
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+
+}
+
+.input-new-transaction table {
+  width: 100%;
+  table-layout: fixed;
+  direction: rtl;
+}
+
+.input-new-transaction td {
+  width: 12.5%;
+
 }
 
 .mat-option {
@@ -14,30 +52,16 @@ table {
   text-align: right !important;
   font-weight: 500;
   font-size: 12px;
-  font-family: "Varela Round", sans-serif;
+
 }
 
 #search {
   text-align: right;
   direction: rtl;
   width: 100%;
-}
-.input-new-transaction td {
-  width: 12.5%;
-  padding: 3px;
-}
-td,
-th {
-  width: 10%;
-  text-align: right !important;
-  font-family: "Varela Round", sans-serif;
+  background-color: white;
 }
 
-td.mat-cell:first-of-type,
-td.mat-footer-cell:first-of-type,
-th.mat-header-cell:first-of-type {
-  padding: 10px;
-}
 
 .input-new-transaction {
   direction: rtl;
@@ -52,13 +76,11 @@ th.mat-header-cell:first-of-type {
   text-align: right
 }
 
-.input-new-transaction
-  .mat-form-field-appearance-legacy
-  .mat-form-field-wrapper {
+.input-new-transaction .mat-form-field-appearance-legacy .mat-form-field-wrapper {
   width: 60%;
   text-align: right;
   direction: rtl;
-  font-family: "Varela Round", sans-serif;
+
 }
 
 .mat-form-field-appearance-legacy .mat-form-field-wrapper {
@@ -70,10 +92,12 @@ th.mat-header-cell:first-of-type {
 
   width: 70% !important;
 }
+
 .fa-edit:before {
 
   margin-right: 15px;
 }
+
 #new-transaction-button {
   margin-top: 5%;
 }
@@ -84,11 +108,10 @@ th.mat-header-cell:first-of-type {
 }
 
 
-
-
 .edit-section .placeholder {
   font-weight: 100;
 }
+
 .money-management-area {
   display: inline-flex;
   margin: auto;
@@ -99,6 +122,7 @@ h1 {
   text-align: center;
   font-size: 21px;
 }
+
 h3 {
   font-size: 15px;
   text-align: right;
@@ -108,13 +132,13 @@ h3 {
 .mat-select-panel .mat-option {
   text-align: right;
   font-weight: 500;
-  font-family: "Varela Round", sans-serif;
 }
 
 .mat-option-text {
 
   font-size: 12px;
 }
+
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -135,11 +159,10 @@ h3 {
 }
 
 .bank-component .purchase-list {
-  height: 100vh;
-  background-color: #3A1772;
+  background-color: antiquewhite;
 }
 
-.bank-component .purchase-list .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper{
+.bank-component .purchase-list .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
 
   width: 30%;
 }
@@ -150,6 +173,4 @@ h3 {
   overflow-x: hidden;
 }
 
-@media only screen and(max-width:600px) {
-
-}
+@media only screen and(max-width:600px) {}

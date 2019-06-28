@@ -14,6 +14,7 @@ import * as chartActions from '../../../store/actions/chart.actions';
 import * as transactionActions from '../../../store/actions/transaction.actions';
 import { BankTranscationService } from '../../services/bank-transcation.service';
 import { MessageService } from '../../services/message.service';
+import { FirstFetch } from '../../../shared/models/first-fetch.model';
 
 @Component({
   selector: 'app-bank-managment',
@@ -45,6 +46,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   public loaded: boolean;
   private getCharts$: Subject<void> = new Subject<void>();
   public registerNewTransactionNgrx: Subject<void> = new Subject<void>();
+  private ngUnsubscribe: Subject<void> = new Subject<void>();
   public editoptionsable: any = {};
   public bankEditTransaction = new BankValues('', '', '', '', null, null, null, null, '', '');
   constructor(
@@ -83,22 +85,28 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.getAllTransactions();
   }
   getAllTransactions() {
-    this.bankTransactionService.getTransactions().subscribe(response => {
-      this.allTranscations = response.message.foundTranscations;
-      // this.filteredOptions = response.message.bushinessNames.groupByBusinessName;
-      this.updateTable();
-      this.calculateFinancialExpenses();
-      this.getAllCharts();
-    });
+    // this.bankTransactionService.getTransactions().subscribe(response => {
+    //   this.arrayCardsNames = response.message.chartGroupByCardName;
+    //   this.allTranscations = response.message.foundTranscations;
+    //   this.updateTable();
+    //   this.calculateFinancialExpenses();
+    //   this.getAllCharts();
+    // });
+    this.store.dispatch(new transactionActions.GetAllTransactions());
+    this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((data) => {
+        if (data.loaded) {
+          console.log(data);
+        }
+      });
   }
   getAllCharts() {
     this.store.dispatch(new chartActions.GetCharts());
     this.store.select(fromRoot.getChartsData).pipe(takeUntil(this.getCharts$))
       .subscribe((data) => {
         if (data.loaded) {
-        this.chartTranscations = data.data as any;
-        console.log(this.chartTranscations);
-        this.assignCardNames();
+          this.chartTranscations = data.data as any;
+          this.assignCardNames();
         }
       });
   }
@@ -108,7 +116,6 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       .subscribe((data) => {
         if (data.loaded) {
           this.afterRegisterNewCard(data.data);
-          this.registerNewTransactionNgrx.complete();
           this.messageService.successMessage('הקנייה התווספה בהצלחה', 'סגור');
         }
       });
@@ -130,12 +137,11 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   }
   assignCardNames() {
     this.arrayCardsTotalPrice = [];
+    this.arrayCardsNames = [];
     this.chartTranscations.forEach(transactionData => {
       this.arrayCardsNames.push(transactionData.cardName);
       this.arrayCardsTotalPrice.push(transactionData.price);
     });
-    console.log(this.arrayCardsNames);
-    console.log(this.arrayCardsTotalPrice);
     this.loadCharts();
   }
   loadCharts() {
@@ -219,7 +225,6 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.updateTable();
     this.updateFinancialExpensesAfterRegister(response);
     this.getAllCharts();
-
   }
   editTransaction(transcationData: Bank) {
     this.updateAble = true;

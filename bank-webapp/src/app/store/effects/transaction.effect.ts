@@ -17,5 +17,16 @@ export class TransactionEffect {
         catchError(error => of(new transactionActions.RegisterTransactionFailed(error)
         )));
     }));
+
+
+  @Effect()
+  public allTransactions$ = this.actions$.pipe(ofType(transactionActions.GET_ALL_TRANSACTION))
+    .pipe(exhaustMap(() => {
+      return this.bankService.getTransactions().pipe(map(transaction =>
+        new transactionActions.GetAllTransactionSuccess(transaction.message)),
+        catchError(error => of(new transactionActions.GetAllTransactionsFailed(error)
+        )));
+    }));
 }
+
 

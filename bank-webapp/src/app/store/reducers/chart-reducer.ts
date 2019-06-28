@@ -33,7 +33,7 @@ export function chartReducer(state = initialState, action: ChartActions) {
         data: action.payload,
       };
     default:
-      return state;
+      return initialState;
   }
 }
 export const getChartsData = (state: State) => state;

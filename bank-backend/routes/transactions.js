@@ -26,7 +26,6 @@ async function registerNewTransaction(req, res) {
 async function getAllTransactions(req, res) {
   try {
     const resultOfFetchedTranscations = await transactionService.get();
-    console.log(resultOfFetchedTranscations);
     res.status(200).json({
       message: resultOfFetchedTranscations,
       success: true,
@@ -41,6 +40,7 @@ async function getAllTransactions(req, res) {
 async function getAllCharts(req, res) {
   try {
     const resultOfFetchedChartData = await transactionService.getCharts();
+    console.log(resultOfFetchedChartData);
     res.status(200).json({
       message: resultOfFetchedChartData.chartGroupByCardName,
       success: true,

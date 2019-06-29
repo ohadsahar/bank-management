@@ -13,7 +13,7 @@
             <ng-container matColumnDef="id">
               <th mat-header-cell *matHeaderCellDef> <i class="fab fa-cc-visa"></i> אפשרויות </th>
               <td mat-cell *matCellDef="let element; let i = index"> <i class="fas fa-trash"
-                  (click)="deleteTransaction(element._id, element)"></i>
+                  (click)="deleteTransaction(element._id)"></i>
                 <i class="fas fa-edit" (click)="editTransaction(element);editoptionsable[i] = !editoptionsable[i]"
                   *ngIf="!editoptionsable[i] && !updateAble"></i>
                 <i class="fas fa-check-double" *ngIf="editEnable && editoptionsable[i]"

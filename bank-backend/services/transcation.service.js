@@ -15,9 +15,34 @@ async function register(transactionData) {
     monthPurchase: transactionData.monthPurchase,
   });
   await transactionToCreate.save();
-  return { transactionSaved: transactionToCreate };
+  return {
+    transactionSaved: transactionToCreate,
+  };
 }
+
+async function updatePurchaseDate(transactionData) {
+  const resultOfValidateTransactionData = await validatorUtil.validateUpdateData(transactionData);
+  await transactionUtil.update(resultOfValidateTransactionData);
+  return {
+    bankData: resultOfValidateTransactionData,
+  };
+}
+async function deleteX(transactionId) {
+  await TransactionModel.findOneAndDelete({
+    _id: transactionId,
+  });
+}
+async function getCharts() {
+  console.log('one');
+  const fetchedTransactions = await TransactionModel.find();
+  const resultLodashTransactions = await transactionUtil.groupCategories(fetchedTransactions);
+  return {
+    chartGroupByCardName: resultLodashTransactions.groupedByCardName,
+  };
+}
+
 async function get() {
+  console.log('two');
   const fetchedTransactions = await TransactionModel.find();
   const resultLodashTransactions = await transactionUtil.groupCategories(fetchedTransactions);
   const resultOfAllBushinessNames = await transactionUtil.allBushinessNames(fetchedTransactions);
@@ -26,19 +51,6 @@ async function get() {
     bushinessNames: resultOfAllBushinessNames,
     chartGroupByCardName: resultLodashTransactions.groupedByCardName,
   };
-}
-async function updatePurchaseDate(transactionData) {
-  const resultOfValidateTransactionData = await validatorUtil.validateUpdateData(transactionData);
-  await transactionUtil.update(resultOfValidateTransactionData);
-  return { bankData: resultOfValidateTransactionData };
-}
-async function deleteX(transactionId) {
-  await TransactionModel.findOneAndDelete({ _id: transactionId });
-}
-async function getCharts() {
-  const fetchedTransactions = await TransactionModel.find();
-  const resultLodashTransactions = await transactionUtil.groupCategories(fetchedTransactions);
-  return { chartGroupByCardName: resultLodashTransactions.groupedByCardName };
 }
 async function checkPayCheck() {
   const fetchedTransactions = await TransactionModel.find();

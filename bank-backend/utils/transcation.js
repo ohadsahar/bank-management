@@ -9,10 +9,11 @@ async function groupCategories(transactions) {
       cardName,
       price: lodash.sumBy(items, 'price'),
     })).value();
+
   // eslint-disable-next-line no-unused-vars
   const groupByMonth = lodash(transactions).groupBy('monthPurchase')
-    .map((items, purchaseDate) => ({
-      purchaseDate,
+    .map((items, monthPurchase) => ({
+      monthPurchase,
       price: lodash.sumBy(items, 'price'),
     })).value();
   console.log(groupByMonth);

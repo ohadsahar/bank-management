@@ -87,7 +87,7 @@ table th {
 .input-new-transaction {
   direction: rtl;
   font-size: 13px;
-  background-image: linear-gradient(#ffffff, #007ea7);
+  background-color:#F5F1ED;
   display: flex;
 }
 

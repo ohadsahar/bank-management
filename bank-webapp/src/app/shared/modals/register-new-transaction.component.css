@@ -1,5 +1,37 @@
-.input-new-transaction {
+.mat-dialog-container {
+  -webkit-transform: none;
+  transform: none;
+  margin: auto;
+  height: auto;
+  text-align: center;
+  width: 29%;
+  padding: 8px;
+  overflow-x: hidden;
+  font-family: 'Varela Round', sans-serif !important;
+}
 
-  width: 100%;
-  text-align: center
+.mat-form-field {
+  font-family: 'Varela Round', sans-serif !important;
+}
+
+.mat-raised-button {
+
+  cursor: pointer;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: 'Varela Round', sans-serif !important;
+}
+
+@media only screen and (max-width: 800px) {
+
+  .mat-dialog-container {
+    -webkit-transform: none;
+    transform: none;
+    width: 90% !important;
+    margin: auto;
+    height: auto;
+    text-align: center;
+    padding: 8px;
+    overflow-x: hidden;
+  }
 }

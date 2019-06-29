@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { BankValues } from '../models/bank.model';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -9,7 +9,8 @@ import { startWith, map } from 'rxjs/operators';
 
   selector: 'app-new-transaction',
   templateUrl: './register-new-transaction.component.html',
-  styleUrls: ['./register-new-transaction.component.css']
+  styleUrls: ['./register-new-transaction.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 
 export class RegisterNewTransactionModalComponent implements OnInit {

@@ -19,7 +19,6 @@ async function register(transactionData) {
     transactionSaved: transactionToCreate,
   };
 }
-
 async function updatePurchaseDate(transactionData) {
   const resultOfValidateTransactionData = await validatorUtil.validateUpdateData(transactionData);
   await transactionUtil.update(resultOfValidateTransactionData);
@@ -28,6 +27,7 @@ async function updatePurchaseDate(transactionData) {
   };
 }
 async function deleteX(transactionId) {
+  console.log('delete');
   await TransactionModel.findOneAndDelete({
     _id: transactionId,
   });
@@ -40,7 +40,6 @@ async function getCharts() {
     chartGroupByMonth: resultLodashTransactions.groupedByMonth,
   };
 }
-
 async function get() {
   const fetchedTransactions = await TransactionModel.find();
   const resultLodashTransactions = await transactionUtil.groupCategories(fetchedTransactions);
@@ -52,10 +51,6 @@ async function get() {
     chartGroupByMonth: resultLodashTransactions.groupedByMonth,
   };
 }
-async function checkPayCheck() {
-  const fetchedTransactions = await TransactionModel.find();
-  await transactionUtil.paymentsTime(fetchedTransactions);
-}
 
 
 module.exports = {
@@ -65,5 +60,4 @@ module.exports = {
   deleteX,
   getCharts,
   updatePurchaseDate,
-  checkPayCheck,
 };

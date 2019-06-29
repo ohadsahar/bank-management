@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
-const transaction = mongoose.Schema({
+const transactionArchives = mongoose.Schema({
+
   cardName: { type: String, required: true },
   name: { type: String, required: true },
   typeProduct: { type: String, required: true },
@@ -11,4 +12,5 @@ const transaction = mongoose.Schema({
   purchaseDate: { type: String, required: true },
   monthPurchase: { type: String, required: true },
 });
-module.exports = mongoose.model('transaction', transaction);
+
+module.exports = mongoose.model('transactionArchives', transactionArchives);

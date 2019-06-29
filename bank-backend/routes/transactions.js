@@ -1,14 +1,9 @@
 const express = require('express');
 
 const router = express.Router();
-const schedule = require('node-schedule');
-const transactionService = require('../services/transcation.service');
+const transactionService = require('../services/transaction.service');
 
-schedule.scheduleJob('0 0 * * *', () => {
-  transactionService.checkPayCheck();
-});
-
-async function registerNewTransaction(req, res) {
+async function create(req, res) {
   try {
     const transactionData = req.body;
     const resultOfRegister = await transactionService.register(transactionData);
@@ -40,7 +35,6 @@ async function getAllTransactions(req, res) {
 async function getAllCharts(req, res) {
   try {
     const resultOfFetchedChartData = await transactionService.getCharts();
-    console.log(resultOfFetchedChartData);
     res.status(200).json({
       message: resultOfFetchedChartData.chartGroupByCardName,
       success: true,
@@ -82,9 +76,9 @@ async function update(req, res) {
   }
 }
 
-router.post('/transcation', registerNewTransaction);
+router.post('/transaction', create);
 router.get('', getAllTransactions);
 router.get('/charts', getAllCharts);
-router.delete('/:transcationId', deleteTransaction);
+router.delete('/:transactionId', deleteTransaction);
 router.put('', update);
 module.exports = router;

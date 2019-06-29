@@ -1,7 +1,9 @@
 /* eslint-disable max-len */
 const lodash = require('lodash');
 const moment = require('moment');
+const transactionService = require('../services/transaction.service');
 const TransactionModel = require('../models/transaction');
+const TransactionArchivesModel = require('../models/transaction-archives');
 
 async function groupCategories(transactions) {
   const groupByCardName = lodash(transactions).groupBy('cardName')
@@ -28,18 +30,41 @@ async function update(resultOfValidateTransactionData) {
     _id: resultOfValidateTransactionData._id,
   }, resultOfValidateTransactionData);
 }
+
+
+async function archivePayment(transaction) {
+  const transactionSave = new TransactionArchivesModel({
+    cardName: transaction.cardName,
+    name: transaction.name,
+    typeProduct: transaction.typeProduct,
+    price: transaction.price,
+    numberofpayments: transaction.numberofpayments,
+    eachMonth: transaction.eachMonth,
+    leftPayments: transaction.leftPayments,
+    purchaseDate: transaction.purchaseDate,
+    monthPurchase: transaction.monthPurchase,
+  });
+  await transactionSave.save();
+}
 async function paymentsTime(transactionData) {
   const dayOfMonth = moment().get('date');
-  if (dayOfMonth === 10) {
-    transactionData.forEach((transaction) => {
-      if (transaction.numberofpayments > 0) {
+  if (dayOfMonth === 29) {
+    await transactionData.forEach((transaction) => {
+      if (transaction.numberofpayments >= 0) {
         // eslint-disable-next-line no-param-reassign
         transaction.numberofpayments -= 1;
-        update(transaction);
+        if (transaction.numberofpayments <= 0) {
+          archivePayment(transaction);
+          // eslint-disable-next-line no-underscore-dangle
+          transactionService.deleteX(transaction._id);
+        } else {
+          update(transaction);
+        }
       }
     });
   }
 }
+
 async function allBushinessNames(transcations) {
   let groupByBusinessName = lodash.uniqBy(transcations, 'name');
   groupByBusinessName = lodash(groupByBusinessName).groupBy('name')
@@ -51,11 +76,10 @@ async function allBushinessNames(transcations) {
     groupByBusinessName,
   };
 }
-
 module.exports = {
-
   groupCategories,
   paymentsTime,
   update,
   allBushinessNames,
+  archivePayment,
 };

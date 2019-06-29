@@ -15,16 +15,16 @@ const backendUrl = environment.backendUrl;
 export class BankTranscationService {
 
   constructor(private http: HttpClient) {}
-  registerNewTransaction(transcationData: Bank) {
-    return this.http.post<{message: Bank}>(`${backendUrl}transcation`, transcationData);
+  registerNewTransaction(transactionData: Bank) {
+    return this.http.post<{message: Bank}>(`${backendUrl}transaction`, transactionData);
   }
 
   updateTransaction(transactionData: Bank) {
       return this.http.put<{message: BankResponse}>(backendUrl, transactionData);
   }
 
-  deleteTransaction(transcationId: string) {
-    return this.http.delete<{message: ResponseModel}>(`${backendUrl}${transcationId}`);
+  deleteTransaction(transactionId: string) {
+    return this.http.delete<{message: ResponseModel}>(`${backendUrl}${transactionId}`);
   }
 
   getTransactions() {

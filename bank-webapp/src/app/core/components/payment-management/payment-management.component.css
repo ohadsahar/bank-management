@@ -3,7 +3,7 @@ html {
   overflow-x: hidden;
 }
 
-.bank-component table,
+.payment-component table,
 th,
 td {
   font-family: 'Varela Round', sans-serif !important;
@@ -18,17 +18,18 @@ th.mat-header-cell:first-of-type {
   text-align: center !important;
 }
 
-.bank-component .purchase-list {
+.payment-component .purchase-list {
   text-align: right;
   background-color: #F5F1ED;
   padding: 20px;
+  height: 100vh;
 }
 
 .mat-paginator-container {
   background-color: #F5F1ED;
 }
 
-.bank-component .purchase-list .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+.payment-component .purchase-list .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
   width: 30%;
 }
 
@@ -182,7 +183,7 @@ i {
 }
 
 
-.bank-component .statistic-section {
+.payment-component .statistic-section {
   background-color: #F5F1ED;
   overflow-x: hidden;
 
@@ -196,7 +197,7 @@ i {
 
 @media only screen and (max-width: 800px) {
 
-  .bank-component .purchase-list {
+  .payment-component .purchase-list {
 
     padding: 0px !important;
   }

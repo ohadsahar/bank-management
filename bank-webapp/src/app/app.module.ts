@@ -18,6 +18,7 @@ import { TransactionEffect } from './store/effects/transaction.effect';
 import { RegisterNewTransactionModalComponent } from './shared/modals/register-new-transaction.component';
 import { PaymentManagementComponent } from './core/components/payment-management/payment-management.component';
 import { MenuComponent } from './core/components/menu/menu.component';
+import { SalaryComponent } from './core/components/salary-managment/salary.component';
 
 
 
@@ -29,7 +30,8 @@ import { MenuComponent } from './core/components/menu/menu.component';
     BankManagmentComponent,
     RegisterNewTransactionModalComponent,
     PaymentManagementComponent,
-    MenuComponent
+    MenuComponent,
+    SalaryComponent
   ],
   imports: [
     BrowserModule,

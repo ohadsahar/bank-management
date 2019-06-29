@@ -194,7 +194,8 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
             barThickness: 8,
             maxBarThickness: 10
           }]
-        }
+        },
+        animation: false,
       }
     });
   }
@@ -225,7 +226,8 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
             maxBarThickness: 10,
 
           }]
-        }
+        },
+        animation: false,
       }
     });
   }
@@ -249,7 +251,9 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
           data: this.arrayCardsTotalPrice
         }]
       },
-      options: {}
+      options: {
+        animation: false,
+      }
     });
   }
   applyFilter(filterValue: string): void {

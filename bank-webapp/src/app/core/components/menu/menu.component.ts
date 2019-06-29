@@ -23,8 +23,11 @@ export class MenuComponent implements OnInit {
     if (event.index === 0) {
       this.router.navigate(['management']);
     }
-    else {
+    if (event.index === 1) {
       this.router.navigate(['payment']);
+    }
+    if (event.index === 2) {
+      this.router.navigate(['salary']);
     }
   }
 }

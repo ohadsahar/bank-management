@@ -32,7 +32,9 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   public chartTranscations: ChartByCardName[];
   public arrayCardsNames: string[] = [];
   public arrayCardsTotalPrice: number[] = [];
-  options: string[] = ['רנואר', 'קאסטרו', 'אייבורי'];
+  public arrayExpansesEachMonth: number[] = [];
+  public arrayEachMonthData: string[] = [];
+  options: string[] = ['הספרייה', 'רנואר', 'קאסטרו', 'אייבורי'];
   filteredOptions: Observable<string[]>;
   myControl = new FormControl();
   public totalExpenses: number;
@@ -43,6 +45,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   public updateAble: boolean;
   public allCardChart: Chart;
   public allExpensesByMonthChart: Chart;
+  public eachMonthExpenses: Chart;
   public loading: boolean;
   public loaded: boolean;
   private getCharts$: Subject<void> = new Subject<void>();
@@ -88,20 +91,11 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.bankTransactionService.getTransactions().subscribe(response => {
       this.arrayCardsNames = response.message.chartGroupByCardName;
       this.allTranscations = response.message.foundTranscations;
+      this.eachMonthExpenses = response.message.chartGroupByMonth;
       this.updateTable();
       this.calculateFinancialExpenses();
       this.getAllCharts();
     });
-    // this.store.dispatch(new transactionActions.GetAllTransactions());
-    // this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.ngUnsubscribe))
-    //   .subscribe((data) => {
-    //     if (data.loaded) {
-    //       console.log(data.data);
-    //       // this.updateTable();
-    //       // this.calculateFinancialExpenses();
-    //       // this.getAllCharts();
-    //     }
-    //   });
   }
   getAllCharts(): void {
     this.store.dispatch(new chartActions.GetCharts());
@@ -109,7 +103,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       .subscribe((data) => {
         if (data.loaded) {
           this.chartTranscations = data.data as any;
-          this.assignCardNames();
+          this.assignDataToCharts();
         }
       });
   }
@@ -150,18 +144,27 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     //     this.updateAble = false;
     //   });
   }
-  assignCardNames(): void {
+  assignDataToCharts(): void {
     this.arrayCardsTotalPrice = [];
     this.arrayCardsNames = [];
     this.chartTranscations.forEach(transactionData => {
       this.arrayCardsNames.push(transactionData.cardName);
       this.arrayCardsTotalPrice.push(transactionData.price);
     });
+
+    this.arrayExpansesEachMonth = [];
+    this.arrayEachMonthData = [];
+    this.eachMonthExpenses.forEach(element => {
+      this.arrayExpansesEachMonth.push(element.monthPurchase);
+      this.arrayEachMonthData.push(element.price);
+    });
+
     this.loadCharts();
   }
   loadCharts(): void {
     this.cardsChart('pie');
     this.expensesByCurrentMonthChart('bar');
+    this.eachMonthChartDisplay('bar');
   }
   expensesByCurrentMonthChart(type: string): void {
     this.allExpensesByMonthChart = new Chart('allExpensesByMonthChart', {
@@ -169,18 +172,55 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       data: {
         datasets: [{
           label: 'החודש הנוכחי',
-          data: this.arrayCardsTotalPrice
-        },],
+          data: this.arrayCardsTotalPrice,
+          backgroundColor: ['#fbd0c6', '#f6c1a6', '#c8c87a', '#79c0b0', '#7ec2a3', '#65b6bd',
+            '#70a6ca', '#90b4cb']
+        }, ],
 
         labels: this.arrayCardsNames,
       },
       options: {
         scales: {
           xAxes: [{
-            stacked: true
+            stacked: true,
+            barThickness: 8,
+            maxBarThickness: 10
           }],
           yAxes: [{
-            stacked: true
+            stacked: true,
+            barThickness: 8,
+            maxBarThickness: 10
+          }]
+        }
+      }
+    });
+  }
+  eachMonthChartDisplay(type: string): void {
+    this.eachMonthExpenses = new Chart('eachMonthExpenses', {
+      type,
+      data: {
+        datasets: [{
+          label: 'לפי חודשים',
+          data: this.arrayEachMonthData,
+          backgroundColor: ['#fbd0c6', '#f6c1a6', '#c8c87a', '#79c0b0', '#7ec2a3', '#65b6bd',
+            '#70a6ca', '#90b4cb']
+        },],
+
+        labels: this.arrayExpansesEachMonth,
+      },
+      options: {
+        scales: {
+          xAxes: [{
+            stacked: true,
+            barThickness: 8,
+            maxBarThickness: 10,
+
+          }],
+          yAxes: [{
+            stacked: true,
+            barThickness: 8,
+            maxBarThickness: 10,
+
           }]
         }
       }
@@ -281,12 +321,14 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   destroyCharts(): void {
     this.allCardChart.destroy();
     this.allExpensesByMonthChart.destroy();
+    this.eachMonthExpenses.destroy();
   }
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.options.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
   }
   registerNewTransactionDialog(): void {
+
     const dialogRef = this.dialog.open(RegisterNewTransactionModalComponent);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -300,5 +342,4 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.registerNewTransactionNgrx.unsubscribe();
     this.getCharts$.unsubscribe();
   }
-
 }

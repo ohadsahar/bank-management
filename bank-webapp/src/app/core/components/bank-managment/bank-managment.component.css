@@ -132,7 +132,6 @@ table th {
 .edit-section .placeholder {
   font-weight: 100;
 }
-
 .money-management-area {
   display: inline-flex;
   margin: auto;
@@ -186,6 +185,7 @@ i {
 .bank-component .statistic-section {
   background-color: #F5F1ED;
   overflow-x: hidden;
+
 }
 
 

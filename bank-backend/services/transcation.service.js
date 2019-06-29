@@ -33,16 +33,15 @@ async function deleteX(transactionId) {
   });
 }
 async function getCharts() {
-  console.log('one');
   const fetchedTransactions = await TransactionModel.find();
   const resultLodashTransactions = await transactionUtil.groupCategories(fetchedTransactions);
   return {
     chartGroupByCardName: resultLodashTransactions.groupedByCardName,
+    chartGroupByMonth: resultLodashTransactions.groupedByMonth,
   };
 }
 
 async function get() {
-  console.log('two');
   const fetchedTransactions = await TransactionModel.find();
   const resultLodashTransactions = await transactionUtil.groupCategories(fetchedTransactions);
   const resultOfAllBushinessNames = await transactionUtil.allBushinessNames(fetchedTransactions);
@@ -50,6 +49,7 @@ async function get() {
     foundTranscations: fetchedTransactions,
     bushinessNames: resultOfAllBushinessNames,
     chartGroupByCardName: resultLodashTransactions.groupedByCardName,
+    chartGroupByMonth: resultLodashTransactions.groupedByMonth,
   };
 }
 async function checkPayCheck() {

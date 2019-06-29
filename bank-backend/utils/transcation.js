@@ -16,9 +16,9 @@ async function groupCategories(transactions) {
       monthPurchase,
       price: lodash.sumBy(items, 'price'),
     })).value();
-  console.log(groupByMonth);
   return {
     groupedByCardName: groupByCardName,
+    groupedByMonth: groupByMonth,
   };
 }
 async function update(resultOfValidateTransactionData) {

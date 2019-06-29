@@ -44,8 +44,9 @@ export class RegisterNewTransactionModalComponent implements OnInit {
     if (this.validateNewTransaction()) {
       this.date = moment().format('LL');
       this.purchaseMonth = (moment().month() + 1).toString();
-      this.bankTransaction.purchaseDate = this.date ;
-      this.bankTransaction.monthPurchase = '9';
+      this.purchaseMonth = moment().month(this.purchaseMonth).format('MMMM');
+      this.bankTransaction.purchaseDate = this.date;
+      this.bankTransaction.monthPurchase = this.purchaseMonth;
     }
   }
 

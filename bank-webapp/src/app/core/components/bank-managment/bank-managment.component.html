@@ -1,5 +1,5 @@
-<div class="bank-component">
-  <div class="row">
+<div class="bank-component" >
+  <div class="row" >
     <div class="col-sm-12 col-md-12 col-lg-12">
       <div class="purchase-list">
         <div class="search-section">
@@ -23,7 +23,7 @@
             <ng-container matColumnDef="cardName">
               <th mat-header-cell *matHeaderCellDef> <i class="fab fa-cc-visa"></i> שם הכרטיס </th>
               <td mat-cell *matCellDef="let element; let i = index">
-                <div *ngIf="!editoptionsable[i]">{{element.cardName}}</div>
+                <div *ngIf="!editoptionsable[i]">{{element?.cardName}}</div>
                 <div *ngIf="editEnable && editoptionsable[i]" class="edit-section">
                   <mat-form-field class="new-transaction">
                     <mat-select [(ngModel)]="bankEditTransaction.cardName" value="{{bankEditTransaction.cardName}}">
@@ -31,7 +31,7 @@
                         {{card.value}}
                       </mat-option>
                     </mat-select>
-                    <mat-placeholder class="placeholder">{{bankEditTransaction.cardName}}</mat-placeholder>
+                    <mat-placeholder class="placeholder">{{bankEditTransaction?.cardName}}</mat-placeholder>
                     <mat-error>חובה למלא שם כרטיס</mat-error>
                   </mat-form-field>
                 </div>
@@ -41,7 +41,7 @@
             <ng-container matColumnDef="name">
               <th mat-header-cell *matHeaderCellDef> <i class="fab fa-product-hunt"></i> בית העסק </th>
               <td mat-cell *matCellDef="let element; let  i = index">
-                <div *ngIf="!editoptionsable[i]">{{element.name}}</div>
+                <div *ngIf="!editoptionsable[i]">{{element?.name}}</div>
                 <div *ngIf="editEnable && editoptionsable[i]">
                   <mat-form-field class="new-transaction edit-section" *ngIf="editEnable">
                     <input type="text" aria-label="Number" matInput [(ngModel)]="bankEditTransaction.name"
@@ -61,12 +61,12 @@
             <ng-container matColumnDef="type">
               <th mat-header-cell *matHeaderCellDef><i class="fas fa-sitemap"></i> קטגוריה </th>
               <td mat-cell *matCellDef="let element; let i = index">
-                <div *ngIf="!editoptionsable[i]">{{element.typeProduct}}</div>
+                <div *ngIf="!editoptionsable[i]">{{element?.typeProduct}}</div>
                 <div *ngIf="editEnable && editoptionsable[i]">
                   <mat-form-field class="new-transaction">
                     <mat-select [(ngModel)]="bankEditTransaction.typeProduct" value="bankEditTransaction.typeProduct">
                       <mat-option *ngFor="let category of categories" [value]="category.value">
-                        {{category.value}}
+                        {{category?.value}}
                       </mat-option>
                     </mat-select>
                     <mat-placeholder class="placeholder">קטגוריה</mat-placeholder>
@@ -81,7 +81,7 @@
                 כללי
               </th>
               <td mat-cell *matCellDef="let element; let  i = index">
-                <div *ngIf="!editoptionsable[i]">{{element.price}}</div>
+                <div *ngIf="!editoptionsable[i]">{{element?.price}}</div>
                 <div *ngIf="editEnable && editoptionsable[i]">
                   <mat-form-field class="new-transaction">
                     <input matInput type="number" [(ngModel)]="bankEditTransaction.price"
@@ -99,7 +99,7 @@
                 מספר
                 תשלומים </th>
               <td mat-cell *matCellDef="let element; let i = index">
-                <div *ngIf="!editoptionsable[i]">{{element.numberofpayments}}</div>
+                <div *ngIf="!editoptionsable[i]">{{element?.numberofpayments}}</div>
                 <div *ngIf="editEnable && editoptionsable[i]">
                   <mat-form-field class="new-transaction">
               <td><input matInput type="number" [(ngModel)]="bankEditTransaction.numberofpayments"
@@ -114,19 +114,19 @@
           <th mat-sort-header="eachMonth" mat-header-cell *matHeaderCellDef> <i class="fas fa-cart-arrow-down"></i>
             תשלום
             חודשי </th>
-          <td mat-cell *matCellDef="let element"> <i class="fas fa-shekel-sign"></i> {{element.eachMonth}} </td>
+          <td mat-cell *matCellDef="let element"> <i class="fas fa-shekel-sign"></i> {{element?.eachMonth}} </td>
         </ng-container>
         <ng-container matColumnDef="leftPayments">
           <th mat-sort-header="leftPayments" mat-header-cell *matHeaderCellDef><i class="fas fa-trophy"></i> תשלומים
             שנשארו
           </th>
-          <td mat-cell *matCellDef="let element"> {{element.leftPayments}} </td>
+          <td mat-cell *matCellDef="let element"> {{element?.leftPayments}} </td>
         </ng-container>
         <ng-container matColumnDef="purchaseDate">
           <th mat-sort-header="purchaseDate" mat-header-cell *matHeaderCellDef><i class="far fa-calendar-check"></i>
             תאריך
             קניה</th>
-          <td mat-cell *matCellDef="let element"> {{element.purchaseDate}} </td>
+          <td mat-cell *matCellDef="let element"> {{element?.purchaseDate}} </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

@@ -47,7 +47,7 @@ async function getAllCharts(req, res) {
   }
 }
 async function deleteTransaction(req, res) {
-  await transactionService.deleteX(req.params.transcationId);
+  await transactionService.deleteX(req.params.transactionId);
   try {
     res.status(200).json({
       message: req.params.transcationIdDelete,

@@ -11,7 +11,8 @@ import {
   MatDividerModule,
   MatSelectModule,
   MatAutocompleteModule,
-  MatDialogModule
+  MatDialogModule,
+  MatTabsModule
 } from '@angular/material';
 
 @NgModule({
@@ -28,7 +29,8 @@ import {
     MatDividerModule,
     MatSelectModule,
     MatAutocompleteModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTabsModule
   ],
   exports: [
     MatInputModule,
@@ -43,7 +45,8 @@ import {
     MatDividerModule,
     MatSelectModule,
     MatAutocompleteModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTabsModule
   ]
 })
 export class AngularMaterialModule {}

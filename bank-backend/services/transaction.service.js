@@ -27,10 +27,7 @@ async function updatePurchaseDate(transactionData) {
   };
 }
 async function deleteX(transactionId) {
-  console.log('delete');
-  await TransactionModel.findOneAndDelete({
-    _id: transactionId,
-  });
+  await TransactionModel.findOneAndDelete({ _id: transactionId });
 }
 async function getCharts() {
   const fetchedTransactions = await TransactionModel.find();

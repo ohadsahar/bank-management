@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  backendUrl: 'http://localhost:3000/api/bank/'
+  backendUrl: 'http://localhost:3000/api/bank/',
+  backendUrlArchive: 'http://localhost:3000/api/payments'
 };
 
 /*

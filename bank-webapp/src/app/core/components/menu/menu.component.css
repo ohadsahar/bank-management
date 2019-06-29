@@ -1,0 +1,5 @@
+::ng-deep .mat-tab-labels {
+
+  direction: rtl;
+  background-color:#F5F1ED !important;
+}

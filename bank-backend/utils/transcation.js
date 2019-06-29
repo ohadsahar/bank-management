@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 const lodash = require('lodash');
 const moment = require('moment');
-const transactionService = require('../services/transaction.service');
 const TransactionModel = require('../models/transaction');
 const TransactionArchivesModel = require('../models/transaction-archives');
 
@@ -30,8 +29,9 @@ async function update(resultOfValidateTransactionData) {
     _id: resultOfValidateTransactionData._id,
   }, resultOfValidateTransactionData);
 }
-
-
+async function deletePayment(transactionId) {
+  await TransactionModel.findOneAndDelete({ _id: transactionId });
+}
 async function archivePayment(transaction) {
   const transactionSave = new TransactionArchivesModel({
     cardName: transaction.cardName,
@@ -48,7 +48,7 @@ async function archivePayment(transaction) {
 }
 async function paymentsTime(transactionData) {
   const dayOfMonth = moment().get('date');
-  if (dayOfMonth === 29) {
+  if (dayOfMonth === 10) {
     await transactionData.forEach((transaction) => {
       if (transaction.numberofpayments >= 0) {
         // eslint-disable-next-line no-param-reassign
@@ -56,7 +56,7 @@ async function paymentsTime(transactionData) {
         if (transaction.numberofpayments <= 0) {
           archivePayment(transaction);
           // eslint-disable-next-line no-underscore-dangle
-          transactionService.deleteX(transaction._id);
+          deletePayment(transaction._id);
         } else {
           update(transaction);
         }
@@ -64,7 +64,6 @@ async function paymentsTime(transactionData) {
     });
   }
 }
-
 async function allBushinessNames(transcations) {
   let groupByBusinessName = lodash.uniqBy(transcations, 'name');
   groupByBusinessName = lodash(groupByBusinessName).groupBy('name')
@@ -82,4 +81,5 @@ module.exports = {
   update,
   allBushinessNames,
   archivePayment,
+  deletePayment,
 };

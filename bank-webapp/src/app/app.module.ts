@@ -16,6 +16,9 @@ import { EffectsModule } from '@ngrx/effects';
 import { BankManagementEffects } from './store/effects/bank-managment.effect';
 import { TransactionEffect } from './store/effects/transaction.effect';
 import { RegisterNewTransactionModalComponent } from './shared/modals/register-new-transaction.component';
+import { PaymentManagementComponent } from './core/components/payment-management/payment-management.component';
+import { MenuComponent } from './core/components/menu/menu.component';
+
 
 
 
@@ -24,7 +27,9 @@ import { RegisterNewTransactionModalComponent } from './shared/modals/register-n
     AppComponent,
     LoginComponent,
     BankManagmentComponent,
-    RegisterNewTransactionModalComponent
+    RegisterNewTransactionModalComponent,
+    PaymentManagementComponent,
+    MenuComponent
   ],
   imports: [
     BrowserModule,

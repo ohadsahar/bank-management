@@ -1,4 +1,5 @@
 const validator = require('validator');
+const moment = require('moment');
 
 async function validateUpdateData(transactionData) {
   if (validator.isLength(transactionData.cardName, { min: 3 })
@@ -6,11 +7,23 @@ async function validateUpdateData(transactionData) {
         && validator.isLength(transactionData.typeProduct, { min: 4 })) {
     return transactionData;
   }
-  console.log('here');
   throw new Error('One of the transaction data is invalid, transactionData did not passed the validator test');
+}
+
+async function validateSalary(salaryData) {
+  const currentMonth = moment().month() + 1;
+  if (salaryData) {
+    const salaryObject = {
+      salary: salaryData.salary,
+      salaryMonth: currentMonth,
+    };
+    return salaryObject;
+  }
+  throw new Error('Salary data is not numeric!!');
 }
 
 module.exports = {
 
   validateUpdateData,
+  validateSalary,
 };

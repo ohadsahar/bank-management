@@ -1,1 +1,44 @@
-<h1>Need to add form</h1>
+<div class="salary-management">
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <div class="list-of-salary">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort (matSortChange)="sortData($event)">
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> <i class="fab fa-cc-visa"></i> אפשרויות </th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              <div>{{i + 1}}</div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="salary">
+            <th mat-header-cell *matHeaderCellDef> <i class="fab fa-cc-visa"></i> משכורת </th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              <div>{{element?.salary}}</div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="monthOfSalary">
+            <th mat-header-cell *matHeaderCellDef> <i class="fab fa-product-hunt"></i> משכורת עבור חודש </th>
+            <td mat-cell *matCellDef="let element; let  i = index">
+              <div>{{element?.monthOfSalary}}</div>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <form name="salaryForm" (submit)="onSubmitSalary(salaryForm)" #salaryForm="ngForm" class="salary-form">
+        <mat-form-field class="salary-input">
+          <input matInput name="salary" type="number" ngModel #salary="ngModel" placeholder="משכורת" value="" required>
+          <mat-error *ngIf="salary.invalid">חובה להכניס משכורת</mat-error>
+        </mat-form-field>
+        <br>
+        <button mat-raised-button color="link" type="submit">אישור</button>
+      </form>
+    </div>
+  </div>
+</div>

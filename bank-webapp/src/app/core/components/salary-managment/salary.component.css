@@ -1,7 +1,6 @@
 .salary-management {
   font-family: 'Varela Round', sans-serif !important;
   background-color: #F5F1ED !important;
-  height: 100vh;
 }
 
 .salary-management .salary-form {
@@ -30,11 +29,10 @@
 
 table th {
   font-weight: bold !important;
+  text-align: center;
 }
 
-.list-of-salary th {
-  text-align: right !important;
-}
+
 
 .list-of-salary td {
   width: 10%;

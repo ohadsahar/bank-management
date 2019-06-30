@@ -3,6 +3,12 @@ html {
   overflow-x: hidden;
 }
 
+.bank-component {
+
+  height: 100vh;
+  background-color: #F5F1ED;
+}
+
 .bank-component table,
 th,
 td {
@@ -131,11 +137,6 @@ table th {
 
 .edit-section .placeholder {
   font-weight: 100;
-}
-.money-management-area {
-  display: inline-flex;
-  margin: auto;
-  display: block;
 }
 
 h1 {

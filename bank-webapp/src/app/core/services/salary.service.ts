@@ -16,6 +16,8 @@ export class SalaryService {
   }
 
   get() {
-    return this.http.get<{message: SalaryModel}>(backendUrl);
+    return this.http.get<{message: any}>(backendUrl);
   }
+
+
 }

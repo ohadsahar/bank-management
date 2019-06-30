@@ -1,6 +1,7 @@
 
 const validatorUtil = require('../utils/validator');
 const SalaryModel = require('../models/salary');
+const salaryUtil = require('../utils/salary');
 
 async function create(salaryData) {
   const afterValidateData = await validatorUtil.validateSalary(salaryData);
@@ -14,7 +15,8 @@ async function create(salaryData) {
 
 async function get() {
   const allSalary = await SalaryModel.find();
-  return allSalary;
+  const allSalaryByMonth = await salaryUtil.allSalaryByMonth(allSalary);
+  return { salary: allSalary, salaryByMonth: allSalaryByMonth };
 }
 
 module.exports = {

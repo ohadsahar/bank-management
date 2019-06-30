@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource, Sort } from '@angular/material';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Chart } from 'chart.js';
 import { Observable, Subject } from 'rxjs';
@@ -15,8 +16,6 @@ import * as transactionActions from '../../../store/actions/transaction.actions'
 import { BankTranscationService } from '../../services/bank-transcation.service';
 import { MessageService } from '../../services/message.service';
 import { PaymentTransactionArchiveService } from '../../services/payment-transaction.service';
-import { Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-bank-managment',
@@ -25,10 +24,8 @@ import { Router } from '@angular/router';
   encapsulation: ViewEncapsulation.None
 })
 export class BankManagmentComponent implements OnInit, OnDestroy {
-
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-
   public sortedData: Bank[];
   public allTransactions: Bank[];
   public oldTransactions: Bank[];
@@ -101,12 +98,11 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       this.allTransactions = response.message.foundTranscations;
       this.chartByMonthTransactions = response.message.chartGroupByMonth;
       this.updateTable();
-      this.calculateFinancialExpenses();
       this.getAllCharts();
     });
     this.paymentService.getAllArchiveTransactions().subscribe(response => {
       this.oldTransactions = response.message.archivesTransactions;
-    })
+    });
   }
   getAllCharts(): void {
     this.store.dispatch(new chartActions.GetCharts());
@@ -124,10 +120,40 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       .subscribe((data) => {
         if (data.loaded) {
           this.allTransactions.push(data.data as any);
+          this.chartTransactions = this.allTransactions;
           this.afterRegisterNewCard();
           this.messageService.successMessage('הקנייה התווספה בהצלחה', 'סגור');
         }
       });
+  }
+  registerNewTransactionDialog(): void {
+
+    const dialogRef = this.dialog.open(RegisterNewTransactionModalComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.registerNewTransaction(result);
+      }
+    });
+  }
+  afterRegisterNewCard(): void {
+    this.destroyCharts();
+    this.updateTable();
+    this.assignDataToCharts();
+  }
+  editTransaction(transcationData: Bank): void {
+    this.updateAble = true;
+    this.bankEditTransaction = transcationData;
+    this.counter = this.counter + 1;
+    if (this.counter === 1) {
+      this.editEnable = true;
+    } else {
+      this.counter = 0;
+    }
+  }
+  updateTable(): void {
+    this.dataSource = new MatTableDataSource(this.allTransactions);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
   deleteTransaction(transactionId: string): void {
     this.store.dispatch(new transactionActions.DeleteTransaction(transactionId));
@@ -137,9 +163,15 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
           const dataId = data.data.toString();
           const deleteTransaction = this.allTransactions.filter(transaction => transaction._id !== dataId);
           this.allTransactions = deleteTransaction;
+          this.chartTransactions = this.allTransactions;
           this.afterDeleteTransaction();
         }
       });
+  }
+  afterDeleteTransaction(): void {
+    this.destroyCharts();
+    this.updateTable();
+    this.assignDataToCharts();
   }
   updateTransaction(): void {
     this.bankTransactionService.updateTransaction(this.bankEditTransaction).subscribe(response => {
@@ -178,7 +210,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
           data: this.arrayCardsTotalPrice,
           backgroundColor: ['#fbd0c6', '#f6c1a6', '#c8c87a', '#79c0b0', '#7ec2a3', '#65b6bd',
             '#70a6ca', '#90b4cb']
-        },],
+        }, ],
 
         labels: this.arrayCardsNames,
       },
@@ -208,7 +240,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
           data: this.arrayEachMonthData,
           backgroundColor: ['#fbd0c6', '#f6c1a6', '#c8c87a', '#79c0b0', '#7ec2a3', '#65b6bd',
             '#70a6ca', '#90b4cb']
-        },],
+        }, ],
 
         labels: this.arrayExpansesEachMonth,
       },
@@ -256,6 +288,11 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       }
     });
   }
+  destroyCharts(): void {
+    this.allCardChart.destroy();
+    this.allExpensesByMonthChart.destroy();
+    this.eachMonthExpenses.destroy();
+  }
   applyFilter(filterValue: string): void {
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
@@ -276,76 +313,12 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     });
     this.allTransactions = this.sortedData;
   }
-  calculateEachMonthEdit(): void {
-    if (this.bankEditTransaction.numberofpayments) {
-      this.bankEditTransaction.eachMonth = this.bankEditTransaction.price / this.bankEditTransaction.numberofpayments;
-      this.bankEditTransaction.eachMonth = Number(this.bankEditTransaction.eachMonth.toFixed(2));
-      this.bankEditTransaction.leftPayments = this.bankEditTransaction.numberofpayments;
-    } else {
-      this.bankEditTransaction.eachMonth = null;
-      this.bankEditTransaction.leftPayments = null;
-    }
-  }
-  calculateFinancialExpenses(): void {
-
-    this.allTransactions.forEach(transcation => {
-      this.totalExpenses += transcation.price;
-      if (transcation.leftPayments > 0) {
-        this.numberOfPayments += transcation.leftPayments;
-        this.monthExpenses += transcation.eachMonth;
-      }
-    });
-    this._filter('');
-    this.monthExpenses = Number(this.monthExpenses.toFixed(2));
-  }
   compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
-  }
-  updateTable(): void {
-    this.dataSource = new MatTableDataSource(this.allTransactions);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-  afterRegisterNewCard(): void {
-    this.destroyCharts();
-    this.updateTable();
-    this.calculateFinancialExpenses();
-    this.assignDataToCharts();
-  }
-  afterDeleteTransaction(): void {
-    this.destroyCharts();
-    this.updateTable();
-    this.calculateFinancialExpenses();
-    this.assignDataToCharts();
-  }
-  editTransaction(transcationData: Bank): void {
-    this.updateAble = true;
-    this.bankEditTransaction = transcationData;
-    this.counter = this.counter + 1;
-    if (this.counter === 1) {
-      this.editEnable = true;
-    } else {
-      this.counter = 0;
-    }
-  }
-  destroyCharts(): void {
-    this.allCardChart.destroy();
-    this.allExpensesByMonthChart.destroy();
-    this.eachMonthExpenses.destroy();
   }
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.options.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
-  }
-  registerNewTransactionDialog(): void {
-
-    const dialogRef = this.dialog.open(RegisterNewTransactionModalComponent);
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-      if (result) {
-        this.registerNewTransaction(result);
-      }
-    });
   }
   ngOnDestroy() {
     this.getCharts$.complete();

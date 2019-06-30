@@ -1,3 +1,4 @@
+import { Bank } from '../../shared/models/bank-data.model';
 
 import {
   TransactionActions,
@@ -10,18 +11,17 @@ import {
 export interface State {
   loading: boolean;
   loaded: boolean;
-  data: any[];
+  data: Bank;
 }
 
 const initialState: State = {
   loading: false,
   loaded: false,
-  data: [],
+  data: null,
 };
 
 export function transactionReducer(state = initialState, action: TransactionActions) {
   switch (action.type) {
-
     case GET_ALL_TRANSACTION:
       return {
         ...state,

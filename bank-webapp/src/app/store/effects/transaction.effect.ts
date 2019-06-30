@@ -9,19 +9,27 @@ import { BankTranscationService } from '../../core/services/bank-transcation.ser
 
 export class TransactionEffect {
   constructor(private actions$: Actions, private bankService: BankTranscationService) { }
+
   @Effect()
   public registerTransaction$ = this.actions$.pipe(ofType(transactionActions.REGISTER_TRANSACTION))
-    .pipe(exhaustMap((action: transactionActions.RegisterTransaction) => {
-      return this.bankService.registerNewTransaction(action.payload).pipe(
-        map(transaction => new transactionActions.RegisterTransactionSuccess(transaction.message)),
-        catchError(error => of(new transactionActions.RegisterTransactionFailed(error)
-        )));
-    }));
-
+    .pipe(switchMap((action: transactionActions.RegisterTransaction) =>
+      this.bankService.registerNewTransaction(action.payload).pipe(
+        map((data) => {
+          if (data.message) {
+            return new transactionActions.RegisterTransactionSuccess(data.message);
+          }
+          return new transactionActions.RegisterTransactionFailed(data.message);
+        }),
+        catchError((error) => {
+          return of(new transactionActions.RegisterTransactionFailed(error));
+        }),
+      ),
+    ),
+    );
 
   @Effect()
   public allTransactions$ = this.actions$.pipe(ofType(transactionActions.GET_ALL_TRANSACTION))
-    .pipe(exhaustMap(() => {
+    .pipe(switchMap(() => {
       return this.bankService.getTransactions().pipe(map(transaction =>
         new transactionActions.GetAllTransactionSuccess(transaction.message)),
         catchError(error => of(new transactionActions.GetAllTransactionsFailed(error)
@@ -30,7 +38,7 @@ export class TransactionEffect {
 
   @Effect()
   public deleteTransaction$ = this.actions$.pipe(ofType(transactionActions.DELETE_TRANSACTION))
-    .pipe(exhaustMap((action: transactionActions.DeleteTransaction) => {
+    .pipe(switchMap((action: transactionActions.DeleteTransaction) => {
       return this.bankService.deleteTransaction(action.payload).pipe(
         map(transaction => new transactionActions.DeleteTransactionSuccess(transaction.message)),
         catchError(error => of(new transactionActions.GetAllTransactionsFailed(error))));
@@ -38,7 +46,7 @@ export class TransactionEffect {
 
   @Effect()
   public updateTransaction$ = this.actions$.pipe(ofType(transactionActions.UPDATE_TRANSACTION))
-    .pipe(exhaustMap((action: transactionActions.UpdateTransaction) => {
+    .pipe(switchMap((action: transactionActions.UpdateTransaction) => {
       return this.bankService.updateTransaction(action.payload).pipe(
         map(transaction => new transactionActions.UpdateTransactionSuccess(transaction.message)),
         catchError(error => of(new transactionActions.UpdateTransactionFailed(error))));

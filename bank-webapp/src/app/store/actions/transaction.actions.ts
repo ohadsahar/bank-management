@@ -15,6 +15,7 @@ export const UPDATE_TRANSACTION_FAILED = 'UPDATE_TRANSACTION_FAILED';
 export class RegisterTransaction implements Action {
   readonly type = REGISTER_TRANSACTION;
   constructor(public payload: any) {
+    console.log(payload);
   }
 }
 export class RegisterTransactionSuccess implements Action {

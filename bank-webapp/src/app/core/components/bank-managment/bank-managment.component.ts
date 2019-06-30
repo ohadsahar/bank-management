@@ -118,8 +118,9 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.store.dispatch(new transactionActions.RegisterTransaction(result));
     this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.registerNewTransactionNgrx))
       .subscribe((data) => {
+        console.log(data);
         if (data.loaded) {
-          this.allTransactions.push(data.data as any);
+          this.allTransactions.push(data.data);
           this.chartTransactions = this.allTransactions;
           this.afterRegisterNewCard();
           this.messageService.successMessage('הקנייה התווספה בהצלחה', 'סגור');

@@ -316,6 +316,16 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
+  calculateEachMonthEdit(): void {
+    if (this.bankEditTransaction.numberofpayments) {
+      this.bankEditTransaction.eachMonth = this.bankEditTransaction.price / this.bankEditTransaction.numberofpayments;
+      this.bankEditTransaction.eachMonth = Number(this.bankEditTransaction.eachMonth.toFixed(2));
+      this.bankEditTransaction.leftPayments = this.bankEditTransaction.numberofpayments;
+    } else {
+      this.bankEditTransaction.eachMonth = null;
+      this.bankEditTransaction.leftPayments = null;
+    }
+  }
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.options.filter(option => option.toLowerCase().indexOf(filterValue) === 0);

@@ -18,9 +18,9 @@ export class TransactionEffect {
           if (data.message) {
             return new transactionActions.RegisterTransactionSuccess(data.message);
           }
-          return new transactionActions.RegisterTransactionFailed(data.message);
         }),
         catchError((error) => {
+
           return of(new transactionActions.RegisterTransactionFailed(error));
         }),
       ),

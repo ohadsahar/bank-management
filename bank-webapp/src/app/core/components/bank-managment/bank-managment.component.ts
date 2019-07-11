@@ -4,8 +4,8 @@ import { MatDialog, MatPaginator, MatSort, MatTableDataSource, Sort } from '@ang
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Chart } from 'chart.js';
-import { Observable, Subject } from 'rxjs';
-import { map, startWith, takeUntil } from 'rxjs/operators';
+import { Observable, Subject, Subscription } from 'rxjs';
+import { map, startWith, takeUntil, tap } from 'rxjs/operators';
 import { RegisterNewTransactionModalComponent } from 'src/app/shared/modals/register-new-transaction.component';
 import * as fromRoot from '../../../app.reducer';
 import { Bank } from '../../../shared/models/bank-data.model';
@@ -50,6 +50,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   public loading: boolean;
   public loaded: boolean;
   public archiveTransactions: Bank[];
+  public dataToSubscribe: Subscription;
   private getCharts$: Subject<void> = new Subject<void>();
   public registerNewTransactionNgrx: Subject<void> = new Subject<void>();
   public updateTransaction$: Subject<void> = new Subject<void>();
@@ -116,16 +117,17 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   }
   registerNewTransaction(result: any): void {
     this.store.dispatch(new transactionActions.RegisterTransaction(result));
-    this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.registerNewTransactionNgrx))
+    this.dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.registerNewTransactionNgrx))
       .subscribe((data) => {
-        console.log(data);
         if (data.loaded) {
           this.allTransactions.push(data.data);
           this.chartTransactions = this.allTransactions;
           this.afterRegisterNewCard();
           this.messageService.successMessage('הקנייה התווספה בהצלחה', 'סגור');
+          this.dataToSubscribe.unsubscribe();
         }
       });
+
   }
   registerNewTransactionDialog(): void {
 
@@ -158,7 +160,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   }
   deleteTransaction(transactionId: string): void {
     this.store.dispatch(new transactionActions.DeleteTransaction(transactionId));
-    this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.ngUnsubscribe))
+    this.dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((data) => {
         if (data.data) {
           const dataId = data.data.toString();
@@ -166,6 +168,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
           this.allTransactions = deleteTransaction;
           this.chartTransactions = this.allTransactions;
           this.afterDeleteTransaction();
+          this.dataToSubscribe.unsubscribe();
         }
       });
   }
@@ -175,11 +178,16 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.assignDataToCharts();
   }
   updateTransaction(): void {
-    this.bankTransactionService.updateTransaction(this.bankEditTransaction).subscribe(response => {
-      const index = this.allTransactions.findIndex(transaction => transaction._id === response.message.bankData._id);
-      this.allTransactions[index] = response.message.bankData;
-      this.updateAble = false;
-    });
+    this.store.dispatch(new transactionActions.UpdateTransaction(this.bankEditTransaction));
+    this.dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((data) => {
+        if (data.data) {
+          const index = this.allTransactions.findIndex(transaction => transaction._id === data.data._id);
+          this.allTransactions[index] = data.data;
+          this.updateAble = false;
+          this.dataToSubscribe.unsubscribe();
+        }
+      });
   }
   assignDataToCharts(): void {
     this.arrayCardsTotalPrice = [];
@@ -211,7 +219,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
           data: this.arrayCardsTotalPrice,
           backgroundColor: ['#fbd0c6', '#f6c1a6', '#c8c87a', '#79c0b0', '#7ec2a3', '#65b6bd',
             '#70a6ca', '#90b4cb']
-        }, ],
+        },],
 
         labels: this.arrayCardsNames,
       },
@@ -241,7 +249,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
           data: this.arrayEachMonthData,
           backgroundColor: ['#fbd0c6', '#f6c1a6', '#c8c87a', '#79c0b0', '#7ec2a3', '#65b6bd',
             '#70a6ca', '#90b4cb']
-        }, ],
+        },],
 
         labels: this.arrayExpansesEachMonth,
       },
@@ -332,9 +340,15 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     return this.options.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
   }
   ngOnDestroy() {
-    this.getCharts$.complete();
-    this.registerNewTransactionNgrx.complete();
-    this.registerNewTransactionNgrx.unsubscribe();
-    this.getCharts$.unsubscribe();
+
+    if (this.registerNewTransactionNgrx) {
+      console.log('hi');
+      this.registerNewTransactionNgrx.complete();
+      this.registerNewTransactionNgrx.unsubscribe();
+    } else {
+      this.getCharts$.complete();
+      this.getCharts$.unsubscribe();
+    }
+
   }
 }

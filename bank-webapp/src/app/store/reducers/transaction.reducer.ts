@@ -50,6 +50,7 @@ export function transactionReducer(state = initialState, action: TransactionActi
         data: action.payload
       };
     case REGISTER_TRANSACTION_SUCCESS:
+
       return {
         ...state,
         loading: false,
@@ -110,3 +111,4 @@ export function transactionReducer(state = initialState, action: TransactionActi
   }
 }
 export const newTransactionData = (state: State) => state;
+

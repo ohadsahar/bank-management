@@ -48,12 +48,12 @@ export class RegisterNewTransactionModalComponent implements OnInit {
       this.bankTransaction.purchaseDate = this.date;
       this.bankTransaction.monthPurchase = this.purchaseMonth;
     }
+    return false;
+
   }
 
   validateNewTransaction() {
-
-    if (this.bankTransaction.cardName && this.bankTransaction.name &&
-      this.bankTransaction.price && this.bankTransaction.typeProduct) {
+    if (this.bankTransaction.cardName.trim() !== '') {
       return true;
     }
     return false;

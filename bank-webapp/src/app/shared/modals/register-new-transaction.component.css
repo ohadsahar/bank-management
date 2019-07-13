@@ -10,8 +10,16 @@
   font-family: 'Varela Round', sans-serif !important;
 }
 
-.mat-form-field {
+.input-new-transaction .mat-form-field {
   font-family: 'Varela Round', sans-serif !important;
+  width: 100%;
+}
+
+.input-new-transaction .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+
+      text-align: right;
+      direction: rtl;
+      margin: auto;
 }
 
 .mat-raised-button {

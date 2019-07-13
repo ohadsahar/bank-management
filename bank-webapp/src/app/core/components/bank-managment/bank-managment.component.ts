@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Chart } from 'chart.js';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { map, startWith, takeUntil, tap } from 'rxjs/operators';
+import { map, startWith, takeUntil } from 'rxjs/operators';
 import { RegisterNewTransactionModalComponent } from 'src/app/shared/modals/register-new-transaction.component';
 import * as fromRoot from '../../../app.reducer';
 import { Bank } from '../../../shared/models/bank-data.model';
@@ -95,7 +95,6 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.getAllTransactions();
   }
   getAllTransactions(): void {
-
     this.store.dispatch(new transactionActions.GetAllTransactions());
     this.dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((data) => {
@@ -173,6 +172,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   afterUpdate(): void {
     this.updateAble = false;
     this.messageService.successMessage('העסקה עודכנה בהצלחה', 'סגור');
+    this.destroyCharts();
   }
   registerNewTransactionDialog(): void {
     const dialogRef = this.dialog.open(RegisterNewTransactionModalComponent);
@@ -185,16 +185,15 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   afterRegisterNewCard(): void {
     this.chartTransactions = this.allTransactions;
     this.messageService.successMessage('הקנייה התווספה בהצלחה', 'סגור');
-    this.destroyCharts();
     this.updateTable();
-    this.assignDataToCharts();
+    this.destroyCharts();
+
   }
   afterDeleteTransaction(): void {
     this.chartTransactions = this.allTransactions;
     this.messageService.successMessage('העסקה נמחקה בהצלחה', 'סגור');
-    this.destroyCharts();
     this.updateTable();
-    this.assignDataToCharts();
+    this.destroyCharts();
   }
   editTransaction(transcationData: Bank): void {
     this.updateAble = true;
@@ -322,6 +321,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.allCardChart.destroy();
     this.allExpensesByMonthChart.destroy();
     this.eachMonthExpenses.destroy();
+    this.getAllCharts();
   }
   applyFilter(filterValue: string): void {
     this.dataSource.filter = filterValue.trim().toLowerCase();

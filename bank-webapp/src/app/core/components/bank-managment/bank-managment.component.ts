@@ -55,6 +55,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   public registerNewTransactionNgrx: Subject<void> = new Subject<void>();
   public updateTransaction$: Subject<void> = new Subject<void>();
   private ngUnsubscribe: Subject<void> = new Subject<void>();
+  private archiveTransaction$: Subject<void> = new Subject<void>();
   public editoptionsable: any = {};
   public bankEditTransaction = new BankValues('', '', '', '', null, null, null, null, '', '');
   constructor(
@@ -94,16 +95,28 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.getAllTransactions();
   }
   getAllTransactions(): void {
-    this.bankTransactionService.getTransactions().subscribe(response => {
-      this.arrayCardsNames = response.message.chartGroupByCardName;
-      this.allTransactions = response.message.foundTranscations;
-      this.chartByMonthTransactions = response.message.chartGroupByMonth;
-      this.updateTable();
-      this.getAllCharts();
-    });
+
+    this.store.dispatch(new transactionActions.GetAllTransactions());
+    this.dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((data) => {
+        if (data.loaded) {
+          this.arrayCardsNames = data.data.chartGroupByCardName;
+          this.allTransactions = data.data.foundTranscations;
+          this.chartByMonthTransactions = data.data.chartGroupByMonth;
+          this.afterFetchedAllData();
+        }
+      });
     this.paymentService.getAllArchiveTransactions().subscribe(response => {
       this.oldTransactions = response.message.archivesTransactions;
     });
+    // this.store.dispatch(new transactionActions.GetAllArchiveTransactions());
+    // this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.archiveTransaction$))
+    //   .subscribe((data) => {
+    //     if (data.loaded) {
+    //       this.oldTransactions = data.data.archivesTransactions;
+    //     }
+    //   });
+
   }
   getAllCharts(): void {
     this.store.dispatch(new chartActions.GetCharts());
@@ -151,10 +164,13 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
         }
       });
   }
-
   // Help functions
-
-  afterUpdate() {
+  afterFetchedAllData(): void {
+    this.updateTable();
+    this.getAllCharts();
+    this.dataToSubscribe.unsubscribe();
+  }
+  afterUpdate(): void {
     this.updateAble = false;
     this.messageService.successMessage('העסקה עודכנה בהצלחה', 'סגור');
   }
@@ -344,9 +360,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     const filterValue = value.toLowerCase();
     return this.options.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
   }
-
   // End of help functions
-
   ngOnDestroy() {
     this.registerNewTransactionNgrx.unsubscribe();
     this.getCharts$.unsubscribe();

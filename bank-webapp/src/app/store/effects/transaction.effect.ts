@@ -4,11 +4,12 @@ import { catchError, switchMap, map, exhaustMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import * as transactionActions from '../actions/transaction.actions';
 import { BankTranscationService } from '../../core/services/bank-transcation.service';
+import { PaymentTransactionArchiveService } from 'src/app/core/services/payment-transaction.service';
 
 @Injectable({ providedIn: 'root' })
 
 export class TransactionEffect {
-  constructor(private actions$: Actions, private bankService: BankTranscationService) { }
+  constructor(private actions$: Actions, private bankService: BankTranscationService, private paymentService: PaymentTransactionArchiveService) { }
 
   @Effect()
   public registerTransaction$ = this.actions$.pipe(ofType(transactionActions.REGISTER_TRANSACTION))
@@ -33,6 +34,15 @@ export class TransactionEffect {
       return this.bankService.getTransactions().pipe(map(transaction =>
         new transactionActions.GetAllTransactionSuccess(transaction.message)),
         catchError(error => of(new transactionActions.GetAllTransactionsFailed(error)
+        )));
+    }));
+
+  @Effect()
+  public allArchiveTransactions$ = this.actions$.pipe(ofType(transactionActions.GET_ALL_ARCHIVE_TRANSACTIONS))
+    .pipe(switchMap(() => {
+      return this.paymentService.getAllArchiveTransactions().pipe(map(transactionArchive =>
+        new transactionActions.GetAllArchiveTransactionsSuccess(transactionArchive.message)),
+        catchError(error => of(new transactionActions.GetAllArchiveTransactionsFailed(error)
         )));
     }));
 

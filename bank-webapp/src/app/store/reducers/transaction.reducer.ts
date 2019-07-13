@@ -5,13 +5,14 @@ import {
   REGISTER_TRANSACTION, REGISTER_TRANSACTION_SUCCESS, REGISTER_TRANSACTION_FAILED,
   GET_ALL_TRANSACTION, GET_ALL_TRANSACTIONS_SUCCESS, GET_ALL_TRANSACTIONS_FAILED,
   UPDATE_TRANSACTION, UPDATE_TRANSACTION_SUCCESS, UPDATE_TRANSACTION_FAILED,
-  DELETE_TRANSACTION, DELETE_TRANSACTION_SUCCESS, DELETE_TRANSACTION_FAILED
+  DELETE_TRANSACTION, DELETE_TRANSACTION_SUCCESS, DELETE_TRANSACTION_FAILED,
+  GET_ALL_ARCHIVE_TRANSACTIONS, GET_ALL_ARCHIVE_TRANSACTIONS_SUCCESS, GET_ALL_ARCHIVE_TRANSACTIONS_FAILED
 } from '../actions/transaction.actions';
 
 export interface State {
   loading: boolean;
   loaded: boolean;
-  data: Bank;
+  data: Bank | any;
 }
 
 const initialState: State = {
@@ -36,6 +37,27 @@ export function transactionReducer(state = initialState, action: TransactionActi
         data: action.payload
       };
     case GET_ALL_TRANSACTIONS_FAILED:
+      return {
+        ...state,
+        loading: false,
+        loaded: true,
+        data: action.payload
+      };
+    case GET_ALL_ARCHIVE_TRANSACTIONS:
+      return {
+        ...state,
+        loading: true,
+        loaded: false
+      };
+    case GET_ALL_ARCHIVE_TRANSACTIONS_SUCCESS:
+      console.log(action.payload);
+      return {
+        ...state,
+        loading: false,
+        loaded: true,
+        data: action.payload
+      };
+    case GET_ALL_ARCHIVE_TRANSACTIONS_FAILED:
       return {
         ...state,
         loading: false,

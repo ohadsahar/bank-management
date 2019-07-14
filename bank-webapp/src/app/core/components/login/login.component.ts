@@ -8,6 +8,7 @@ import * as fromRoot from '../../../app.reducer';
 import * as loginActions from '../../../store/actions/login.actions';
 import { MessageService } from '../../services/message.service';
 import * as validateUtil from './validate.functions';
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,8 @@ export class LoginComponent implements OnInit {
     private messageService: MessageService,
     private store: Store<fromRoot.State>,
     private spinnerService: Ng4LoadingSpinnerService,
-    private deviceService: DeviceDetectorService
+    private deviceService: DeviceDetectorService,
+    private loginService: LoginService
   ) {
     this.hide = true;
   }
@@ -32,14 +34,14 @@ export class LoginComponent implements OnInit {
     this.mobileOrDesktop();
   }
   Login(form: NgForm) {
+    console.log(form.value);
     if (form.invalid) {
       return;
     } else {
       if (validateUtil.validateAuthData(form)) {
-        this.messageService.successMessage(
-          'You have successfully connected to the system.',
-          'Dismiss'
-        );
+        this.loginService.login(form.value).subscribe(response => {
+          console.log(response);
+        });
       } else {
         this.messageService.failedMessage(
           'One of the details you entered is incorrect.',

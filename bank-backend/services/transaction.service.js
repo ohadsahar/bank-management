@@ -5,6 +5,7 @@ const validatorUtil = require('../utils/validator');
 async function register(transactionData) {
   const transactionToCreate = new TransactionModel({
     cardName: transactionData.cardName,
+    username: transactionData.username,
     name: transactionData.name,
     typeProduct: transactionData.typeProduct,
     price: transactionData.price,
@@ -29,16 +30,16 @@ async function updatePurchaseDate(transactionData) {
 async function deleteX(transactionId) {
   await TransactionModel.findOneAndDelete({ _id: transactionId });
 }
-async function getCharts() {
-  const fetchedTransactions = await TransactionModel.find();
+async function getCharts(username) {
+  const fetchedTransactions = await TransactionModel.find({ username });
   const resultLodashTransactions = await transactionUtil.groupCategories(fetchedTransactions);
   return {
     chartGroupByCardName: resultLodashTransactions.groupedByCardName,
     chartGroupByMonth: resultLodashTransactions.groupedByMonth,
   };
 }
-async function get() {
-  const fetchedTransactions = await TransactionModel.find();
+async function get(username) {
+  const fetchedTransactions = await TransactionModel.find({ username });
   const resultLodashTransactions = await transactionUtil.groupCategories(fetchedTransactions);
   const resultOfAllBushinessNames = await transactionUtil.allBushinessNames(fetchedTransactions);
   return {

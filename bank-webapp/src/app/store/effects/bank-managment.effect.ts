@@ -14,8 +14,8 @@ export class BankManagementEffects {
 
   @Effect()
   public getCharts$ = this.actions$.pipe(ofType(chartActions.GET_CHARTS))
-    .pipe(exhaustMap(() => {
-      return this.bankService.getCharts().pipe(map(charts => new chartActions.ChartSuccess(charts.message)),
+    .pipe(exhaustMap((action: chartActions.GetCharts) => {
+      return this.bankService.getCharts(action.payload).pipe(map(charts => new chartActions.ChartSuccess(charts.message)),
         catchError(error => of(new chartActions.ChartFailed(error)
         )));
     }));

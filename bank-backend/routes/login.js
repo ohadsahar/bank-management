@@ -7,6 +7,7 @@ const userManagementService = require('../services/user-management.service');
 async function login(req, res) {
   const loginData = req.body;
   const resultOfAuthUtil = await authUtil.login(loginData);
+  console.log(resultOfAuthUtil);
   try {
     res.status(200).json({
       message: resultOfAuthUtil.userData,

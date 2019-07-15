@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const transactionArchives = mongoose.Schema({
-
+  username: { type: String, required: true },
   cardName: { type: String, required: true },
   name: { type: String, required: true },
   typeProduct: { type: String, required: true },

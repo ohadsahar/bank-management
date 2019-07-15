@@ -27,12 +27,12 @@ export class BankTranscationService {
     return this.http.delete<{message: ResponseModel}>(`${backendUrl}${transactionId}`);
   }
 
-  getTransactions() {
-    return this.http.get<{message: FirstFetch}>(`${backendUrl}`);
+  getTransactions(email: string) {
+    return this.http.get<{message: FirstFetch}>(`${backendUrl}/${email}`);
   }
 
-  getCharts() {
-    return this.http.get<{message: ChartByCardName}>(`${backendUrl}charts`);
+  getCharts(email: string) {
+    return this.http.get<{message: ChartByCardName}>(`${backendUrl}charts/${email}`);
   }
 
 }

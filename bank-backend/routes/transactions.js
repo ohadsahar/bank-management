@@ -20,7 +20,8 @@ async function create(req, res) {
 }
 async function getAllTransactions(req, res) {
   try {
-    const resultOfFetchedTranscations = await transactionService.get();
+    const username = req.params.username;
+    const resultOfFetchedTranscations = await transactionService.get(username);
     res.status(200).json({
       message: resultOfFetchedTranscations,
       success: true,
@@ -34,7 +35,8 @@ async function getAllTransactions(req, res) {
 }
 async function getAllCharts(req, res) {
   try {
-    const resultOfFetchedChartData = await transactionService.getCharts();
+    const username = req.params.username;
+    const resultOfFetchedChartData = await transactionService.getCharts(username);
     res.status(200).json({
       message: resultOfFetchedChartData.chartGroupByCardName,
       success: true,
@@ -77,8 +79,8 @@ async function update(req, res) {
 }
 
 router.post('/transaction', create);
-router.get('', getAllTransactions);
-router.get('/charts', getAllCharts);
+router.get('/:username', getAllTransactions);
+router.get('/charts/:username', getAllCharts);
 router.delete('/:transactionId', deleteTransaction);
 router.put('', update);
 module.exports = router;

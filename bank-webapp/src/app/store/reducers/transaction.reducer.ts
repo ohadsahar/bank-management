@@ -27,7 +27,8 @@ export function transactionReducer(state = initialState, action: TransactionActi
       return {
         ...state,
         loading: true,
-        loaded: false
+        loaded: false,
+        data: action.payload
       };
     case GET_ALL_TRANSACTIONS_SUCCESS:
       return {
@@ -50,7 +51,6 @@ export function transactionReducer(state = initialState, action: TransactionActi
         loaded: false
       };
     case GET_ALL_ARCHIVE_TRANSACTIONS_SUCCESS:
-      console.log(action.payload);
       return {
         ...state,
         loading: false,

@@ -18,6 +18,8 @@ export class LoginService {
   private tokenTimer: any;
   private authStatusListener = new Subject<boolean>();
   private isLogged: boolean;
+  private username: string;
+  private id: string;
 
   constructor(private http: HttpClient, private router: Router) {
     this.isLogged = false
@@ -26,10 +28,13 @@ export class LoginService {
 
   login(loginData: LoginModel) {
     this.http.post<{ message: AuthData }>(backendUrlLogin, loginData).subscribe(response => {
+      console.log(response);
       const token = response.message.token;
       this.token = token;
       if (token) {
         this.isLogged = true;
+        this.username = response.message.username;
+        this.id = response.message.id;
         const expiryTokenTime = response.message.expiresIn;
         this.setAuthTimer(expiryTokenTime);
         this.tokenTimer = setTimeout(() => {
@@ -40,7 +45,6 @@ export class LoginService {
         this.saveAuthData(this.token, this.expiryDate);
         this.authStatusListener.next(true);
         this.router.navigate(['/menu']);
-        location.reload();
       }
     }, (error) => {
     });
@@ -67,6 +71,8 @@ export class LoginService {
   private saveAuthData(token: string, expirateionDate: Date) {
     localStorage.setItem('token', token);
     localStorage.setItem('expiryDate', expirateionDate.toISOString());
+    localStorage.setItem('username', this.username);
+    localStorage.setItem('id', this.id);
   }
   private getAuthData() {
     const token = localStorage.getItem('token');
@@ -84,6 +90,8 @@ export class LoginService {
   private clearAuthData() {
     localStorage.removeItem('token');
     localStorage.removeItem('expiryDate');
+    localStorage.removeItem('username');
+    localStorage.removeItem('id');
   }
   logout() {
     this.token = null;
@@ -92,6 +100,14 @@ export class LoginService {
     this.clearAuthData();
     clearTimeout(this.tokenTimer);
     this.router.navigate(['']);
+  }
+
+  getUsernameAndId() {
+    const loggedUser = {
+      username: localStorage.getItem('username'),
+      id: localStorage.getItem('id')
+    };
+    return loggedUser;
   }
   getIsLogged() {
     return this.isLogged;

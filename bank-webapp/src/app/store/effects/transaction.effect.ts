@@ -9,7 +9,8 @@ import { PaymentTransactionArchiveService } from 'src/app/core/services/payment-
 @Injectable({ providedIn: 'root' })
 
 export class TransactionEffect {
-  constructor(private actions$: Actions, private bankService: BankTranscationService, private paymentService: PaymentTransactionArchiveService) { }
+  constructor(private actions$: Actions, private bankService: BankTranscationService,
+              private paymentService: PaymentTransactionArchiveService) { }
 
   @Effect()
   public registerTransaction$ = this.actions$.pipe(ofType(transactionActions.REGISTER_TRANSACTION))
@@ -21,7 +22,6 @@ export class TransactionEffect {
           }
         }),
         catchError((error) => {
-
           return of(new transactionActions.RegisterTransactionFailed(error));
         }),
       ),
@@ -30,8 +30,8 @@ export class TransactionEffect {
 
   @Effect()
   public allTransactions$ = this.actions$.pipe(ofType(transactionActions.GET_ALL_TRANSACTION))
-    .pipe(switchMap(() => {
-      return this.bankService.getTransactions().pipe(map(transaction =>
+    .pipe(switchMap((action: transactionActions.GetAllTransactions) => {
+      return this.bankService.getTransactions(action.payload).pipe(map(transaction =>
         new transactionActions.GetAllTransactionSuccess(transaction.message)),
         catchError(error => of(new transactionActions.GetAllTransactionsFailed(error)
         )));

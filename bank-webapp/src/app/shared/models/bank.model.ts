@@ -1,6 +1,8 @@
 export class BankValues {
 
-  constructor(public _id: string, public cardName: string,
+  constructor(public _id: string,
+              public username: string,
+              public cardName: string,
               public name: string,
               public typeProduct: string,
               public price: number,

@@ -33,7 +33,7 @@ export class RegisterTransactionFailed implements Action {
 
 export class GetAllTransactions implements Action {
   readonly type = GET_ALL_TRANSACTION;
-  constructor() { }
+  constructor(public payload: any) { }
 }
 
 export class GetAllTransactionSuccess implements Action {

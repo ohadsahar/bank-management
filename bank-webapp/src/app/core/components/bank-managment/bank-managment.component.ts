@@ -1,3 +1,4 @@
+import { LoginService } from './../../services/login.service';
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource, Sort } from '@angular/material';
@@ -58,14 +59,15 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<void> = new Subject<void>();
   private archiveTransaction$: Subject<void> = new Subject<void>();
   public editoptionsable: any = {};
-  public bankEditTransaction = new BankValues('', '', '', '', null, null, null, null, '', '');
+  public bankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '');
   constructor(
     private bankTransactionService: BankTranscationService,
     private messageService: MessageService,
     private paymentService: PaymentTransactionArchiveService,
     private store: Store<fromRoot.State>,
     public router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private loginService: LoginService
   ) {
     this.counter = 0;
     this.totalExpenses = 0;
@@ -96,7 +98,9 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.getAllTransactions();
   }
   getAllTransactions(): void {
-    this.store.dispatch(new transactionActions.GetAllTransactions());
+
+    const loggedInUsername = this.loginService.getUsernameAndId().username;
+    this.store.dispatch(new transactionActions.GetAllTransactions(loggedInUsername));
     this.dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((data) => {
         if (data.loaded) {
@@ -109,17 +113,9 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.paymentService.getAllArchiveTransactions().subscribe(response => {
       this.oldTransactions = response.message.archivesTransactions;
     });
-    // this.store.dispatch(new transactionActions.GetAllArchiveTransactions());
-    // this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.archiveTransaction$))
-    //   .subscribe((data) => {
-    //     if (data.loaded) {
-    //       this.oldTransactions = data.data.archivesTransactions;
-    //     }
-    //   });
-
   }
   getAllCharts(): void {
-    this.store.dispatch(new chartActions.GetCharts());
+    this.store.dispatch(new chartActions.GetCharts(this.loginService.getUsernameAndId().username));
     this.store.select(fromRoot.getChartsData).pipe(takeUntil(this.getCharts$))
       .subscribe((data) => {
         if (data.loaded) {
@@ -196,9 +192,10 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.updateTable();
     this.destroyCharts();
   }
-  editTransaction(transcationData: Bank): void {
+  editTransaction(transactionData: Bank): void {
     this.updateAble = true;
-    this.bankEditTransaction = transcationData;
+    this.bankEditTransaction = transactionData;
+    this.bankEditTransaction.username = this.loginService.getUsernameAndId().username;
     this.counter = this.counter + 1;
     if (this.counter === 1) {
       this.editEnable = true;
@@ -216,7 +213,6 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.arrayCardsNames = [];
     this.arrayExpansesEachMonth = [];
     this.arrayEachMonthData = [];
-
     this.chartTransactions.forEach(transactionData => {
       this.arrayCardsNames.push(transactionData.cardName);
       this.arrayCardsTotalPrice.push(transactionData.price);

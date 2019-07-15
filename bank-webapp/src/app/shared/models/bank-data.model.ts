@@ -1,6 +1,7 @@
 export interface Bank {
 
   _id: string;
+  username: string;
   cardName: string;
   name: string;
   typeProduct: string;

@@ -1,3 +1,4 @@
+import { LoginService } from './../../../core/services/login.service';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { BankValues } from '../../models/bank.model';
 import { FormControl } from '@angular/forms';
@@ -25,8 +26,8 @@ export class RegisterNewTransactionModalComponent implements OnInit {
   categories: any[] = [{ value: 'חשמל' }, { value: 'ביגוד' }, { value: 'ריהוט' },
   { value: 'אוכל' }, { value: 'תכשיטים' }, { value: 'בריאות' }, { value: 'אחר' }];
 
-  constructor() { }
-  public bankTransaction = new BankValues('', '', '', '', null, null, null, null, '', '');
+  constructor(private loginService: LoginService) { }
+  public bankTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '');
 
 
   ngOnInit() {
@@ -47,6 +48,7 @@ export class RegisterNewTransactionModalComponent implements OnInit {
       this.purchaseMonth = moment().month(this.purchaseMonth).format('MMMM');
       this.bankTransaction.purchaseDate = this.date;
       this.bankTransaction.monthPurchase = this.purchaseMonth;
+      this.bankTransaction.username = this.loginService.getUsernameAndId().username;
     }
     return false;
 

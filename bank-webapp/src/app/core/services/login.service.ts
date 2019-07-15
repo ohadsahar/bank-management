@@ -24,11 +24,8 @@ export class LoginService {
   constructor(private http: HttpClient, private router: Router) {
     this.isLogged = false
   }
-
-
   login(loginData: LoginModel) {
     this.http.post<{ message: AuthData }>(backendUrlLogin, loginData).subscribe(response => {
-      console.log(response);
       const token = response.message.token;
       this.token = token;
       if (token) {

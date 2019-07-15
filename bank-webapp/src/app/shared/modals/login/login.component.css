@@ -1,6 +1,7 @@
 
 .example-full-width {
   width: 100%;
+  text-align: right;
 }
 
 .mat-dialog-content {
@@ -13,4 +14,8 @@
 
 .mat-dialog-content {
   height: 250px;;
+}
+
+h2 {
+  text-align: center;
 }

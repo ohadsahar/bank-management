@@ -10,7 +10,7 @@ function createRegisterObject(registerData) {
 async function register(registerData) {
   const resultCreationObject = createRegisterObject(registerData);
   await resultCreationObject.save();
-  return { message: 'User has successfully registered' };
+  return { message: 'נרשמת בהצלחה, אנא התחבר!' };
 }
 
 

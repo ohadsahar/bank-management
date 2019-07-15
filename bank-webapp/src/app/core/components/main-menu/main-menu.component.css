@@ -1,9 +1,13 @@
 .main-menu-component {
 
   height: 100vh;
-
+  background-color: #F5F1ED;
 }
 
 a {
   cursor: pointer;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  text-align: right;
 }

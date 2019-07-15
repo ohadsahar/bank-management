@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { BankValues } from '../models/bank.model';
+import { BankValues } from '../../models/bank.model';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';

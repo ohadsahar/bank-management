@@ -1,0 +1,16 @@
+
+.example-full-width {
+  width: 100%;
+}
+
+.mat-dialog-content {
+  overflow-y: hidden;
+}
+
+.register-message {
+  padding: 20px;
+}
+
+.mat-dialog-content {
+  height: 250px;;
+}

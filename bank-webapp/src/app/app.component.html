@@ -1,2 +1,2 @@
-<app-login></app-login>
+<app-menu *ngIf="isLogged" (event)="setDataLoggedIn($event)" ></app-menu>
 <router-outlet></router-outlet>

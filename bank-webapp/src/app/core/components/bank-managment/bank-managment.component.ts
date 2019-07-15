@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource, Sort } from '@angular/material';
 import { Router } from '@angular/router';
@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { Chart } from 'chart.js';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { map, startWith, takeUntil } from 'rxjs/operators';
-import { RegisterNewTransactionModalComponent } from 'src/app/shared/modals/register-new-transaction.component';
+
 import * as fromRoot from '../../../app.reducer';
 import { Bank } from '../../../shared/models/bank-data.model';
 import { BankValues } from '../../../shared/models/bank.model';
@@ -16,6 +16,7 @@ import * as transactionActions from '../../../store/actions/transaction.actions'
 import { BankTranscationService } from '../../services/bank-transcation.service';
 import { MessageService } from '../../services/message.service';
 import { PaymentTransactionArchiveService } from '../../services/payment-transaction.service';
+import { RegisterNewTransactionModalComponent } from 'src/app/shared/modals/register-transaction/register-new-transaction.component';
 
 @Component({
   selector: 'app-bank-managment',

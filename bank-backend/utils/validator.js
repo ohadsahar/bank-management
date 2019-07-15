@@ -22,8 +22,16 @@ async function validateSalary(salaryData) {
   throw new Error('Salary data is not numeric!!');
 }
 
+function validateRegisterData(registerData) {
+  if (validator.isEmail(registerData.username) && validator.isLength(registerData.password, { min: 8, max: 8 })) {
+    return true;
+  }
+  throw new Error('Validation of register new user has problem with data!');
+}
+
 module.exports = {
 
   validateUpdateData,
   validateSalary,
+  validateRegisterData,
 };

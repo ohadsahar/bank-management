@@ -1,5 +1,5 @@
 import { LoginModalComponent } from './shared/modals/login/login.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -21,6 +21,7 @@ import { RegisterNewTransactionModalComponent } from './shared/modals/register-t
 import { RegisterUserModalComponent } from './shared/modals/register-user/register-user.component';
 import { BankManagementEffects } from './store/effects/bank-managment.effect';
 import { TransactionEffect } from './store/effects/transaction.effect';
+import { AuthInterceptor } from './shared/modals/login/auth-interceptor.component';
 
 
 
@@ -49,7 +50,7 @@ import { TransactionEffect } from './store/effects/transaction.effect';
     DeviceDetectorModule.forRoot(),
     Ng4LoadingSpinnerModule.forRoot()
   ],
-  providers: [],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
 
   bootstrap: [AppComponent],
   entryComponents: [RegisterNewTransactionModalComponent, RegisterUserModalComponent, LoginModalComponent]

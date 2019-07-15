@@ -2,6 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 const transactionService = require('../services/transaction.service');
+const authValiadte = require('../middleware/validate-auth');
 
 async function create(req, res) {
   try {
@@ -78,9 +79,9 @@ async function update(req, res) {
   }
 }
 
-router.post('/transaction', create);
-router.get('/:username', getAllTransactions);
-router.get('/charts/:username', getAllCharts);
-router.delete('/:transactionId', deleteTransaction);
+router.post('/transaction', authValiadte, create);
+router.get('/:username', authValiadte, getAllTransactions);
+router.get('/charts/:username', authValiadte, getAllCharts);
+router.delete('/:transactionId', authValiadte, deleteTransaction);
 router.put('', update);
 module.exports = router;

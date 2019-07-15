@@ -104,6 +104,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((data) => {
         if (data.loaded) {
+          console.log(data);
           this.arrayCardsNames = data.data.chartGroupByCardName;
           this.allTransactions = data.data.foundTranscations;
           this.chartByMonthTransactions = data.data.chartGroupByMonth;

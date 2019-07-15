@@ -5,7 +5,7 @@ async function login(userData) {
   const fetchedUser = await LoginModel.findOne({ username: userData.username });
   if (userData.password === fetchedUser.password) {
     const token = jwt.sign(
-      { username: fetchedUser.username, id: fetchedUser.id }, 'CYBER_SERIAL_KEY_NEVER_GONNA_GUESS_IT',
+      { username: fetchedUser.username, id: fetchedUser.id }, 'OHAD_SERIAL_KEY_NEVER_GONNA_GUESS_IT',
       { expiresIn: '1h' },
     );
     // eslint-disable-next-line no-shadow

@@ -1,11 +1,18 @@
+
 .main-menu-component {
 
   height: 100vh;
-  background-color: #F5F1ED;
+  background-image: url("/assets/images/fabian-blank-pElSkGRA2NU-unsplash.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 a {
   cursor: pointer;
+}
+
+.bg-light {
+  font-weight: bold;
 }
 
 .navbar-light .navbar-nav .nav-link {

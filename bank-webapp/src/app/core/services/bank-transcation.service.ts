@@ -1,10 +1,8 @@
+import { Bank } from './../../shared/models/bank-data.model';
 import { Injectable } from '@angular/core';
-import { Bank } from '../../shared/models/bank-data.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { ResponseModel } from '../../shared/models/response.model';
-import { TranscationTransform } from '../../shared/models/response-get.model';
-import { ChartByCardName } from '../../shared/models/chart-by-cardname.model';
 import { BankResponse } from '../../shared/models/bank-response.model';
 import { FirstFetch } from '../../shared/models/first-fetch.model';
 
@@ -31,8 +29,12 @@ export class BankTranscationService {
     return this.http.get<{message: FirstFetch}>(`${backendUrl}/${email}`);
   }
 
+  getTransactionById(specificId: string) {
+    return this.http.get<{message: Bank}>(`${backendUrl}/byId/${specificId}`);
+  }
+
   getCharts(email: string) {
-    return this.http.get<{message: ChartByCardName}>(`${backendUrl}charts/${email}`);
+    return this.http.get<{message: any}>(`${backendUrl}charts/${email}`);
   }
 
 }

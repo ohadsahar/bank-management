@@ -98,13 +98,11 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.getAllTransactions();
   }
   getAllTransactions(): void {
-
     const loggedInUsername = this.loginService.getUsernameAndId().username;
     this.store.dispatch(new transactionActions.GetAllTransactions(loggedInUsername));
     this.dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((data) => {
         if (data.loaded) {
-          console.log(data);
           this.arrayCardsNames = data.data.chartGroupByCardName;
           this.allTransactions = data.data.foundTranscations;
           this.chartByMonthTransactions = data.data.chartGroupByMonth;
@@ -120,7 +118,8 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.store.select(fromRoot.getChartsData).pipe(takeUntil(this.getCharts$))
       .subscribe((data) => {
         if (data.loaded) {
-          this.chartTransactions = data.data as any;
+          this.chartTransactions = data.data.chartGroupByCardName;
+          this.chartByMonthTransactions = data.data.chartGroupByMonth;
           this.assignDataToCharts();
         }
       });
@@ -145,6 +144,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
           const deleteTransaction = this.allTransactions.filter(transaction => transaction._id !== dataId);
           this.allTransactions = deleteTransaction;
           this.afterDeleteTransaction();
+          this.messageService.successMessage('העסקה נמחקה בהצלחה','סגור');
           this.dataToSubscribe.unsubscribe();
         }
       });
@@ -195,14 +195,22 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   }
   editTransaction(transactionData: Bank): void {
     this.updateAble = true;
+    this.counter = this.counter + 1;
     this.bankEditTransaction = transactionData;
     this.bankEditTransaction.username = this.loginService.getUsernameAndId().username;
-    this.counter = this.counter + 1;
     if (this.counter === 1) {
       this.editEnable = true;
     } else {
       this.counter = 0;
     }
+  }
+  cancelUpdate(data) {
+
+    this.bankTransactionService.getTransactionById(data._id).subscribe(response => {
+      this.bankEditTransaction = response.message;
+    })
+    this.updateAble = false;
+    this.messageService.successMessage('עדכון העסקה בוטל','סגור');
   }
   updateTable(): void {
     this.dataSource = new MatTableDataSource(this.allTransactions);
@@ -226,37 +234,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   }
   loadCharts(): void {
     this.cardsChart('pie');
-    this.expensesByCurrentMonthChart('bar');
     this.eachMonthChartDisplay('bar');
-  }
-  expensesByCurrentMonthChart(type: string): void {
-    this.allExpensesByMonthChart = new Chart('allExpensesByMonthChart', {
-      type,
-      data: {
-        datasets: [{
-          label: 'החודש הנוכחי',
-          data: this.arrayCardsTotalPrice,
-          backgroundColor: ['#fbd0c6', '#f6c1a6', '#c8c87a', '#79c0b0', '#7ec2a3', '#65b6bd',
-            '#70a6ca', '#90b4cb']
-        },],
-        labels: this.arrayCardsNames,
-      },
-      options: {
-        scales: {
-          xAxes: [{
-            stacked: true,
-            barThickness: 8,
-            maxBarThickness: 10
-          }],
-          yAxes: [{
-            stacked: true,
-            barThickness: 8,
-            maxBarThickness: 10
-          }]
-        },
-        animation: false,
-      }
-    });
   }
   eachMonthChartDisplay(type: string): void {
     this.eachMonthExpenses = new Chart('eachMonthExpenses', {
@@ -317,7 +295,6 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   }
   destroyCharts(): void {
     this.allCardChart.destroy();
-    this.allExpensesByMonthChart.destroy();
     this.eachMonthExpenses.destroy();
     this.getAllCharts();
   }

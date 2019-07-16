@@ -15,7 +15,7 @@ async function groupCategories(transactions) {
   const groupByMonth = lodash(transactions).groupBy('monthPurchase')
     .map((items, monthPurchase) => ({
       monthPurchase,
-      price: lodash.sumBy(items, 'price'),
+      price: lodash(transactions).sumBy('eachMonth'),
     })).value();
   return {
     groupedByCardName: groupByCardName,

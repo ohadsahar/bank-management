@@ -1,3 +1,6 @@
+.register-dialog {
+  font-family: 'Varela Round', sans-serif !important;
+}
 
 .example-full-width {
   width: 100%;
@@ -17,8 +20,29 @@
 }
 
 .mat-dialog-content {
-  height: 250px;;
+  height: 250px;
+  ;
 }
- h2 {
-   text-align: center;
- }
+
+h2 {
+  text-align: center;
+}
+
+p {
+  direction: rtl;
+  text-align: right;
+}
+::ng-deep .mat-dialog-container {
+
+  background-color: #fcfdff !important;
+}
+
+.register-dialog .mat-dialog-content {
+  font-weight: bold;
+  font-size: 18px;
+
+}
+
+::ng-deep .register-dialog .mat-form-field-appearance-legacy .mat-form-field-infix, h2, .mat-hint, button {
+  font-family: 'Varela Round', sans-serif !important;
+}

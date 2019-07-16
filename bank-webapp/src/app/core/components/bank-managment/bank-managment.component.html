@@ -12,12 +12,15 @@
             (matSortChange)="sortData($event)">
             <ng-container matColumnDef="id">
               <th mat-header-cell *matHeaderCellDef> <i class="fab fa-cc-visa"></i> אפשרויות </th>
-              <td mat-cell *matCellDef="let element; let i = index"> <i class="fas fa-trash"
+              <td mat-cell *matCellDef="let element; let i = index">
+                 <i class="fas fa-trash"
                   (click)="deleteTransaction(element._id)"></i>
                 <i class="fas fa-edit" (click)="editTransaction(element);editoptionsable[i] = !editoptionsable[i]"
                   *ngIf="!editoptionsable[i] && !updateAble"></i>
                 <i class="fas fa-check-double" *ngIf="editEnable && editoptionsable[i]"
                   (click)="updateTransaction();editoptionsable[i] = !editoptionsable[i]"></i>
+                  <i class="fas fa-times" *ngIf="editEnable && editoptionsable[i]"
+                  (click)="cancelUpdate(element);editoptionsable[i] = !editoptionsable[i]"></i>
               </td>
             </ng-container>
             <ng-container matColumnDef="cardName">
@@ -142,9 +145,6 @@
     <div class="row">
       <div class="col-sm-12 col-md-4 col-lg-4">
         <canvas id="allCardChart">{{allCardChart}}</canvas>
-      </div>
-      <div class="col-sm-12 col-md-4 col-lg-4">
-        <canvas id="allExpensesByMonthChart">{{allExpensesByMonthChart}}</canvas>
       </div>
       <div class="col-sm-12 col-md-4 col-lg-4">
         <canvas id="eachMonthExpenses">{{eachMonthExpenses}}</canvas>

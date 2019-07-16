@@ -50,6 +50,13 @@ async function get(username) {
   };
 }
 
+async function getTransactionById(id) {
+  const resultOfFetchTransaction = await TransactionModel.findById({ _id: id });
+  if (resultOfFetchTransaction) {
+    return { fetchedTransaction: resultOfFetchTransaction };
+  }
+  throw new Error('There is a problem with fetching specific transaction!');
+}
 
 module.exports = {
 
@@ -58,4 +65,5 @@ module.exports = {
   deleteX,
   getCharts,
   updatePurchaseDate,
+  getTransactionById,
 };

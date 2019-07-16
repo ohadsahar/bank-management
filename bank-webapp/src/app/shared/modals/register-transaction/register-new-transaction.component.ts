@@ -29,11 +29,9 @@ export class RegisterNewTransactionModalComponent implements OnInit {
   constructor(private loginService: LoginService) { }
   public bankTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '');
 
-
   ngOnInit() {
     this.onLoadComponent();
   }
-
   onLoadComponent() {
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
@@ -44,16 +42,14 @@ export class RegisterNewTransactionModalComponent implements OnInit {
     this.bankTransaction.name = this.myControl.value;
     if (this.validateNewTransaction()) {
       this.date = moment().format('LL');
-      this.purchaseMonth = (moment().month() + 1).toString();
+      this.purchaseMonth = (moment().month()).toString();
       this.purchaseMonth = moment().month(this.purchaseMonth).format('MMMM');
       this.bankTransaction.purchaseDate = this.date;
       this.bankTransaction.monthPurchase = this.purchaseMonth;
       this.bankTransaction.username = this.loginService.getUsernameAndId().username;
     }
     return false;
-
   }
-
   validateNewTransaction() {
     if (this.bankTransaction.cardName.trim() !== '') {
       return true;
@@ -61,7 +57,6 @@ export class RegisterNewTransactionModalComponent implements OnInit {
     return false;
   }
   calculateEachMonth() {
-
     if (this.bankTransaction.numberofpayments) {
       this.bankTransaction.eachMonth = this.bankTransaction.price / this.bankTransaction.numberofpayments;
       this.bankTransaction.eachMonth = Number(this.bankTransaction.eachMonth.toFixed(2));
@@ -71,7 +66,6 @@ export class RegisterNewTransactionModalComponent implements OnInit {
       this.bankTransaction.leftPayments = null;
     }
   }
-
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.options.filter(option => option.toLowerCase().indexOf(filterValue) === 0);

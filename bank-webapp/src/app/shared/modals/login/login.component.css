@@ -2,6 +2,7 @@
 .example-full-width {
   width: 100%;
   text-align: right;
+  direction: rtl;
 }
 
 .mat-dialog-content {
@@ -18,4 +19,19 @@
 
 h2 {
   text-align: center;
+}
+
+::ng-deep .mat-dialog-container {
+
+  background-color: #fcfdff !important;
+}
+
+.login-dialog .mat-dialog-content {
+  font-weight: bold;
+  font-size: 18px;
+
+}
+
+::ng-deep .login-dialog .mat-form-field-appearance-legacy .mat-form-field-infix, h2, .mat-hint, button {
+  font-family: 'Varela Round', sans-serif !important;
 }

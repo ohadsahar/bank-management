@@ -15,7 +15,6 @@ export class LoginModalComponent {
   hide = true;
   @Output() event: EventEmitter<boolean> = new EventEmitter();
   constructor(private loginService: LoginService) { }
-
   login(form: NgForm) {
     if (form.invalid) {
       return false;

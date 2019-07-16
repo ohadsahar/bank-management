@@ -24,6 +24,10 @@ th.mat-header-cell:first-of-type {
   text-align: center !important;
 }
 
+.fa-times:before {
+  margin-right: 16px;
+}
+
 .bank-component .purchase-list {
   text-align: right;
   background-color: #F5F1ED;

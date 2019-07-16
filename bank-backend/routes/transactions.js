@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 const transactionService = require('../services/transaction.service');
-const authValiadte = require('../middleware/validate-auth');
+const authValidate = require('../middleware/validate-auth');
 
 async function create(req, res) {
   try {
@@ -19,7 +19,7 @@ async function create(req, res) {
     });
   }
 }
-async function getAllTransactions(req, res) {
+async function get(req, res) {
   try {
     const username = req.params.username;
     const resultOfFetchedTranscations = await transactionService.get(username);
@@ -34,12 +34,28 @@ async function getAllTransactions(req, res) {
     });
   }
 }
-async function getAllCharts(req, res) {
+
+async function getById(req, res) {
+  try {
+    const id = req.params.specificId;
+    const resultOfSpecificTransaction = await transactionService.getTransactionById(id);
+    res.status(200).json({
+      message: resultOfSpecificTransaction,
+      success: true,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: error,
+      success: false,
+    });
+  }
+}
+async function getCharts(req, res) {
   try {
     const username = req.params.username;
     const resultOfFetchedChartData = await transactionService.getCharts(username);
     res.status(200).json({
-      message: resultOfFetchedChartData.chartGroupByCardName,
+      message: resultOfFetchedChartData,
       success: true,
     });
   } catch (error) {
@@ -79,9 +95,10 @@ async function update(req, res) {
   }
 }
 
-router.post('/transaction', authValiadte, create);
-router.get('/:username', authValiadte, getAllTransactions);
-router.get('/charts/:username', authValiadte, getAllCharts);
-router.delete('/:transactionId', authValiadte, deleteTransaction);
-router.put('', update);
+router.post('/transaction', authValidate, create);
+router.get('/:username', authValidate, get);
+router.get('/charts/:username', authValidate, getCharts);
+router.get('/byId/:specificId', authValidate, getById);
+router.delete('/:transactionId', authValidate, deleteTransaction);
+router.put('', authValidate, update);
 module.exports = router;

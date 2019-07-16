@@ -14,6 +14,7 @@ async function login(userData) {
     };
     return { userData, success: true };
   }
+  console.log('error');
   throw new Error('Username or password invalid, sorry!');
 }
 

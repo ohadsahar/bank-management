@@ -1,25 +1,28 @@
-<h2 mat-dialog-title>התחברות</h2>
-<mat-dialog-content class="mat-typography">
-  <form #loginData="ngForm" (submit)="login(loginData)">
-    <mat-form-field class="example-full-width">
-      <input matInput name="username" #email="ngModel" ngModel type="email" placeholder="האיימיל שלך" required>
-      <mat-error *ngIf="email.invalid">האיימיל בפורמט לא נכון</mat-error>
-    </mat-form-field>
-    <mat-form-field class="example-full-width">
-      <input matInput name="password" ngModel #password="ngModel" placeholder="סיסמא"
-        [type]="hide ? 'password' : 'text'" required>
-      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
-        [attr.aria-pressed]="hide">
-        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-      </button>
-      <mat-error *ngIf="password.invalid">בעיה עם הסיסמא</mat-error>
-    </mat-form-field>
-    <mat-dialog-actions align="end">
-      <button mat-button cdkFocusInitial type="submit">התחבר</button>
-      <button mat-button mat-dialog-close>בטל</button>
-    </mat-dialog-actions>
-    <div class="register-message" >
-        <p>{{registerMessage}}</p>
-    </div>
-  </form>
-</mat-dialog-content>
+<div class="login-dialog">
+    <h2 mat-dialog-title>התחברות</h2>
+    <mat-dialog-content class="mat-typography">
+      <form #loginData="ngForm" (submit)="login(loginData)">
+        <mat-form-field class="example-full-width">
+          <input matInput name="username" #email="ngModel" ngModel type="email" placeholder="האיימיל שלך" required>
+          <mat-error *ngIf="email.invalid">האיימיל בפורמט לא נכון</mat-error>
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <input matInput name="password" minlength="8"  ngModel #password="ngModel" placeholder="סיסמא"
+            [type]="hide ? 'password' : 'text'" required>
+          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error *ngIf="password.invalid">הסיסמא חייבת להכיל בדיוק 8 תווים</mat-error>
+        </mat-form-field>
+        <mat-dialog-actions align="end">
+          <button  mat-button cdkFocusInitial type="submit">התחבר</button>
+          <button mat-button mat-dialog-close>בטל</button>
+        </mat-dialog-actions>
+        <div class="register-message" >
+            <p>{{registerMessage}}</p>
+        </div>
+      </form>
+    </mat-dialog-content>
+
+</div>

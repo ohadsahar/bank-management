@@ -1,11 +1,12 @@
-import { AuthData } from './../../shared/models/auth-data.model';
-import { ResponseRegisterModel } from './../../shared/models/register-response.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 import { LoginModel } from 'src/app/shared/models/login-data.model';
 import { environment } from 'src/environments/environment';
-import { Subject } from 'rxjs';
-import { Router } from '@angular/router';
+import { AuthData } from './../../shared/models/auth-data.model';
+import { ResponseRegisterModel } from './../../shared/models/register-response.model';
+import { MessageService } from './message.service';
 
 
 
@@ -21,8 +22,8 @@ export class LoginService {
   private username: string;
   private id: string;
 
-  constructor(private http: HttpClient, private router: Router) {
-    this.isLogged = false
+  constructor(private http: HttpClient, private router: Router, private messageService: MessageService) {
+    this.isLogged = false;
   }
   login(loginData: LoginModel) {
     this.http.post<{ message: AuthData }>(backendUrlLogin, loginData).subscribe(response => {
@@ -41,9 +42,11 @@ export class LoginService {
         this.expiryDate = new Date(now.getTime() + expiryTokenTime * 1000);
         this.saveAuthData(this.token, this.expiryDate);
         this.authStatusListener.next(true);
+        this.messageService.successMessage('התחברת בהצלחה!', 'סגור');
         this.router.navigate(['/menu']);
       }
     }, (error) => {
+      this.messageService.failedMessage('שם המשתמש או הסיסמא לא נכונים', 'סגור');
     });
   }
   register(loginData: LoginModel) {

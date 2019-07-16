@@ -16,6 +16,8 @@ export class MainMenuComponent {
   constructor(public dialog: MatDialog) { }
   register() {
     this.dialog.open(RegisterUserModalComponent);
+
+
   }
   login() {
     this.dialog.open(LoginModalComponent);

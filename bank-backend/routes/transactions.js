@@ -39,7 +39,7 @@ async function getById(req, res) {
     const id = req.params.specificId;
     const resultOfSpecificTransaction = await transactionService.getTransactionById(id);
     res.status(200).json({
-      message: resultOfSpecificTransaction,
+      message: resultOfSpecificTransaction.fetchedTransaction,
       success: true,
     });
   } catch (error) {

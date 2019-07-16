@@ -199,13 +199,19 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       this.counter = 0;
     }
   }
-  cancelUpdate(data) {
-
+  cancelUpdate(data: Bank): void {
     this.bankTransactionService.getTransactionById(data._id).subscribe(response => {
       this.bankEditTransaction = response.message;
-    })
-    this.updateAble = false;
-    this.messageService.successMessage('עדכון העסקה בוטל','סגור');
+      data.cardName = response.message.cardName;
+      data.name = response.message.name;
+      data.price = response.message.price;
+      data.typeProduct = response.message.typeProduct;
+      data.leftPayments = response.message.leftPayments;
+      data.eachMonth = response.message.eachMonth;
+      data.numberofpayments = response.message.numberofpayments;
+      this.updateAble = false;
+      this.messageService.successMessage('עדכון העסקה בוטל', 'סגור');
+    });
   }
   updateTable(): void {
     this.dataSource = new MatTableDataSource(this.allTransactions);

@@ -30,7 +30,7 @@ export class BankTranscationService {
   }
 
   getTransactionById(specificId: string) {
-    return this.http.get<{message: Bank}>(`${backendUrl}/byId/${specificId}`);
+    return this.http.get<{message: Bank}>(`${backendUrl}byId/${specificId}`);
   }
 
   getCharts(email: string) {

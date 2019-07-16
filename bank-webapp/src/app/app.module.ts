@@ -22,6 +22,7 @@ import { RegisterUserModalComponent } from './shared/modals/register-user/regist
 import { BankManagementEffects } from './store/effects/bank-managment.effect';
 import { TransactionEffect } from './store/effects/transaction.effect';
 import { AuthInterceptor } from './shared/modals/login/auth-interceptor.component';
+import { DisconnectDialogComponent } from './shared/modals/disconnect/disconnect.component';
 
 
 
@@ -30,6 +31,7 @@ import { AuthInterceptor } from './shared/modals/login/auth-interceptor.componen
     AppComponent,
     BankManagmentComponent,
     RegisterNewTransactionModalComponent,
+    DisconnectDialogComponent,
     RegisterUserModalComponent,
     PaymentManagementComponent,
     MenuComponent,
@@ -53,6 +55,6 @@ import { AuthInterceptor } from './shared/modals/login/auth-interceptor.componen
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
 
   bootstrap: [AppComponent],
-  entryComponents: [RegisterNewTransactionModalComponent, RegisterUserModalComponent, LoginModalComponent]
+  entryComponents: [RegisterNewTransactionModalComponent, RegisterUserModalComponent, LoginModalComponent, DisconnectDialogComponent]
 })
 export class AppModule { }

@@ -13,8 +13,8 @@ async function create(salaryData) {
   return salaryDataSave;
 }
 
-async function get() {
-  const allSalary = await SalaryModel.find();
+async function get(username) {
+  const allSalary = await SalaryModel.find({ username });
   const allSalaryByMonth = await salaryUtil.allSalaryByMonth(allSalary);
   return { salary: allSalary, salaryByMonth: allSalaryByMonth };
 }

@@ -9,7 +9,8 @@ const router = express.Router();
 
 async function get(req, res) {
   try {
-    const resultOfAllArchivesTransaction = await paymentService.get();
+    const username = req.params.username;
+    const resultOfAllArchivesTransaction = await paymentService.get(username);
     res.status(200).json({
       message: resultOfAllArchivesTransaction,
       success: true,
@@ -22,5 +23,5 @@ async function get(req, res) {
   }
 }
 
-router.get('', get);
+router.get('/:username', get);
 module.exports = router;

@@ -44,6 +44,7 @@ export class LoginService {
         this.authStatusListener.next(true);
         this.messageService.successMessage('התחברת בהצלחה!', 'סגור');
         this.router.navigate(['/menu']);
+        location.reload(); // combine for now
       }
     }, (error) => {
       this.messageService.failedMessage('שם המשתמש או הסיסמא לא נכונים', 'סגור');

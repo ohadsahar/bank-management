@@ -1,3 +1,4 @@
+import { LoginService } from './../../services/login.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { SalaryService } from '../../services/salary.service';
@@ -19,7 +20,7 @@ export class SalaryComponent implements OnInit {
   public allInComeData:any[];
   public monthArray: string [] = [];
   public salaryArray: number[] = [];
-  constructor(private salaryService: SalaryService) { }
+  constructor(private salaryService: SalaryService, private loginService: LoginService) { }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -30,7 +31,8 @@ export class SalaryComponent implements OnInit {
     this.onLoadComponent();
   }
   onLoadComponent() {
-    this.salaryService.get().subscribe(response => {
+    const username = this.loginService.getUsernameAndId().username;
+    this.salaryService.get(username).subscribe(response => {
       this.allInComeData = response.message.salaryByMonth;
       this.allSalary = response.message.salary as any;
       this.updateTable();

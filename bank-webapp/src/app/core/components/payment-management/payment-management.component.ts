@@ -1,3 +1,4 @@
+import { LoginService } from './../../services/login.service';
 import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource, Sort } from '@angular/material';
@@ -22,7 +23,8 @@ export class PaymentManagementComponent {
   constructor(
     private paymentService: PaymentTransactionArchiveService,
     public router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public loginService: LoginService,
   ) {
   }
   dataSource = new MatTableDataSource();
@@ -37,7 +39,8 @@ export class PaymentManagementComponent {
     this.getAllTransactions();
   }
   getAllTransactions(): void {
-    this.paymentService.getAllArchiveTransactions().subscribe(response => {
+    const username = this.loginService.getUsernameAndId().username;
+    this.paymentService.getAllArchiveTransactions(username).subscribe(response => {
       this.allTransactions = response.message.archivesTransactions;
       this.updateTable();
     });

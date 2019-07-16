@@ -34,7 +34,6 @@ async function get(req, res) {
     });
   }
 }
-
 async function getById(req, res) {
   try {
     const id = req.params.specificId;
@@ -94,7 +93,6 @@ async function update(req, res) {
     });
   }
 }
-
 router.post('/transaction', authValidate, create);
 router.get('/:username', authValidate, get);
 router.get('/charts/:username', authValidate, getCharts);

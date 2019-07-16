@@ -1,0 +1,22 @@
+.disconnect-dialog {
+
+  direction: rtl;
+}
+h2 {
+  text-align: center;
+}
+
+::ng-deep .mat-dialog-container {
+
+  background-color: #fcfdff !important;
+}
+
+.disconnect-dialog .mat-dialog-content {
+  font-weight: bold;
+  font-size: 18px;
+
+}
+
+::ng-deep .disconnect-dialog .mat-form-field-appearance-legacy .mat-form-field-infix, h2, .mat-hint, button {
+  font-family: 'Varela Round', sans-serif !important;
+}

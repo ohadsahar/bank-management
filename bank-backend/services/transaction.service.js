@@ -49,7 +49,6 @@ async function get(username) {
     chartGroupByMonth: resultLodashTransactions.groupedByMonth,
   };
 }
-
 async function getTransactionById(id) {
   const resultOfFetchTransaction = await TransactionModel.findById({ _id: id });
   if (resultOfFetchTransaction) {
@@ -57,9 +56,7 @@ async function getTransactionById(id) {
   }
   throw new Error('There is a problem with fetching specific transaction!');
 }
-
 module.exports = {
-
   register,
   get,
   deleteX,

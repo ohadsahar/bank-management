@@ -34,6 +34,7 @@ async function deletePayment(transactionId) {
 }
 async function archivePayment(transaction) {
   const transactionSave = new TransactionArchivesModel({
+    username: transaction.username,
     cardName: transaction.cardName,
     name: transaction.name,
     typeProduct: transaction.typeProduct,

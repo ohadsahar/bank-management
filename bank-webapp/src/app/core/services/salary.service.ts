@@ -15,8 +15,8 @@ export class SalaryService {
     return this.http.post<{message: SalaryModel}>(backendUrl, salaryData);
   }
 
-  get() {
-    return this.http.get<{message: any}>(backendUrl);
+  get(username: string) {
+    return this.http.get<{message: any}>(`${backendUrl}/${username}`);
   }
 
 

@@ -39,8 +39,8 @@ export class TransactionEffect {
 
   @Effect()
   public allArchiveTransactions$ = this.actions$.pipe(ofType(transactionActions.GET_ALL_ARCHIVE_TRANSACTIONS))
-    .pipe(switchMap(() => {
-      return this.paymentService.getAllArchiveTransactions().pipe(map(transactionArchive =>
+    .pipe(switchMap((action: transactionActions.GetAllArchiveTransactions) => {
+      return this.paymentService.getAllArchiveTransactions(action.payload).pipe(map(transactionArchive =>
         new transactionActions.GetAllArchiveTransactionsSuccess(transactionArchive.message)),
         catchError(error => of(new transactionActions.GetAllArchiveTransactionsFailed(error)
         )));

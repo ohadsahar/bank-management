@@ -49,7 +49,7 @@ export class GetAllTransactionsFailed implements Action {
 
 export class GetAllArchiveTransactions implements Action {
   readonly type = GET_ALL_ARCHIVE_TRANSACTIONS;
-  constructor() { }
+  constructor(public payload: any) { }
 }
 export class GetAllArchiveTransactionsSuccess implements Action {
   readonly type = GET_ALL_ARCHIVE_TRANSACTIONS_SUCCESS;

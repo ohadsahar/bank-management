@@ -22,7 +22,8 @@ async function create(req, res) {
 
 async function get(req, res) {
   try {
-    const getAllSalary = await salaryService.get();
+    const username = req.params.username;
+    const getAllSalary = await salaryService.get(username);
     res.status(200).json({
       message: getAllSalary,
       success: true,
@@ -36,5 +37,5 @@ async function get(req, res) {
 }
 
 router.post('', create);
-router.get('', get);
+router.get('/:username', get);
 module.exports = router;

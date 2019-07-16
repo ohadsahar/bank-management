@@ -10,8 +10,7 @@ export class PaymentTransactionArchiveService {
 
   constructor(private http: HttpClient) {}
 
-  getAllArchiveTransactions() {
-
-    return this.http.get<{message: OldTransactionData}>(backendUrl);
+  getAllArchiveTransactions(username: string) {
+    return this.http.get<{message: OldTransactionData}>(`${backendUrl}/${username}`);
   }
 }

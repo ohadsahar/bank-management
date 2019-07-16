@@ -30,7 +30,6 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   public sortedData: Bank[];
   public allTransactions: Bank[];
-  public oldTransactions: Bank[];
   public chartTransactions: ChartByCardName[];
   public chartByMonthTransactions: any[];
   public arrayCardsNames: string[] = [];
@@ -77,7 +76,6 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.updateAble = false;
   }
   dataSource = new MatTableDataSource();
-  dataSourceOldTransactions = new MatTableDataSource();
   displayedColumns: string[] = [
     'id', 'cardName', 'name', 'type', 'price', 'numberofpayments', 'eachMonth', 'leftPayments', 'purchaseDate'
   ];
@@ -109,9 +107,6 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
           this.afterFetchedAllData();
         }
       });
-    this.paymentService.getAllArchiveTransactions().subscribe(response => {
-      this.oldTransactions = response.message.archivesTransactions;
-    });
   }
   getAllCharts(): void {
     this.store.dispatch(new chartActions.GetCharts(this.loginService.getUsernameAndId().username));

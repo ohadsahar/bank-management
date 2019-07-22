@@ -7,16 +7,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'movies-libary';
+  title = 'bank-management';
   isLogged: boolean;
 
  constructor(private loginService: LoginService) {}
 
   ngOnInit() {
     this.loginService.autoAuthUser();
-    this.isLogged = this.loginService.getIsLogged();
+    this.loginService.currentStatus.subscribe(response => {
+      this.isLogged = response;
+    });
   }
-
   setDataLoggedIn(data) {
     this.isLogged = data;
   }

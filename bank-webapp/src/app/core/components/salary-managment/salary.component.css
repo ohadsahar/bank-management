@@ -2,43 +2,40 @@
   font-family: 'Varela Round', sans-serif !important;
   background-color: #F5F1ED !important;
   height: 100vh;
+  direction: rtl;
 }
-
-.salary-management .salary-form {
-
-  text-align: center;
-  padding: 50px;
-}
-
-.salary-input {
-  width: 30%;
-  text-align: right;
-  margin: auto;
-}
-
 .mat-form-field-appearance-legacy .mat-form-field-wrapper {
   width: 30% !important;
   text-align: right;
   margin: auto;
 }
-
 .list-of-salary table {
   width: 100%;
   table-layout: fixed;
   direction: rtl;
 }
-
 table th {
   font-weight: bold !important;
   text-align: center;
 }
-
-
-
 .list-of-salary td {
   width: 10%;
   border: 1px solid #ddd;
   padding: 8px;
   text-align: center;
+}
 
+.form-salary {
+  margin: auto;
+  display: block;
+}
+
+.salary-input {
+  width: 100%;
+  text-align: right;
+}
+
+.mat-raised-button {
+  margin: auto;
+  display: block;
 }

@@ -1,5 +1,5 @@
 import { DisconnectDialogComponent } from './../../../shared/modals/disconnect/disconnect.component';
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatTabChangeEvent, MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { LoginService } from '../../services/login.service';
@@ -11,10 +11,9 @@ import { LoginService } from '../../services/login.service';
 
 export class MenuComponent implements OnInit {
   public selectedTab: number;
-  @Output() event: EventEmitter<boolean> = new EventEmitter();
-  constructor(private router: Router, private loginService: LoginService, public dialog: MatDialog) { }
+  constructor(private router: Router, private loginService: LoginService, public dialog: MatDialog) {
+   }
   ngOnInit() {
-    this.sendDataToAppComponent(true);
     this.router.navigate(['management']);
   }
   changedTab(event: MatTabChangeEvent) {
@@ -33,7 +32,6 @@ export class MenuComponent implements OnInit {
       dialog.afterClosed().subscribe(result => {
         if (result === true) {
           this.loginService.logout();
-          this.sendDataToAppComponent(false);
         }
         if (result === false || result === undefined) {
           this.selectedTab = 0;
@@ -42,9 +40,6 @@ export class MenuComponent implements OnInit {
         }
       });
     }
-  }
-  sendDataToAppComponent(value: boolean) {
-    this.event.emit(value);
   }
 }
 

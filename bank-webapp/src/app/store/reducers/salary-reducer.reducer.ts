@@ -1,82 +1,79 @@
-import { Bank } from '../../shared/models/bank-data.model';
-
 import {
-  TransactionActions,
-  REGISTER_TRANSACTION, REGISTER_TRANSACTION_SUCCESS, REGISTER_TRANSACTION_FAILED,
-  UPDATE_TRANSACTION, UPDATE_TRANSACTION_SUCCESS, UPDATE_TRANSACTION_FAILED,
-  DELETE_TRANSACTION, DELETE_TRANSACTION_SUCCESS, DELETE_TRANSACTION_FAILED} from '../actions/transaction.actions';
+  SalaryActions, REGISTER_NEW_SALARY, REGISTER_NEW_SALARY_SUCCESS,
+  REGISTER_NEW_SALARY_FAILED, UPDATE_SALARY, UPDATE_SALARY_SUCCESS, UPDATE_SALARY_FAILED,
+  DELETE_SALARY, DELETE_SALARY_FAILED, DELETE_SALARY_SUCCESS
+} from './../actions/salary.actions';
 
 export interface State {
   loading: boolean;
   loaded: boolean;
-  data: Bank | any;
+  data: any;
 }
-
-const initialState: State = {
-  loading: false,
+export const initialState: State = {
+  loading: true,
   loaded: false,
-  data: null,
+  data: [],
 };
 
-export function transactionReducer(state = initialState, action: TransactionActions) {
+export function salaryReducer(state = initialState, action: SalaryActions) {
   switch (action.type) {
-    case REGISTER_TRANSACTION:
+    case REGISTER_NEW_SALARY:
       return {
         ...state,
         loading: true,
         loaded: false,
         data: action.payload
       };
-    case REGISTER_TRANSACTION_SUCCESS:
+    case REGISTER_NEW_SALARY_SUCCESS:
       return {
         ...state,
         loading: false,
         loaded: true,
         data: action.payload
       };
-    case REGISTER_TRANSACTION_FAILED:
+    case REGISTER_NEW_SALARY_FAILED:
       return {
         ...state,
         loading: false,
         loaded: true,
         data: action.payload
       };
-    case UPDATE_TRANSACTION:
+    case UPDATE_SALARY:
       return {
         ...state,
         loading: true,
         loaded: false,
         data: action.payload
       };
-    case UPDATE_TRANSACTION_SUCCESS:
+    case UPDATE_SALARY_SUCCESS:
       return {
         ...state,
         loading: false,
         loaded: true,
         data: action.payload
       };
-    case UPDATE_TRANSACTION_FAILED:
+    case UPDATE_SALARY_FAILED:
       return {
         ...state,
         loading: false,
         loaded: true,
         data: action.payload
       };
-    case DELETE_TRANSACTION:
+    case DELETE_SALARY:
       return {
         ...state,
         loading: true,
         loaded: false,
         data: action.payload
       };
-    case DELETE_TRANSACTION_SUCCESS:
+    case DELETE_SALARY_SUCCESS:
       return {
         ...state,
         loading: false,
         loaded: true,
         data: action.payload
       };
-    case DELETE_TRANSACTION_FAILED:
+    case DELETE_SALARY_FAILED:
       return {
         ...state,
         loading: false,
@@ -85,7 +82,9 @@ export function transactionReducer(state = initialState, action: TransactionActi
       };
     default:
       return state;
+
   }
 }
-export const newTransactionData = (state: State) => state;
+
+export const getSalaryData = (state: State) => state;
 

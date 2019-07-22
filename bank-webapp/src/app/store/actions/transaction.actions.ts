@@ -15,6 +15,31 @@ export const GET_ALL_ARCHIVE_TRANSACTIONS = 'GET_ALL_ARCHIVE_TRANSACTIONS';
 export const GET_ALL_ARCHIVE_TRANSACTIONS_SUCCESS = 'GET_ALL_ARCHIVE_TRANSACTIONS_SUCCESS';
 export const GET_ALL_ARCHIVE_TRANSACTIONS_FAILED = 'GET_ALL_ARCHIVE_TRANSACTIONS_FAILED';
 
+export class GetAllTransactions implements Action {
+  readonly type = GET_ALL_TRANSACTION;
+  constructor(public payload: any) { }
+}
+export class GetAllTransactionSuccess implements Action {
+  readonly type = GET_ALL_TRANSACTIONS_SUCCESS;
+  constructor(public payload: any) {
+  }
+}
+export class GetAllTransactionsFailed implements Action {
+  readonly type = GET_ALL_TRANSACTIONS_FAILED;
+  constructor(public payload: any) { }
+}
+export class GetAllArchiveTransactions implements Action {
+  readonly type = GET_ALL_ARCHIVE_TRANSACTIONS;
+  constructor(public payload: any) { }
+}
+export class GetAllArchiveTransactionsSuccess implements Action {
+  readonly type = GET_ALL_ARCHIVE_TRANSACTIONS_SUCCESS;
+  constructor(public payload: any) { }
+}
+export class GetAllArchiveTransactionsFailed implements Action {
+  readonly type = GET_ALL_ARCHIVE_TRANSACTIONS_FAILED;
+  constructor(public payload: any) { }
+}
 export class RegisterTransaction implements Action {
   readonly type = REGISTER_TRANSACTION;
   constructor(public payload: any) {
@@ -30,62 +55,26 @@ export class RegisterTransactionFailed implements Action {
   constructor(public payload: any) {
   }
 }
-
-export class GetAllTransactions implements Action {
-  readonly type = GET_ALL_TRANSACTION;
-  constructor(public payload: any) { }
-}
-
-export class GetAllTransactionSuccess implements Action {
-  readonly type = GET_ALL_TRANSACTIONS_SUCCESS;
-  constructor(public payload: any) {
-  }
-}
-
-export class GetAllTransactionsFailed implements Action {
-  readonly type = GET_ALL_TRANSACTIONS_FAILED;
-  constructor(public payload: any) { }
-}
-
-export class GetAllArchiveTransactions implements Action {
-  readonly type = GET_ALL_ARCHIVE_TRANSACTIONS;
-  constructor(public payload: any) { }
-}
-export class GetAllArchiveTransactionsSuccess implements Action {
-  readonly type = GET_ALL_ARCHIVE_TRANSACTIONS_SUCCESS;
-  constructor(public payload: any) { }
-}
-
-export class GetAllArchiveTransactionsFailed implements Action {
-  readonly type = GET_ALL_ARCHIVE_TRANSACTIONS_FAILED;
-  constructor(public payload: any) { }
-}
-
 export class DeleteTransaction implements Action {
   readonly type = DELETE_TRANSACTION;
   constructor(public payload: any) { }
 }
-
 export class DeleteTransactionSuccess implements Action {
   readonly type = DELETE_TRANSACTION_SUCCESS;
   constructor(public payload: any) { }
 }
-
 export class DeleteTransactionFailed implements Action {
   readonly type = DELETE_TRANSACTION_FAILED;
   constructor(public payload: any) { }
 }
-
 export class UpdateTransaction implements Action {
   readonly type = UPDATE_TRANSACTION;
   constructor(public payload: any) { }
 }
-
 export class UpdateTransactionSuccess implements Action {
   readonly type = UPDATE_TRANSACTION_SUCCESS;
   constructor(public payload: any) { }
 }
-
 export class UpdateTransactionFailed implements Action {
   readonly type = UPDATE_TRANSACTION_FAILED;
   constructor(public payload: any) { }

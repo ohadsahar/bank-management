@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 import { LoginModel } from 'src/app/shared/models/login-data.model';
 import { environment } from 'src/environments/environment';
 import { AuthData } from './../../shared/models/auth-data.model';
@@ -17,6 +17,8 @@ export class LoginService {
   private token: string;
   private expiryDate: Date;
   private tokenTimer: any;
+  private loggedUserSource = new BehaviorSubject(false);
+  currentStatus = this.loggedUserSource.asObservable();
   private authStatusListener = new Subject<boolean>();
   private isLogged: boolean;
   private username: string;
@@ -24,6 +26,7 @@ export class LoginService {
 
   constructor(private http: HttpClient, private router: Router, private messageService: MessageService) {
     this.isLogged = false;
+    this.changeStatus(false);
   }
   login(loginData: LoginModel) {
     this.http.post<{ message: AuthData }>(backendUrlLogin, loginData).subscribe(response => {
@@ -31,6 +34,7 @@ export class LoginService {
       this.token = token;
       if (token) {
         this.isLogged = true;
+        this.changeStatus(true);
         this.username = response.message.username;
         this.id = response.message.id;
         const expiryTokenTime = response.message.expiresIn;
@@ -44,7 +48,7 @@ export class LoginService {
         this.authStatusListener.next(true);
         this.messageService.successMessage('התחברת בהצלחה!', 'סגור');
         this.router.navigate(['/menu']);
-        location.reload(); // combine for now
+        // location.reload(); // combine for now
       }
     }, (error) => {
       this.messageService.failedMessage('שם המשתמש או הסיסמא לא נכונים', 'סגור');
@@ -64,6 +68,7 @@ export class LoginService {
       if (expiresIn > 0) {
         this.token = authInformation.token;
         this.isLogged = true;
+        this.changeStatus(true);
         this.setAuthTimer(expiresIn / 1000);
         this.authStatusListener.next(true);
       }
@@ -97,6 +102,7 @@ export class LoginService {
   logout() {
     this.token = null;
     this.isLogged = false;
+    this.changeStatus(false);
     this.authStatusListener.next(false);
     this.clearAuthData();
     clearTimeout(this.tokenTimer);
@@ -112,5 +118,9 @@ export class LoginService {
   }
   getIsLogged() {
     return this.isLogged;
+  }
+
+  changeStatus(value: boolean) {
+    this.loggedUserSource.next(value);
   }
 }

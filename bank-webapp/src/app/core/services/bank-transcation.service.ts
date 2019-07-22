@@ -28,11 +28,6 @@ export class BankTranscationService {
   getTransactions(email: string) {
     return this.http.get<{message: FirstFetch}>(`${backendUrl}/${email}`);
   }
-
-  getTransactionById(specificId: string) {
-    return this.http.get<{message: Bank}>(`${backendUrl}byId/${specificId}`);
-  }
-
   getCharts(email: string) {
     return this.http.get<{message: any}>(`${backendUrl}charts/${email}`);
   }

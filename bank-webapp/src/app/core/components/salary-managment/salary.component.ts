@@ -1,26 +1,49 @@
-import { LoginService } from './../../services/login.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { MessageService } from './../../services/message.service';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { SalaryService } from '../../services/salary.service';
-import { MatTableDataSource, MatSort, MatPaginator, Sort } from '@angular/material';
-import { SalaryModel } from 'src/app/shared/models/salary.model';
+import { MatPaginator, MatSort, MatTableDataSource, Sort } from '@angular/material';
+import { Store } from '@ngrx/store';
 import { Chart } from 'chart.js';
+import { Subject, Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { SalaryData } from 'src/app/shared/models/edit-salary.model';
+import { SalaryModel } from 'src/app/shared/models/salary.model';
+import * as fromRoot from '../../../app.reducer';
+import { SalaryService } from '../../services/salary.service';
+import * as salaryActions from './../../../store/actions/salary.actions';
+import { LoginService } from './../../services/login.service';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
 @Component({
   selector: 'app-salary',
   templateUrl: './salary.component.html',
-  styleUrls: ['./salary.component.css']
+  styleUrls: ['./salary.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
-
 export class SalaryComponent implements OnInit {
-
+  public ngbSubscribe: Subject<void> = new Subject<void>();
+  public dataToSubscribe: Subscription;
+  public updateAble: boolean;
+  public counter: number;
+  public id: string;
+  public salaryEditData: SalaryData;
+  public editEnable: boolean;
+  public isLoading: boolean;
+  public cancelDataSa: SalaryData;
+  editoptionsable: any = {};
   public chartInComeData: Chart;
   public sortedData: SalaryModel[];
   public allSalary: SalaryModel[];
-  public allInComeData:any[];
-  public monthArray: string [] = [];
+  public allInComeData: any[];
+  public monthArray: string[] = [];
   public salaryArray: number[] = [];
-  constructor(private salaryService: SalaryService, private loginService: LoginService) { }
+  constructor(private salaryService: SalaryService, private loginService: LoginService,
+              private messageService: MessageService, private store: Store<fromRoot.State>,
+              private spinnerService: Ng4LoadingSpinnerService) {
+    this.editEnable = false;
+    this.counter = 0;
+    this.updateAble = false;
+  }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -38,16 +61,71 @@ export class SalaryComponent implements OnInit {
       this.updateTable();
       this.assignChartDataInCome();
     });
-
   }
-  onSubmitSalary(form: NgForm) {
+  registerSalary(form: NgForm): void {
     if (form.invalid) {
       return;
     }
-    this.salaryService.createNewSalary(form.value).subscribe(response => {
-      this.allSalary.push(response.message);
-      this.updateTable();
-    })
+    const salaryData = {
+      salary: form.value.salary,
+      username: this.loginService.getUsernameAndId().username
+    };
+    this.store.dispatch(new salaryActions.RegisterNewSalary(salaryData));
+    this.dataToSubscribe = this.store.select(fromRoot.getSalaryData).pipe(takeUntil(this.ngbSubscribe))
+      .subscribe((data) => {
+        if (data.loaded) {
+          this.allSalary.push(data.data);
+          this.destroyCharts();
+          this.messageService.successMessage('המשכורת התווספה בהצלחה', 'סגור');
+          this.dataToSubscribe.unsubscribe();
+        }
+      });
+  }
+  deleteSalary(salaryId: string): void {
+    this.store.dispatch(new salaryActions.DeleteSalary(salaryId));
+    this.dataToSubscribe = this.store.select(fromRoot.getSalaryData).pipe(takeUntil(this.ngbSubscribe))
+      .subscribe((data) => {
+        if (data.loaded) {
+          const deleteSalary = this.allSalary.filter(salary => salary._id !== salaryId);
+          this.allSalary = deleteSalary;
+          this.updateTable();
+          this.messageService.successMessage('המשכורת נמחקה בהצלחה', 'סגור');
+          this.dataToSubscribe.unsubscribe();
+        }
+      });
+  }
+  editSalary(salaryData: SalaryData): void {
+    this.cancelDataSa = Object.assign({}, salaryData);
+    this.id = salaryData._id;
+    this.updateAble = true;
+    this.counter = this.counter + 1;
+    this.salaryEditData = salaryData;
+    this.salaryEditData.username = this.loginService.getUsernameAndId().username;
+    if (this.counter === 1) {
+      this.editEnable = true;
+    } else {
+      this.counter = 0;
+    }
+  }
+  updateSalary(): void {
+    this.store.dispatch(new salaryActions.UpdateSalary(this.salaryEditData));
+    this.dataToSubscribe = this.store.select(fromRoot.getSalaryData).pipe(takeUntil(this.ngbSubscribe))
+      .subscribe((data) => {
+        if (data.loaded) {
+          const index = this.allSalary.findIndex(salary => salary._id === this.id);
+          this.allSalary[index] = data.data;
+          this.updateTable();
+          this.updateAble = false;
+          this.messageService.successMessage('המשכורת עודכנה בהצלחה', 'סגור');
+          this.dataToSubscribe.unsubscribe();
+        }
+      });
+  }
+  cancelUpdate(): void {
+    this.salaryEditData.salary = this.cancelDataSa.salary;
+    this.salaryEditData.monthOfSalary = this.cancelDataSa.monthOfSalary;
+    this.updateAble = false;
+    this.messageService.successMessage('ביטול המשכורת בוצע בהצלחה', 'סגור');
   }
   updateTable(): void {
     this.dataSource = new MatTableDataSource(this.allSalary);
@@ -77,7 +155,6 @@ export class SalaryComponent implements OnInit {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
   assignChartDataInCome() {
-
     this.allInComeData.forEach(element => {
       this.monthArray.push(element.monthOfSalary);
       this.salaryArray.push(element.salary);
@@ -114,5 +191,18 @@ export class SalaryComponent implements OnInit {
       }
     });
   }
+  destroyCharts() {
+    this.chartInComeData.destroy();
+    this.assignChartDataInCome();
+    this.updateTable();
+  }
+  startLoading() {
+    this.isLoading = true;
+    this.spinnerService.show();
+  }
 
+  stopLoading() {
+    this.isLoading = false;
+    this.spinnerService.hide();
+  }
 }

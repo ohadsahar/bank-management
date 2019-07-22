@@ -8,13 +8,10 @@ export class GetCharts implements Action {
   constructor(public payload: any) {
   }
 }
-
 export class ChartSuccess implements Action {
   readonly type = GET_CHARTS_SUCCESS;
-  constructor(public payload: any) {;
-  }
+  constructor(public payload: any) {}
 }
-
 export class ChartFailed implements Action {
   readonly type = GET_CHART_FAILED;
   constructor(public payload: any) {}

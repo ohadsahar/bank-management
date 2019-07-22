@@ -1,7 +1,6 @@
 import { ChartActions, GET_CHARTS_SUCCESS, GET_CHARTS, GET_CHART_FAILED } from '../actions/chart.actions';
-import { ChartByCardName } from '../../shared/models/chart-by-cardname.model';
 export interface State {
-  data: any,
+  data: any;
   loading: boolean;
   loaded: boolean;
 }

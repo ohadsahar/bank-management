@@ -9,6 +9,7 @@ async function allSalaryByMonth(salaryData) {
   return groupByMonthSalary;
 }
 
+
 module.exports = {
 
   allSalaryByMonth,

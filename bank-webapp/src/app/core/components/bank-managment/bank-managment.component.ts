@@ -1,29 +1,30 @@
-import { LoginService } from './../../services/login.service';
-import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource, Sort } from '@angular/material';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Chart } from 'chart.js';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { map, startWith, takeUntil } from 'rxjs/operators';
-
+import { RegisterNewTransactionModalComponent } from 'src/app/shared/modals/register-transaction/register-new-transaction.component';
 import * as fromRoot from '../../../app.reducer';
 import { Bank } from '../../../shared/models/bank-data.model';
 import { BankValues } from '../../../shared/models/bank.model';
 import { ChartByCardName } from '../../../shared/models/chart-by-cardname.model';
 import * as chartActions from '../../../store/actions/chart.actions';
 import * as transactionActions from '../../../store/actions/transaction.actions';
-import { BankTranscationService } from '../../services/bank-transcation.service';
 import { MessageService } from '../../services/message.service';
-import { PaymentTransactionArchiveService } from '../../services/payment-transaction.service';
-import { RegisterNewTransactionModalComponent } from 'src/app/shared/modals/register-transaction/register-new-transaction.component';
+import { bottomSideItemTrigger,
+         upSideItemTrigger } from './../../../shared/animations/bank-management/bank-management-animations.animations';
+import { LoginService } from './../../services/login.service';
 
 @Component({
   selector: 'app-bank-managment',
   templateUrl: './bank-managment.component.html',
   styleUrls: ['./bank-managment.component.css'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  animations: [upSideItemTrigger, bottomSideItemTrigger]
 })
 export class BankManagmentComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -45,6 +46,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   public numberOfPayments: number;
   public editEnable: boolean;
   public updateAble: boolean;
+  public isLoading: boolean;
   public allCardChart: Chart;
   public allExpensesByMonthChart: Chart;
   public eachMonthExpenses: Chart;
@@ -52,22 +54,23 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   public loaded: boolean;
   public archiveTransactions: Bank[];
   public dataToSubscribe: Subscription;
+  public chartDataToSubscribe: Subscription;
   private getCharts$: Subject<void> = new Subject<void>();
   public registerNewTransactionNgrx: Subject<void> = new Subject<void>();
   public updateTransaction$: Subject<void> = new Subject<void>();
   private ngUnsubscribe: Subject<void> = new Subject<void>();
-  private archiveTransaction$: Subject<void> = new Subject<void>();
   public editoptionsable: any = {};
+  public cancelBankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '');
   public bankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '');
   constructor(
-    private bankTransactionService: BankTranscationService,
     private messageService: MessageService,
-    private paymentService: PaymentTransactionArchiveService,
     private store: Store<fromRoot.State>,
     public router: Router,
     public dialog: MatDialog,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private spinnerService: Ng4LoadingSpinnerService
   ) {
+    this.isLoading = true;
     this.counter = 0;
     this.totalExpenses = 0;
     this.monthExpenses = 0;
@@ -89,6 +92,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.onLoadSite();
   }
   onLoadSite(): void {
+    this.isLoading = true;
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value))
@@ -98,9 +102,10 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   getAllTransactions(): void {
     const loggedInUsername = this.loginService.getUsernameAndId().username;
     this.store.dispatch(new transactionActions.GetAllTransactions(loggedInUsername));
-    this.dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.ngUnsubscribe))
+    this.dataToSubscribe = this.store.select(fromRoot.fetchedTransaction).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((data) => {
         if (data.loaded) {
+          this.loading = false;
           this.arrayCardsNames = data.data.chartGroupByCardName;
           this.allTransactions = data.data.foundTranscations;
           this.chartByMonthTransactions = data.data.chartGroupByMonth;
@@ -110,9 +115,9 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   }
   getAllCharts(): void {
     this.store.dispatch(new chartActions.GetCharts(this.loginService.getUsernameAndId().username));
-    this.store.select(fromRoot.getChartsData).pipe(takeUntil(this.getCharts$))
+    this.chartDataToSubscribe = this.store.select(fromRoot.getChartsData).pipe(takeUntil(this.getCharts$))
       .subscribe((data) => {
-        if (data.loaded) {
+        if (data.loaded && this.chartDataToSubscribe) {
           this.chartTransactions = data.data.chartGroupByCardName;
           this.chartByMonthTransactions = data.data.chartGroupByMonth;
           this.assignDataToCharts();
@@ -139,7 +144,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
           const deleteTransaction = this.allTransactions.filter(transaction => transaction._id !== dataId);
           this.allTransactions = deleteTransaction;
           this.afterDeleteTransaction();
-          this.messageService.successMessage('העסקה נמחקה בהצלחה','סגור');
+          this.messageService.successMessage('העסקה נמחקה בהצלחה', 'סגור');
           this.dataToSubscribe.unsubscribe();
         }
       });
@@ -160,6 +165,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   afterFetchedAllData(): void {
     this.updateTable();
     this.getAllCharts();
+    this.isLoading = false;
     this.dataToSubscribe.unsubscribe();
   }
   afterUpdate(): void {
@@ -191,6 +197,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   editTransaction(transactionData: Bank): void {
     this.updateAble = true;
     this.counter = this.counter + 1;
+    this.cancelBankEditTransaction = Object.assign({}, transactionData);
     this.bankEditTransaction = transactionData;
     this.bankEditTransaction.username = this.loginService.getUsernameAndId().username;
     if (this.counter === 1) {
@@ -199,19 +206,19 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       this.counter = 0;
     }
   }
-  cancelUpdate(data: Bank): void {
-    this.bankTransactionService.getTransactionById(data._id).subscribe(response => {
-      this.bankEditTransaction = response.message;
-      data.cardName = response.message.cardName;
-      data.name = response.message.name;
-      data.price = response.message.price;
-      data.typeProduct = response.message.typeProduct;
-      data.leftPayments = response.message.leftPayments;
-      data.eachMonth = response.message.eachMonth;
-      data.numberofpayments = response.message.numberofpayments;
-      this.updateAble = false;
-      this.messageService.successMessage('עדכון העסקה בוטל', 'סגור');
-    });
+  cancelUpdate(): void {
+    this.restoreData();
+    this.updateAble = false;
+    this.messageService.successMessage('עדכון העסקה בוטל', 'סגור');
+  }
+  restoreData() {
+    this.bankEditTransaction.cardName = this.cancelBankEditTransaction.cardName;
+    this.bankEditTransaction.name = this.cancelBankEditTransaction.name;
+    this.bankEditTransaction.price = this.cancelBankEditTransaction.price;
+    this.bankEditTransaction.typeProduct = this.cancelBankEditTransaction.typeProduct;
+    this.bankEditTransaction.leftPayments = this.cancelBankEditTransaction.leftPayments;
+    this.bankEditTransaction.eachMonth = this.cancelBankEditTransaction.eachMonth;
+    this.bankEditTransaction.numberofpayments = this.cancelBankEditTransaction.numberofpayments;
   }
   updateTable(): void {
     this.dataSource = new MatTableDataSource(this.allTransactions);
@@ -231,6 +238,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       this.arrayExpansesEachMonth.push(element.monthPurchase);
       this.arrayEachMonthData.push(element.price);
     });
+    this.chartDataToSubscribe.unsubscribe();
     this.loadCharts();
   }
   loadCharts(): void {
@@ -246,7 +254,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
           data: this.arrayEachMonthData,
           backgroundColor: ['#fbd0c6', '#f6c1a6', '#c8c87a', '#79c0b0', '#7ec2a3', '#65b6bd',
             '#70a6ca', '#90b4cb']
-        },],
+        }, ],
 
         labels: this.arrayExpansesEachMonth,
       },

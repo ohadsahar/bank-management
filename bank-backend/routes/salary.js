@@ -3,7 +3,6 @@ const salaryService = require('../services/salary.service');
 
 const router = express.Router();
 
-
 async function create(req, res) {
   try {
     const salaryData = req.body;
@@ -19,7 +18,6 @@ async function create(req, res) {
     });
   }
 }
-
 async function get(req, res) {
   try {
     const username = req.params.username;
@@ -35,7 +33,39 @@ async function get(req, res) {
     });
   }
 }
+async function deleteSalary(req, res) {
+  try {
+    const salaryId = req.params.salaryId;
+    const resultOfDeleteSalary = await salaryService.deleteSalary(salaryId);
+    res.status(200).json({
+      message: resultOfDeleteSalary.salaryId,
+      success: true,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: error,
+      success: false,
+    });
+  }
+}
+async function update(req, res) {
+  try {
+    const salaryData = req.body;
+    const resultOfUpdateSalary = await salaryService.updateSalary(salaryData);
+    res.status(200).json({
+      message: resultOfUpdateSalary,
+      success: true,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: error,
+      success: false,
+    });
+  }
+}
 
 router.post('', create);
 router.get('/:username', get);
+router.put('', update);
+router.delete('/:salaryId', deleteSalary);
 module.exports = router;

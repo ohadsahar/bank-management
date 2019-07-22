@@ -20,9 +20,10 @@ export class RegisterNewTransactionModalComponent implements OnInit {
   private purchaseMonth: string;
   myControl = new FormControl();
   filteredOptions: Observable<string[]>;
-  options: string[] = ['רנואר', 'קאסטרו', 'אייבורי'];
+  options: string[] = [
+   'ממתקים', 'יס פלנט', 'סופר פארם', 'הגראז', 'קמפאי', 'פאנקו פופ', 'דלק', 'רנואר', 'קאסטרו', 'אייבורי'];
   cards: any[] = [{ value: 'הוט' }, { value: 'שופרסל' }, { value: 'נגב' }, { value: 'יוניק' },
-  { value: 'דרים קארד' }, { value: 'מאסטר-קארד אוהד' }, { value: 'דרים קארד אוהד' }];
+  { value: 'דרים קארד' }, { value: 'מאסטר-קארד אוהד' }, { value: 'דרים קארד אוהד' } , { value: 'לייף סטייל' }];
   categories: any[] = [{ value: 'חשמל' }, { value: 'ביגוד' }, { value: 'ריהוט' },
   { value: 'אוכל' }, { value: 'תכשיטים' }, { value: 'בריאות' }, { value: 'אחר' }];
 

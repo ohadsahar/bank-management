@@ -83,9 +83,9 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     'id', 'cardName', 'name', 'type', 'price', 'numberofpayments', 'eachMonth', 'leftPayments', 'purchaseDate'
   ];
   cards: any[] = [{ value: 'הוט' }, { value: 'שופרסל' }, { value: 'נגב' }, { value: 'יוניק' },
-  { value: 'דרים קארד' }, { value: 'מאסטר-קארד אוהד' }, { value: 'דרים קארד אוהד' }];
-  categories: any[] = [{ value: 'חשמל' }, { value: 'ביגוד' }, { value: 'ריהוט' },
-  { value: 'אוכל' }, { value: 'תכשיטים' }, { value: 'בריאות' }, { value: 'אחר' }];
+  { value: 'דרים קארד' }, { value: 'מאסטר-קארד אוהד' }, { value: 'דרים קארד אוהד' } , { value: 'לייף - סטייל' }];
+  // categories: any[] = [{ value: 'חשמל' }, { value: 'ביגוד' }, { value: 'ריהוט' },
+  // { value: 'אוכל' }, { value: 'תכשיטים' }, { value: 'בריאות' }, { value: 'אחר' }];
 
 
   ngOnInit() {
@@ -93,6 +93,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   }
   onLoadSite(): void {
     this.isLoading = true;
+    this.spinnerService.show();
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value))
@@ -105,6 +106,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.dataToSubscribe = this.store.select(fromRoot.fetchedTransaction).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((data) => {
         if (data.loaded) {
+          this.spinnerService.hide();
           this.loading = false;
           this.arrayCardsNames = data.data.chartGroupByCardName;
           this.allTransactions = data.data.foundTranscations;
@@ -291,7 +293,8 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
             'purple',
             'red',
             'yellow',
-            'lightblue'
+            'lightblue',
+            '#5F4842'
           ],
           borderColor: 'black',
           data: this.arrayCardsTotalPrice

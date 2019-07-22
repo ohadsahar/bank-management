@@ -10,13 +10,13 @@ import { Bank } from '../../../shared/models/bank-data.model';
 import * as transactionActions from '../../../store/actions/transaction.actions';
 import { LoginService } from './../../services/login.service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
-import { topItemTrigger } from 'src/app/shared/animations/payment/payment.animation';
+import { topItemTrigger, keyFrameTrigger } from 'src/app/shared/animations/payment/payment.animation';
 @Component({
   selector: 'app-payment-management',
   templateUrl: './payment-management.component.html',
   styleUrls: ['./payment-management.component.css'],
   encapsulation: ViewEncapsulation.None,
-  animations: [topItemTrigger]
+  animations: [topItemTrigger, keyFrameTrigger]
 })
 
 export class PaymentManagementComponent implements OnInit {
@@ -26,6 +26,7 @@ export class PaymentManagementComponent implements OnInit {
   public allTransactions: Bank[];
   myControl = new FormControl();
   public isLoading: boolean;
+  public clickInfo: string;
   public dataToSubscribe: Subscription;
   public ngbSubscribe: Subject<void> = new Subject<void>();
   constructor(
@@ -35,6 +36,7 @@ export class PaymentManagementComponent implements OnInit {
     public loginService: LoginService,
     private store: Store<fromRoot.State>
   ) {
+    this.clickInfo = 'unclicked';
   }
   dataSource = new MatTableDataSource();
   dataSourceOldTransactions = new MatTableDataSource();
@@ -86,6 +88,14 @@ export class PaymentManagementComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.allTransactions);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+  changeClick() {
+    if (this.clickInfo === 'unclicked') {
+      this.clickInfo = 'clicked';
+    } else {
+      this.clickInfo = 'unclicked';
+    }
   }
   startLoading() {
     this.isLoading = true;

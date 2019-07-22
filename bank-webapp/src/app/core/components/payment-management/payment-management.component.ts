@@ -10,11 +10,13 @@ import { Bank } from '../../../shared/models/bank-data.model';
 import * as transactionActions from '../../../store/actions/transaction.actions';
 import { LoginService } from './../../services/login.service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import { topItemTrigger } from 'src/app/shared/animations/payment/payment.animation';
 @Component({
   selector: 'app-payment-management',
   templateUrl: './payment-management.component.html',
   styleUrls: ['./payment-management.component.css'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  animations: [topItemTrigger]
 })
 
 export class PaymentManagementComponent implements OnInit {

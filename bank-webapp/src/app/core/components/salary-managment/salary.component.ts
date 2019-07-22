@@ -13,12 +13,14 @@ import { SalaryService } from '../../services/salary.service';
 import * as salaryActions from './../../../store/actions/salary.actions';
 import { LoginService } from './../../services/login.service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import { bottomItemTrigger, topItemTrigger } from 'src/app/shared/animations/salary/salary.animation';
 
 @Component({
   selector: 'app-salary',
   templateUrl: './salary.component.html',
   styleUrls: ['./salary.component.css'],
   encapsulation: ViewEncapsulation.None,
+  animations: [bottomItemTrigger, topItemTrigger]
 })
 export class SalaryComponent implements OnInit {
   public ngbSubscribe: Subject<void> = new Subject<void>();

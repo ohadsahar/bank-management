@@ -1,7 +1,7 @@
 <div class="salary-management">
   <div class="row">
     <div class="col-sm-12 col-md-12 col-lg-12">
-      <div class="list-of-salary">
+      <div class="list-of-salary" @bottomItem>
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort (matSortChange)="sortData($event)">
           <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef> <i class="fab fa-cc-visa"></i> אפשרויות </th>
@@ -48,7 +48,7 @@
       <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
     </div>
   </div>
-  <div class="form-salary">
+  <div class="form-salary" @bottomItem>
     <div class="row">
       <div class="col-sm-12 col-md-12 col-lg-12">
         <form name="salaryForm" (submit)="registerSalary(salaryForm)" #salaryForm="ngForm">
@@ -62,7 +62,7 @@
       </div>
     </div>
   </div>
-  <div class="statistic-section">
+  <div class="statistic-section" @topItem>
     <div class="row">
       <div class="col-sm-12 col-md-12 col-lg-12">
         <canvas id="chartInComeData">{{chartInComeData}}</canvas>

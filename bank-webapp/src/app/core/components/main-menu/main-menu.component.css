@@ -2,7 +2,7 @@
 .main-menu-component {
 
   height: 100vh;
-  background-image: url("/assets/images/fabian-blank-pElSkGRA2NU-unsplash.jpg");
+  background-image: linear-gradient(#1B5299,#1D1E2C,#F7EBEC);
   background-size: cover;
   background-repeat: no-repeat;
 }

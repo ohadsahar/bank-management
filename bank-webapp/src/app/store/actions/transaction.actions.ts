@@ -80,7 +80,7 @@ export class UpdateTransactionFailed implements Action {
   constructor(public payload: any) { }
 }
 
-export type TransactionActions = RegisterTransaction | RegisterTransactionSuccess |
+export type Actions = RegisterTransaction | RegisterTransactionSuccess |
   RegisterTransactionFailed | GetAllTransactions | GetAllTransactionSuccess |
   GetAllTransactionsFailed | DeleteTransaction | DeleteTransactionSuccess |
   DeleteTransactionFailed | UpdateTransaction | UpdateTransactionSuccess | UpdateTransactionFailed

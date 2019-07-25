@@ -48,6 +48,6 @@ export class DeleteSalaryFailed implements Action {
   constructor(public payload: any) {}
 }
 
-export type SalaryActions = RegisterNewSalary | RegisterNewSalarySuccess | RegisterNewSalaryFailed |
+export type Actions = RegisterNewSalary | RegisterNewSalarySuccess | RegisterNewSalaryFailed |
 UpdateSalary | UpdateSalarySuccess | UpdateSalaryFailed | DeleteSalary | DeleteSalarySuccess | DeleteSalaryFailed;
 

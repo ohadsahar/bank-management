@@ -18,4 +18,4 @@ export class ChartFailed implements Action {
 }
 
 
-export type ChartActions =  ChartSuccess | GetCharts | ChartFailed;
+export type Actions =  ChartSuccess | GetCharts | ChartFailed;

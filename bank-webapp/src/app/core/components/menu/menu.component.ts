@@ -14,17 +14,17 @@ export class MenuComponent implements OnInit {
   constructor(private router: Router, private loginService: LoginService, public dialog: MatDialog) {
    }
   ngOnInit() {
-    this.router.navigate(['management']);
+    this.router.navigate(['user-management/management']);
   }
   changedTab(event: MatTabChangeEvent) {
     if (event.index === 0) {
-      this.router.navigate(['management']);
+      this.router.navigate(['user-management/management']);
     }
     if (event.index === 1) {
-      this.router.navigate(['payment']);
+      this.router.navigate(['user-payment/payment']);
     }
     if (event.index === 2) {
-      this.router.navigate(['salary']);
+      this.router.navigate(['user-salary/salary']);
     }
     if (event.index === 3) {
       this.selectedTab = 3;
@@ -36,7 +36,7 @@ export class MenuComponent implements OnInit {
         if (result === false || result === undefined) {
           this.selectedTab = 0;
           event.index = 0;
-          this.router.navigate(['management']);
+          this.router.navigate(['user-management/management']);
         }
       });
     }

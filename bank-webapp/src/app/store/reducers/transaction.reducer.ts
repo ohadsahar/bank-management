@@ -1,10 +1,7 @@
+
+import * as transactionActions from '../actions/transaction.actions';
 import { Bank } from '../../shared/models/bank-data.model';
 
-import {
-  TransactionActions,
-  REGISTER_TRANSACTION, REGISTER_TRANSACTION_SUCCESS, REGISTER_TRANSACTION_FAILED,
-  UPDATE_TRANSACTION, UPDATE_TRANSACTION_SUCCESS, UPDATE_TRANSACTION_FAILED,
-  DELETE_TRANSACTION, DELETE_TRANSACTION_SUCCESS, DELETE_TRANSACTION_FAILED} from '../actions/transaction.actions';
 
 export interface State {
   loading: boolean;
@@ -18,65 +15,65 @@ const initialState: State = {
   data: null,
 };
 
-export function transactionReducer(state = initialState, action: TransactionActions) {
+export function transactionReducer(state = initialState, action: transactionActions.Actions) {
   switch (action.type) {
-    case REGISTER_TRANSACTION:
+    case transactionActions.REGISTER_TRANSACTION:
       return {
         ...state,
         loading: true,
         loaded: false,
         data: action.payload
       };
-    case REGISTER_TRANSACTION_SUCCESS:
+    case transactionActions.REGISTER_TRANSACTION_SUCCESS:
       return {
         ...state,
         loading: false,
         loaded: true,
         data: action.payload
       };
-    case REGISTER_TRANSACTION_FAILED:
+    case transactionActions.REGISTER_TRANSACTION_FAILED:
       return {
         ...state,
         loading: false,
         loaded: true,
         data: action.payload
       };
-    case UPDATE_TRANSACTION:
+    case transactionActions.UPDATE_TRANSACTION:
       return {
         ...state,
         loading: true,
         loaded: false,
         data: action.payload
       };
-    case UPDATE_TRANSACTION_SUCCESS:
+    case transactionActions.UPDATE_TRANSACTION_SUCCESS:
       return {
         ...state,
         loading: false,
         loaded: true,
         data: action.payload
       };
-    case UPDATE_TRANSACTION_FAILED:
+    case transactionActions.UPDATE_TRANSACTION_FAILED:
       return {
         ...state,
         loading: false,
         loaded: true,
         data: action.payload
       };
-    case DELETE_TRANSACTION:
+    case transactionActions.DELETE_TRANSACTION:
       return {
         ...state,
         loading: true,
         loaded: false,
         data: action.payload
       };
-    case DELETE_TRANSACTION_SUCCESS:
+    case transactionActions.DELETE_TRANSACTION_SUCCESS:
       return {
         ...state,
         loading: false,
         loaded: true,
         data: action.payload
       };
-    case DELETE_TRANSACTION_FAILED:
+    case transactionActions.DELETE_TRANSACTION_FAILED:
       return {
         ...state,
         loading: false,

@@ -1,8 +1,4 @@
-import {
-  SalaryActions, REGISTER_NEW_SALARY, REGISTER_NEW_SALARY_SUCCESS,
-  REGISTER_NEW_SALARY_FAILED, UPDATE_SALARY, UPDATE_SALARY_SUCCESS, UPDATE_SALARY_FAILED,
-  DELETE_SALARY, DELETE_SALARY_FAILED, DELETE_SALARY_SUCCESS
-} from './../actions/salary.actions';
+import * as salaryActions from '../actions/salary.actions';
 
 export interface State {
   loading: boolean;
@@ -15,65 +11,65 @@ export const initialState: State = {
   data: [],
 };
 
-export function salaryReducer(state = initialState, action: SalaryActions) {
+export function salaryReducer(state = initialState, action: salaryActions.Actions) {
   switch (action.type) {
-    case REGISTER_NEW_SALARY:
+    case salaryActions.REGISTER_NEW_SALARY:
       return {
         ...state,
         loading: true,
         loaded: false,
         data: action.payload
       };
-    case REGISTER_NEW_SALARY_SUCCESS:
+    case salaryActions.REGISTER_NEW_SALARY_SUCCESS:
       return {
         ...state,
         loading: false,
         loaded: true,
         data: action.payload
       };
-    case REGISTER_NEW_SALARY_FAILED:
+    case salaryActions.REGISTER_NEW_SALARY_FAILED:
       return {
         ...state,
         loading: false,
         loaded: true,
         data: action.payload
       };
-    case UPDATE_SALARY:
+    case salaryActions.UPDATE_SALARY:
       return {
         ...state,
         loading: true,
         loaded: false,
         data: action.payload
       };
-    case UPDATE_SALARY_SUCCESS:
+    case salaryActions.UPDATE_SALARY_SUCCESS:
       return {
         ...state,
         loading: false,
         loaded: true,
         data: action.payload
       };
-    case UPDATE_SALARY_FAILED:
+    case salaryActions.UPDATE_SALARY_FAILED:
       return {
         ...state,
         loading: false,
         loaded: true,
         data: action.payload
       };
-    case DELETE_SALARY:
+    case salaryActions.DELETE_SALARY:
       return {
         ...state,
         loading: true,
         loaded: false,
         data: action.payload
       };
-    case DELETE_SALARY_SUCCESS:
+    case salaryActions.DELETE_SALARY_SUCCESS:
       return {
         ...state,
         loading: false,
         loaded: true,
         data: action.payload
       };
-    case DELETE_SALARY_FAILED:
+    case salaryActions.DELETE_SALARY_FAILED:
       return {
         ...state,
         loading: false,

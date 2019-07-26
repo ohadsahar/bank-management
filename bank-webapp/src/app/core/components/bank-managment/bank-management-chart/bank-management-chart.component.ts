@@ -1,13 +1,14 @@
-import { Store } from '@ngrx/store';
-import { LoginService } from './../../../services/login.service';
-import { ChartByCardName } from './../../../../shared/models/chart-by-cardname.model';
 import { Component, OnInit } from '@angular/core';
-import { Subscription, Subject } from 'rxjs';
+import { Store } from '@ngrx/store';
 import { Chart } from 'chart.js';
-import * as chartActions from '../../../../store/actions/chart.actions';
-import * as fromRoot from '../../../../app.reducer';
+import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ShareDataService } from 'src/app/core/services/share-data.service';
 import { bottomSideItemTrigger } from 'src/app/shared/animations/bank-management/bank-management-animations.animations';
+import * as fromRoot from '../../../../app.reducer';
+import * as chartActions from '../../../../store/actions/chart.actions';
+import { ChartByCardName } from './../../../../shared/models/chart-by-cardname.model';
+import { LoginService } from './../../../services/login.service';
 
 @Component({
   selector: 'app-bank-management-chart',
@@ -18,7 +19,7 @@ import { bottomSideItemTrigger } from 'src/app/shared/animations/bank-management
 
 export class BankManagementChartComponent implements OnInit {
 
-  constructor(private loginService: LoginService, private store: Store<fromRoot.State>) { }
+  constructor(private loginService: LoginService, private store: Store<fromRoot.State>, private shareDataService: ShareDataService) { }
   public chartTransactions: ChartByCardName[];
   public arrayCardsNames: string[] = [];
   public arrayCardsTotalPrice: number[] = [];
@@ -33,6 +34,7 @@ export class BankManagementChartComponent implements OnInit {
 
   ngOnInit() {
     this.getAllCharts();
+    this.waitingForDataCharts();
   }
   getAllCharts(): void {
     this.store.dispatch(new chartActions.GetCharts(this.loginService.getUsernameAndId().username));
@@ -44,6 +46,16 @@ export class BankManagementChartComponent implements OnInit {
           this.assignDataToCharts();
         }
       });
+  }
+  waitingForDataCharts() {
+    this.shareDataService.currentTransactions.subscribe(transactions => {
+      this.chartTransactions = transactions;
+      this.shareDataService.currentStatusOfDestroy.subscribe(response => {
+        if (response) {
+          this.destroyCharts();
+        }
+      });
+    });
   }
   assignDataToCharts(): void {
     this.resetCharts();
@@ -93,7 +105,7 @@ export class BankManagementChartComponent implements OnInit {
           data: this.arrayEachMonthData,
           backgroundColor: ['#fbd0c6', '#f6c1a6', '#c8c87a', '#79c0b0', '#7ec2a3', '#65b6bd',
             '#70a6ca', '#90b4cb']
-        },],
+        }, ],
 
         labels: this.arrayExpansesEachMonth,
       },
@@ -129,6 +141,7 @@ export class BankManagementChartComponent implements OnInit {
   destroyCharts(): void {
     this.allCardChart.destroy();
     this.eachMonthExpenses.destroy();
+    this.shareDataService.changeDestroy(false);
     this.getAllCharts();
   }
 }

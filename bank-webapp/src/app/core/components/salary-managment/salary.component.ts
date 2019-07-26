@@ -14,6 +14,7 @@ import * as salaryActions from './../../../store/actions/salary.actions';
 import { LoginService } from './../../services/login.service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { bottomItemTrigger, topItemTrigger } from 'src/app/shared/animations/salary/salary.animation';
+import { ShareDataService } from '../../services/share-data.service';
 
 @Component({
   selector: 'app-salary',
@@ -41,7 +42,7 @@ export class SalaryComponent implements OnInit {
   public salaryArray: number[] = [];
   constructor(private salaryService: SalaryService, private loginService: LoginService,
               private messageService: MessageService, private store: Store<fromRoot.State>,
-              private spinnerService: Ng4LoadingSpinnerService) {
+              private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService) {
     this.editEnable = false;
     this.counter = 0;
     this.updateAble = false;
@@ -58,10 +59,9 @@ export class SalaryComponent implements OnInit {
   onLoadComponent() {
     const username = this.loginService.getUsernameAndId().username;
     this.salaryService.get(username).subscribe(response => {
-      this.allInComeData = response.message.salaryByMonth;
+      this.shareDataService.changeSalary(response.message.salaryByMonth);
       this.allSalary = response.message.salary as any;
       this.updateTable();
-      this.assignChartDataInCome();
     });
   }
   registerSalary(form: NgForm): void {
@@ -77,11 +77,20 @@ export class SalaryComponent implements OnInit {
       .subscribe((data) => {
         if (data.loaded) {
           this.allSalary.push(data.data);
-          this.destroyCharts();
+          this.getSalaryByMonths();
+          this.shareDataService.changeSalaryDestroyStatus(true);
+          this.updateTable();
           this.messageService.successMessage('המשכורת התווספה בהצלחה', 'סגור');
           this.dataToSubscribe.unsubscribe();
         }
       });
+  }
+
+  getSalaryByMonths() {
+    const username = this.loginService.getUsernameAndId().username;
+    this.salaryService.get(username).subscribe(response => {
+      this.shareDataService.changeSalary(response.message.salaryByMonth);
+    });
   }
   deleteSalary(salaryId: string): void {
     this.store.dispatch(new salaryActions.DeleteSalary(salaryId));
@@ -90,6 +99,8 @@ export class SalaryComponent implements OnInit {
         if (data.loaded) {
           const deleteSalary = this.allSalary.filter(salary => salary._id !== salaryId);
           this.allSalary = deleteSalary;
+          this.getSalaryByMonths();
+          this.shareDataService.changeSalaryDestroyStatus(true);
           this.updateTable();
           this.messageService.successMessage('המשכורת נמחקה בהצלחה', 'סגור');
           this.dataToSubscribe.unsubscribe();
@@ -116,6 +127,8 @@ export class SalaryComponent implements OnInit {
         if (data.loaded) {
           const index = this.allSalary.findIndex(salary => salary._id === this.id);
           this.allSalary[index] = data.data;
+          this.getSalaryByMonths();
+          this.shareDataService.changeSalaryDestroyStatus(true);
           this.updateTable();
           this.updateAble = false;
           this.messageService.successMessage('המשכורת עודכנה בהצלחה', 'סגור');
@@ -156,53 +169,10 @@ export class SalaryComponent implements OnInit {
   compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
-  assignChartDataInCome() {
-    this.allInComeData.forEach(element => {
-      this.monthArray.push(element.monthOfSalary);
-      this.salaryArray.push(element.salary);
-    });
-    this.expensesByCurrentMonthChart('bar');
-  }
-  expensesByCurrentMonthChart(type: string): void {
-    this.chartInComeData = new Chart('chartInComeData', {
-      type,
-      data: {
-        datasets: [{
-          label: 'משכורות לפי חודשים',
-          data: this.salaryArray,
-          backgroundColor: ['#fbd0c6', '#f6c1a6', '#c8c87a', '#79c0b0', '#7ec2a3', '#65b6bd',
-            '#70a6ca', '#90b4cb']
-        },],
-
-        labels: this.monthArray,
-      },
-      options: {
-        scales: {
-          xAxes: [{
-            stacked: true,
-            barThickness: 8,
-            maxBarThickness: 10
-          }],
-          yAxes: [{
-            stacked: true,
-            barThickness: 8,
-            maxBarThickness: 10
-          }]
-        },
-        animation: false,
-      }
-    });
-  }
-  destroyCharts() {
-    this.chartInComeData.destroy();
-    this.assignChartDataInCome();
-    this.updateTable();
-  }
   startLoading() {
     this.isLoading = true;
     this.spinnerService.show();
   }
-
   stopLoading() {
     this.isLoading = false;
     this.spinnerService.hide();

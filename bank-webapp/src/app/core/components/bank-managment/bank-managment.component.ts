@@ -3,7 +3,6 @@ import { FormControl } from '@angular/forms';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource, Sort } from '@angular/material';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Chart } from 'chart.js';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { map, startWith, takeUntil } from 'rxjs/operators';
@@ -11,13 +10,12 @@ import { RegisterNewTransactionModalComponent } from 'src/app/shared/modals/regi
 import * as fromRoot from '../../../app.reducer';
 import { Bank } from '../../../shared/models/bank-data.model';
 import { BankValues } from '../../../shared/models/bank.model';
-import { ChartByCardName } from '../../../shared/models/chart-by-cardname.model';
-
 import * as transactionActions from '../../../store/actions/transaction.actions';
 import { MessageService } from '../../services/message.service';
 import { bottomSideItemTrigger,
-         upSideItemTrigger } from './../../../shared/animations/bank-management/bank-management-animations.animations';
+  upSideItemTrigger } from './../../../shared/animations/bank-management/bank-management-animations.animations';
 import { LoginService } from './../../services/login.service';
+import { ShareDataService } from './../../services/share-data.service';
 
 @Component({
   selector: 'app-bank-managment',
@@ -31,49 +29,28 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   public sortedData: Bank[];
   public allTransactions: Bank[];
-  public chartTransactions: ChartByCardName[];
-  public chartByMonthTransactions: any[];
-  public arrayCardsNames: string[] = [];
-  public arrayCardsTotalPrice: number[] = [];
-  public arrayExpansesEachMonth: number[] = [];
-  public arrayEachMonthData: string[] = [];
   options: string[] = ['הספרייה', 'רנואר', 'קאסטרו', 'אייבורי'];
   filteredOptions: Observable<string[]>;
   myControl = new FormControl();
-  public totalExpenses: number;
   private counter: number;
-  public monthExpenses: number;
   public numberOfPayments: number;
   public editEnable: boolean;
   public updateAble: boolean;
   public isLoading: boolean;
-  public allCardChart: Chart;
-  public allExpensesByMonthChart: Chart;
-  public eachMonthExpenses: Chart;
   public loading: boolean;
   public loaded: boolean;
-  public archiveTransactions: Bank[];
   public dataToSubscribe: Subscription;
-  public chartDataToSubscribe: Subscription;
-  private getCharts$: Subject<void> = new Subject<void>();
   public registerNewTransactionNgrx: Subject<void> = new Subject<void>();
   public updateTransaction$: Subject<void> = new Subject<void>();
   private ngUnsubscribe: Subject<void> = new Subject<void>();
   public editoptionsable: any = {};
   public cancelBankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '');
   public bankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '');
-  constructor(
-    private messageService: MessageService,
-    private store: Store<fromRoot.State>,
-    public router: Router,
-    public dialog: MatDialog,
-    private loginService: LoginService,
-    private spinnerService: Ng4LoadingSpinnerService
-  ) {
+  constructor(private messageService: MessageService, private store: Store<fromRoot.State>,
+              public router: Router, public dialog: MatDialog, private loginService: LoginService,
+              private spinnerService: Ng4LoadingSpinnerService,private shareDataService: ShareDataService) {
     this.isLoading = true;
     this.counter = 0;
-    this.totalExpenses = 0;
-    this.monthExpenses = 0;
     this.numberOfPayments = 0;
     this.editEnable = false;
     this.updateAble = false;
@@ -86,7 +63,6 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   { value: 'דרים קארד' }, { value: 'מאסטר-קארד אוהד' }, { value: 'דרים קארד אוהד' } , { value: 'לייף - סטייל' }];
   categories: any[] = [{ value: 'חשמל' }, { value: 'ביגוד' }, { value: 'ריהוט' },
   { value: 'אוכל' }, { value: 'תכשיטים' }, { value: 'בריאות' }, { value: 'אחר' }];
-
 
   ngOnInit() {
     this.onLoadSite();
@@ -108,9 +84,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
         if (data.loaded) {
           this.spinnerService.hide();
           this.loading = false;
-          this.arrayCardsNames = data.data.chartGroupByCardName;
           this.allTransactions = data.data.foundTranscations;
-          this.chartByMonthTransactions = data.data.chartGroupByMonth;
           this.afterFetchedAllData();
         }
       });
@@ -152,7 +126,6 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
         }
       });
   }
-  // Help functions
   afterFetchedAllData(): void {
     this.updateTable();
     // this.getAllCharts();
@@ -173,17 +146,18 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     });
   }
   afterRegisterNewCard(): void {
-    this.chartTransactions = this.allTransactions;
+
+    this.shareDataService.changeTransactions(this.allTransactions as any);
     this.messageService.successMessage('הקנייה התווספה בהצלחה', 'סגור');
     this.updateTable();
-    // this.destroyCharts();
+    this.shareDataService.changeDestroy(true);
 
   }
   afterDeleteTransaction(): void {
-    this.chartTransactions = this.allTransactions;
+    this.shareDataService.changeTransactions(this.allTransactions as any);
     this.messageService.successMessage('העסקה נמחקה בהצלחה', 'סגור');
     this.updateTable();
-    // this.destroyCharts();
+    this.shareDataService.changeDestroy(true);
   }
   editTransaction(transactionData: Bank): void {
     this.updateAble = true;
@@ -216,7 +190,6 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-
   applyFilter(filterValue: string): void {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
@@ -253,16 +226,9 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     const filterValue = value.toLowerCase();
     return this.options.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
   }
-  // End of help functions
   ngOnDestroy() {
     this.registerNewTransactionNgrx.unsubscribe();
-    this.getCharts$.unsubscribe();
     this.ngUnsubscribe.unsubscribe();
   }
-
-
-
-
-
 }
 

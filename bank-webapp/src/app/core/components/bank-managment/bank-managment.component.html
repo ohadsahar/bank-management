@@ -13,7 +13,7 @@
             (matSortChange)="sortData($event)">
             <ng-container matColumnDef="id">
               <th mat-header-cell *matHeaderCellDef> <i class="fab fa-cc-visa"></i> אפשרויות </th>
-              <td mat-cell *matCellDef="let element; let i = index" @upSideItem>
+              <td mat-cell *matCellDef="let element; let i = index">
                  <i class="fas fa-trash"
                   (click)="deleteTransaction(element._id)"></i>
                 <i class="fas fa-edit" (click)="editTransaction(element);editoptionsable[i] = !editoptionsable[i]"
@@ -26,7 +26,7 @@
             </ng-container>
             <ng-container matColumnDef="cardName">
               <th mat-header-cell *matHeaderCellDef> <i class="fab fa-cc-visa"></i> שם הכרטיס </th>
-              <td mat-cell *matCellDef="let element; let i = index" @upSideItem>
+              <td mat-cell *matCellDef="let element; let i = index">
                 <div *ngIf="!editoptionsable[i]">{{element?.cardName}}</div>
                 <div *ngIf="editEnable && editoptionsable[i]" class="edit-section">
                   <mat-form-field class="new-transaction">
@@ -44,7 +44,7 @@
             <!-- Name Column -->
             <ng-container matColumnDef="name">
               <th mat-header-cell *matHeaderCellDef> <i class="fab fa-product-hunt"></i> בית העסק </th>
-              <td mat-cell *matCellDef="let element; let  i = index" @upSideItem>
+              <td mat-cell *matCellDef="let element; let  i = index">
                 <div *ngIf="!editoptionsable[i]">{{element?.name}}</div>
                 <div *ngIf="editEnable && editoptionsable[i]">
                   <mat-form-field class="new-transaction edit-section" *ngIf="editEnable">
@@ -64,7 +64,7 @@
             <!-- Type of product  Column -->
             <ng-container matColumnDef="type">
               <th mat-header-cell *matHeaderCellDef><i class="fas fa-sitemap"></i> קטגוריה </th>
-              <td mat-cell *matCellDef="let element; let i = index" @upSideItem>
+              <td mat-cell *matCellDef="let element; let i = index" >
                 <div *ngIf="!editoptionsable[i]">{{element?.typeProduct}}</div>
                 <div *ngIf="editEnable && editoptionsable[i]">
                   <mat-form-field class="new-transaction">
@@ -84,7 +84,7 @@
               <th mat-sort-header="price" mat-header-cell *matHeaderCellDef> <i class="fas fa-shekel-sign"></i> מחיר
                 כללי
               </th>
-              <td mat-cell *matCellDef="let element; let  i = index" @upSideItem>
+              <td mat-cell *matCellDef="let element; let  i = index">
                 <div *ngIf="!editoptionsable[i]">{{element?.price}}</div>
                 <div *ngIf="editEnable && editoptionsable[i]">
                   <mat-form-field class="new-transaction">
@@ -101,7 +101,7 @@
               <th mat-sort-header="numberofpayments" mat-header-cell *matHeaderCellDef> <i
                   class="fas fa-shopping-bag"></i>
                   מספר תשלומים שנשארו </th>
-              <td mat-cell *matCellDef="let element; let i = index" @upSideItem>
+              <td mat-cell *matCellDef="let element; let i = index">
                 <div *ngIf="!editoptionsable[i]">{{element?.numberofpayments}}</div>
                 <div *ngIf="editEnable && editoptionsable[i]">
                   <mat-form-field class="new-transaction">
@@ -117,19 +117,19 @@
           <th mat-sort-header="eachMonth" mat-header-cell *matHeaderCellDef> <i class="fas fa-cart-arrow-down"></i>
             תשלום
             חודשי </th>
-          <td mat-cell *matCellDef="let element" @upSideItem> <i class="fas fa-shekel-sign"></i> {{element?.eachMonth}} </td>
+          <td mat-cell *matCellDef="let element" > <i class="fas fa-shekel-sign"></i> {{element?.eachMonth}} </td>
         </ng-container>
         <ng-container matColumnDef="leftPayments">
           <th mat-sort-header="leftPayments" mat-header-cell *matHeaderCellDef><i class="fas fa-trophy"></i>
             סה"כ תשלומים
           </th>
-          <td mat-cell *matCellDef="let element" @upSideItem> {{element?.leftPayments}} </td>
+          <td mat-cell *matCellDef="let element" > {{element?.leftPayments}} </td>
         </ng-container>
         <ng-container matColumnDef="purchaseDate">
           <th mat-sort-header="purchaseDate" mat-header-cell *matHeaderCellDef><i class="far fa-calendar-check"></i>
             תאריך
             קניה</th>
-          <td mat-cell *matCellDef="let element" @upSideItem> {{element?.purchaseDate}} </td>
+          <td mat-cell *matCellDef="let element" > {{element?.purchaseDate}} </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

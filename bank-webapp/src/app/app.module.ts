@@ -1,12 +1,13 @@
-import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { enableProdMode, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 import { DeviceDetectorModule } from 'ngx-device-detector';
+import { environment } from 'src/environments/environment.prod';
 import { AngularMaterialModule } from './angular-material.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -21,9 +22,9 @@ import { RegisterUserModalComponent } from './shared/modals/register-user/regist
 import { BankManagementEffects } from './store/effects/bank-managment.effect';
 import { SalaryEffects } from './store/effects/salary.effect';
 import { TransactionEffect } from './store/effects/transaction.effect';
-
-
-
+if (environment.production) {
+  enableProdMode();
+}
 
 @NgModule({
   declarations: [
@@ -48,7 +49,7 @@ import { TransactionEffect } from './store/effects/transaction.effect';
     DeviceDetectorModule.forRoot(),
     Ng4LoadingSpinnerModule.forRoot()
   ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
 
   bootstrap: [AppComponent],
   entryComponents: [RegisterNewTransactionModalComponent, RegisterUserModalComponent, LoginModalComponent, DisconnectDialogComponent]

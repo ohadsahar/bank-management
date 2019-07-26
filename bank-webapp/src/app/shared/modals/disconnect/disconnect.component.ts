@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./disconnect.component.css']
 })
 
-export class DisconnectDialogComponent implements OnInit{
+export class DisconnectDialogComponent implements OnInit {
 
 
   ngOnInit() {}

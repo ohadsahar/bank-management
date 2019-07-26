@@ -5,18 +5,19 @@ import { BankManagmentComponent } from './../bank-managment.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from "@angular/core";
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
+import { BankManagementChartComponent } from '../bank-management-chart/bank-management-chart.component';
 
 @NgModule({
-  declarations: [BankManagmentComponent],
+  declarations: [BankManagmentComponent, BankManagementChartComponent],
   imports: [
     CommonModule,
     AngularMaterialModule,
     BankManagementRouting,
     AngularMaterialModule,
-  FormsModule,
+    FormsModule,
     Ng4LoadingSpinnerModule.forRoot()
   ]
 })
 
-export class BankManagementModule {}
+export class BankManagementModule { }
 

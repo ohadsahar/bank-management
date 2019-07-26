@@ -140,17 +140,5 @@
     </div>
   </div>
 </div>
-<div class="statistic-section" *ngIf="!isLoading"  @bottomSideItem>
-  <h1>ניתוח מצב פיננסי</h1>
-  <div>
-    <div class="row">
-      <div class="col-sm-12 col-md-4 col-lg-4">
-        <canvas id="allCardChart">{{allCardChart}}</canvas>
-      </div>
-      <div class="col-sm-12 col-md-4 col-lg-4">
-        <canvas id="eachMonthExpenses">{{eachMonthExpenses}}</canvas>
-      </div>
-    </div>
-  </div>
-</div>
+<app-bank-management-chart></app-bank-management-chart>
 </div>

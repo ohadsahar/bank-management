@@ -7,7 +7,7 @@
           <mat-error *ngIf="email.invalid">האיימיל בפורמט לא נכון</mat-error>
         </mat-form-field>
         <mat-form-field class="example-full-width">
-          <input matInput name="password" minlength="8"  ngModel #password="ngModel" placeholder="סיסמא"
+          <input matInput name="password" minlength="8" autocomplete="password" ngModel #password="ngModel" placeholder="סיסמא"
             [type]="hide ? 'password' : 'text'" required>
           <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
             [attr.aria-pressed]="hide">

@@ -1,17 +1,15 @@
-import { SalaryData } from 'src/app/shared/models/edit-salary.model';
-import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
-import { SalaryModel } from '../../shared/models/salary.model';
-import { environment } from '../../../environments/environment';
+import { Injectable } from '@angular/core';
+import { SalaryData } from 'src/app/shared/models/edit-salary.model';
 import { SalaryPost } from 'src/app/shared/models/salary-post.model';
+import { environment } from '../../../environments/environment';
+import { SalaryModel } from '../../shared/models/salary.model';
 
 const backendUrl = environment.backendUrlSalary;
 
 @Injectable({ providedIn: 'root' })
 export class SalaryService {
-
   constructor(private http: HttpClient) { }
-
   registerSalary(salaryData: SalaryPost) {
     return this.http.post<{ message: SalaryModel }>(backendUrl, salaryData);
   }
@@ -24,6 +22,4 @@ export class SalaryService {
   updateSalary(salaryData: SalaryData) {
     return this.http.put<{ message: SalaryData }>(`${backendUrl}`, salaryData);
   }
-
-
 }

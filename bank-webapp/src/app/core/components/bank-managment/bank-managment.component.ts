@@ -16,7 +16,6 @@ import { bottomSideItemTrigger,
   upSideItemTrigger } from './../../../shared/animations/bank-management/bank-management-animations.animations';
 import { LoginService } from './../../services/login.service';
 import { ShareDataService } from './../../services/share-data.service';
-
 @Component({
   selector: 'app-bank-managment',
   templateUrl: './bank-managment.component.html',

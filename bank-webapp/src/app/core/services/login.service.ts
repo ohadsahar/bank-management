@@ -1,19 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { LoginModel } from 'src/app/shared/models/login-data.model';
 import { environment } from 'src/environments/environment';
 import { AuthData } from './../../shared/models/auth-data.model';
 import { ResponseRegisterModel } from './../../shared/models/register-response.model';
 import { MessageService } from './message.service';
 
-
-
 const backendUrlLogin = environment.backendUrlLogin;
 @Injectable({ providedIn: 'root' })
 export class LoginService {
-
   private token: string;
   private expiryDate: Date;
   private tokenTimer: any;
@@ -47,8 +44,6 @@ export class LoginService {
         this.saveAuthData(this.token, this.expiryDate);
         this.authStatusListener.next(true);
         this.messageService.successMessage('התחברת בהצלחה!', 'סגור');
-        this.router.navigate(['/menu']);
-        // location.reload(); // combine for now
       }
     }, (error) => {
       this.messageService.failedMessage('שם המשתמש או הסיסמא לא נכונים', 'סגור');
@@ -74,6 +69,28 @@ export class LoginService {
       }
     }
   }
+  logout() {
+    this.token = null;
+    this.isLogged = false;
+    this.changeStatus(false);
+    this.authStatusListener.next(false);
+    this.clearAuthData();
+    clearTimeout(this.tokenTimer);
+    this.router.navigate(['']);
+  }
+  getUsernameAndId() {
+    const loggedUser = {
+      username: localStorage.getItem('username'),
+      id: localStorage.getItem('id')
+    };
+    return loggedUser;
+  }
+  getIsLogged() {
+    return this.isLogged;
+  }
+  changeStatus(value: boolean) {
+    this.loggedUserSource.next(value);
+  }
   private saveAuthData(token: string, expirateionDate: Date) {
     localStorage.setItem('token', token);
     localStorage.setItem('expiryDate', expirateionDate.toISOString());
@@ -98,29 +115,5 @@ export class LoginService {
     localStorage.removeItem('expiryDate');
     localStorage.removeItem('username');
     localStorage.removeItem('id');
-  }
-  logout() {
-    this.token = null;
-    this.isLogged = false;
-    this.changeStatus(false);
-    this.authStatusListener.next(false);
-    this.clearAuthData();
-    clearTimeout(this.tokenTimer);
-    this.router.navigate(['']);
-  }
-
-  getUsernameAndId() {
-    const loggedUser = {
-      username: localStorage.getItem('username'),
-      id: localStorage.getItem('id')
-    };
-    return loggedUser;
-  }
-  getIsLogged() {
-    return this.isLogged;
-  }
-
-  changeStatus(value: boolean) {
-    this.loggedUserSource.next(value);
   }
 }

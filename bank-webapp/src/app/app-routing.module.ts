@@ -18,7 +18,6 @@ const routes: Routes = [
     path: 'user-salary',
     loadChildren: './core/components/salary-managment/salary.module#SalaryModule'
   },
-  { path: 'menu', component: MenuComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

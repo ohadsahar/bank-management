@@ -312,7 +312,6 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   }
   applyFilter(filterValue: string): void {
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
   }
   sortData(sort: Sort) {
     this.sortedData = this.allTransactions;

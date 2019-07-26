@@ -5,7 +5,7 @@ html {
 
 .bank-component {
 
-  height: 100vh;
+  height: 100%;
   background-color: #F5F1ED;
 }
 
@@ -97,7 +97,7 @@ table th {
 .input-new-transaction {
   direction: rtl;
   font-size: 13px;
-  background-color:#F5F1ED;
+  background-color: #F5F1ED;
   display: flex;
 }
 

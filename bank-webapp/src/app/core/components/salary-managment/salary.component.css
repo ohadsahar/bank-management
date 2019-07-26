@@ -1,7 +1,6 @@
 .salary-management {
   background-color: #F5F1ED !important;
-  height: 100vh;
-  direction: rtl;
+  height: 100%;
 }
 .mat-form-field-appearance-legacy .mat-form-field-wrapper {
   width: 30% !important;

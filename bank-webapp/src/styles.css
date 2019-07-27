@@ -2,3 +2,6 @@
 
 html, body { height: 100%;   font-family: 'Varela Round', sans-serif !important;}
 body { margin: 0;}
+th.mat-header-cell:first-of-type {
+  text-align: center !important;
+}

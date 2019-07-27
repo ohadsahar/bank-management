@@ -12,8 +12,10 @@ import { Bank } from '../../../shared/models/bank-data.model';
 import { BankValues } from '../../../shared/models/bank.model';
 import * as transactionActions from '../../../store/actions/transaction.actions';
 import { MessageService } from '../../services/message.service';
-import { bottomSideItemTrigger,
-          upSideItemTrigger } from './../../../shared/animations/bank-management/bank-management-animations.animations';
+import {
+  bottomSideItemTrigger,
+  upSideItemTrigger
+} from './../../../shared/animations/bank-management/bank-management-animations.animations';
 import { LoginService } from './../../services/login.service';
 import { ShareDataService } from './../../services/share-data.service';
 
@@ -47,8 +49,8 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   public cancelBankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '');
   public bankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '');
   constructor(private messageService: MessageService, private store: Store<fromRoot.State>,
-              public router: Router, public dialog: MatDialog, private loginService: LoginService,
-              private spinnerService: Ng4LoadingSpinnerService,private shareDataService: ShareDataService) {
+    public router: Router, public dialog: MatDialog, private loginService: LoginService,
+    private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService) {
     this.isLoading = true;
     this.counter = 0;
     this.numberOfPayments = 0;
@@ -60,9 +62,12 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     'id', 'cardName', 'name', 'type', 'price', 'numberofpayments', 'eachMonth', 'leftPayments', 'purchaseDate'
   ];
   cards: any[] = [{ value: 'הוט' }, { value: 'שופרסל' }, { value: 'נגב' }, { value: 'יוניק' },
-  { value: 'דרים קארד' }, { value: 'מאסטר-קארד אוהד' }, { value: 'דרים קארד אוהד' } , { value: 'לייף - סטייל' }];
+  { value: 'דרים קארד' }, { value: 'מאסטר-קארד אוהד' }, { value: 'דרים קארד אוהד' }, { value: 'לייף - סטייל' }];
   categories: any[] = [{ value: 'חשמל' }, { value: 'ביגוד' }, { value: 'ריהוט' },
-  { value: 'אוכל' }, { value: 'תכשיטים' }, { value: 'בריאות' }, { value: 'אחר' }];
+  { value: 'אוכל' }, { value: 'תכשיטים' }, { value: 'בריאות' }, { value: 'חו"ל' }, { value: 'רכבת ישראל' },
+  { value: 'ביטוח' }, { value: 'רכב' }, { value: 'משיכת מזומן' }, { value: 'מספרה' }, { value: 'תחבורה ציבורית' },
+  { value: 'מרכז קניות' }, { value: 'אחר' }];
+
 
   ngOnInit() {
     this.onLoadSite();
@@ -206,6 +211,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       }
     });
     this.allTransactions = this.sortedData;
+    this.updateTable();
   }
   compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);

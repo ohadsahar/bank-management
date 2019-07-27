@@ -21,11 +21,15 @@ export class RegisterNewTransactionModalComponent implements OnInit {
   myControl = new FormControl();
   filteredOptions: Observable<string[]>;
   options: string[] = [
-   'ממתקים', 'יס פלנט', 'סופר פארם', 'הגראז', 'קמפאי', 'פאנקו פופ', 'דלק', 'רנואר', 'קאסטרו', 'אייבורי'];
+    'ממתקים', 'יס פלנט', 'סופר פארם', 'הגראז', 'קמפאי', 'פאנקו פופ', 'דלק', 'רנואר', 'קאסטרו', 'אייבורי'];
   cards: any[] = [{ value: 'הוט' }, { value: 'שופרסל' }, { value: 'נגב' }, { value: 'יוניק' },
-  { value: 'דרים קארד' }, { value: 'מאסטר-קארד אוהד' }, { value: 'דרים קארד אוהד' } , { value: 'לייף סטייל' }];
+  { value: 'דרים קארד' }, { value: 'מאסטר-קארד אוהד' }, { value: 'דרים קארד אוהד' }, { value: 'לייף סטייל' }];
   categories: any[] = [{ value: 'חשמל' }, { value: 'ביגוד' }, { value: 'ריהוט' },
-  { value: 'אוכל' }, { value: 'תכשיטים' }, { value: 'בריאות' }, { value: 'אחר' }];
+  { value: 'אוכל' }, { value: 'תכשיטים' }, { value: 'בריאות' }, { value: 'חו"ל' }, { value: 'רכבת ישראל' },
+  { value: 'ביטוח' }, { value: 'רכב' }, { value: 'משיכת מזומן' }, { value: 'מספרה' }, { value: 'תחבורה ציבורית' },
+  { value: 'מרכז קניות' }, { value: 'אחר' }];
+
+
 
   constructor(private loginService: LoginService) { }
   public bankTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '');

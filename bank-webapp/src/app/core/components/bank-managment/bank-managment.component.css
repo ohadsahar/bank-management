@@ -2,28 +2,22 @@ body,
 html {
   overflow-x: hidden;
 }
-
 .bank-component {
-
   height: 100%;
   background-color: #F5F1ED;
 }
-
+th.mat-header-cell {
+  text-align: center !important;
+  padding: 40px;
+}
+.mat-sort-header-container {
+  justify-content: center;
+}
 .bank-component table,
 th,
 td {
-
   background-color: #F5F1ED;
-  text-align: center !important;
 }
-
-td.mat-cell:first-of-type,
-td.mat-footer-cell:first-of-type,
-th.mat-header-cell:first-of-type {
-
-  text-align: center !important;
-}
-
 .fa-times:before {
   margin-right: 16px;
 }

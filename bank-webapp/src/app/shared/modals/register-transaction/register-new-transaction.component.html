@@ -5,7 +5,7 @@
           <mat-form-field class="new-transaction">
             <mat-select [(ngModel)]="bankTransaction.cardName" required>
               <mat-option *ngFor="let card of cards" [value]="card.value" >
-                {{card.value}}
+                {{card?.value}}
               </mat-option>
             </mat-select>
             <mat-placeholder class="placeholder">שם הכרטיס</mat-placeholder>
@@ -28,7 +28,7 @@
           <mat-form-field class="new-transaction">
             <mat-select [(ngModel)]="bankTransaction.typeProduct">
               <mat-option *ngFor="let category of categories" [value]="category.value">
-                {{category.value}}
+                {{category?.value}}
               </mat-option>
             </mat-select>
             <mat-placeholder class="placeholder">קטגוריה</mat-placeholder>

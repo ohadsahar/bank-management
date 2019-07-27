@@ -7,3 +7,7 @@ export * from './components/salary-managment/salary-management-chart/salary-mana
 export * from './components/salary-managment/salary.component';
 export * from './services/message.service';
 export * from './services/share-data.service';
+export * from './services/salary.service';
+export * from './services/payment-transaction.service';
+export * from './services/login.service';
+export * from './services/bank-transcation.service';

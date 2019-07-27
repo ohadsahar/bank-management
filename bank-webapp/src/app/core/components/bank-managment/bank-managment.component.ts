@@ -13,9 +13,10 @@ import { BankValues } from '../../../shared/models/bank.model';
 import * as transactionActions from '../../../store/actions/transaction.actions';
 import { MessageService } from '../../services/message.service';
 import { bottomSideItemTrigger,
-  upSideItemTrigger } from './../../../shared/animations/bank-management/bank-management-animations.animations';
+          upSideItemTrigger } from './../../../shared/animations/bank-management/bank-management-animations.animations';
 import { LoginService } from './../../services/login.service';
 import { ShareDataService } from './../../services/share-data.service';
+
 @Component({
   selector: 'app-bank-managment',
   templateUrl: './bank-managment.component.html',
@@ -127,14 +128,12 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   }
   afterFetchedAllData(): void {
     this.updateTable();
-    // this.getAllCharts();
     this.isLoading = false;
     this.dataToSubscribe.unsubscribe();
   }
   afterUpdate(): void {
     this.updateAble = false;
     this.messageService.successMessage('העסקה עודכנה בהצלחה', 'סגור');
-    // this.destroyCharts();
   }
   registerNewTransactionDialog(): void {
     const dialogRef = this.dialog.open(RegisterNewTransactionModalComponent);

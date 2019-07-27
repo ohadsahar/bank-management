@@ -44,6 +44,7 @@ export function transactionFetchReducer(state = initialState, action: transactio
         loaded: false
       };
     case transactionActions.GET_ALL_ARCHIVE_TRANSACTIONS_SUCCESS:
+      console.log('1');
       return {
         ...state,
         loading: false,

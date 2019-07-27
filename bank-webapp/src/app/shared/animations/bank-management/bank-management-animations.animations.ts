@@ -11,7 +11,7 @@ export const upSideItemTrigger = trigger('upSideItem', [
 ]);
 
 export const bottomSideItemTrigger = trigger('bottomSideItem', [
-  transition(':enter',[
+  transition(':enter', [
     style({
       opacity: 0,
       transform: 'translateY(100%)'

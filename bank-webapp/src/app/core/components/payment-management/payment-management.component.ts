@@ -3,14 +3,14 @@ import { FormControl } from '@angular/forms';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource, Sort } from '@angular/material';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { topItemTrigger } from 'src/app/shared/animations/payment/payment.animation';
 import * as fromRoot from '../../../app.reducer';
 import { Bank } from '../../../shared/models/bank-data.model';
 import * as transactionActions from '../../../store/actions/transaction.actions';
 import { LoginService } from './../../services/login.service';
-import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
-import { topItemTrigger } from 'src/app/shared/animations/payment/payment.animation';
 @Component({
   selector: 'app-payment-management',
   templateUrl: './payment-management.component.html',

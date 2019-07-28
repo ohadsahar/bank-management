@@ -1,13 +1,23 @@
 <div class="statistic-section">
-    <h1>ניתוח מצב פיננסי</h1>
-    <div>
-      <div class="row">
-        <div class="col-sm-12 col-md-4 col-lg-4">
-          <canvas id="allCardChart">{{allCardChart}}</canvas>
-        </div>
-        <div class="col-sm-12 col-md-4 col-lg-4">
-          <canvas id="eachMonthExpenses">{{eachMonthExpenses}}</canvas>
-        </div>
+  <h1>ניתוח מצב פיננסי</h1>
+  <div>
+    <div class="row">
+      <div class="col-sm-12 col-md-4 col-lg-4">
+          <h1>כרטיסים</h1>
+          <mat-divider></mat-divider>
+        <canvas id="allCardChart">{{allCardChart}}</canvas>
+      </div>
+      <div class="col-sm-12 col-md-4 col-lg-4">
+          <h1>חודשים</h1>
+          <mat-divider></mat-divider>
+        <canvas id="eachMonthExpenses">{{eachMonthExpenses}}</canvas>
+      </div>
+
+      <div class="col-sm-12 col-md-4 col-lg-4">
+          <h1>קטגוריות</h1>
+          <mat-divider></mat-divider>
+        <canvas id="divisionChart">{{divisionChart}}</canvas>
       </div>
     </div>
   </div>
+</div>

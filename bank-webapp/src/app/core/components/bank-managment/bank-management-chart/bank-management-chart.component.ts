@@ -8,6 +8,7 @@ import { bottomSideItemTrigger } from 'src/app/shared/animations/bank-management
 import * as fromRoot from '../../../../app.reducer';
 import * as chartActions from '../../../../store/actions/chart.actions';
 import { ChartByCardName } from './../../../../shared/models/chart-by-cardname.model';
+import { ChartDivision } from './../../../../shared/models/chart-division.model';
 import { LoginService } from './../../../services/login.service';
 
 @Component({
@@ -18,18 +19,21 @@ import { LoginService } from './../../../services/login.service';
 })
 
 export class BankManagementChartComponent implements OnInit {
-
   constructor(private loginService: LoginService, private store: Store<fromRoot.State>, private shareDataService: ShareDataService) { }
   public chartTransactions: ChartByCardName[];
+  public chartDivisions: ChartDivision[];
   public arrayCardsNames: string[] = [];
   public arrayCardsTotalPrice: number[] = [];
   public arrayExpansesEachMonth: number[] = [];
   public arrayEachMonthData: string[] = [];
+  public arrayEachMonthDivision: number[] = [];
+  public arrayDivisionNames: string[] = [];
   public chartByMonthTransactions: any[];
   public chartDataToSubscribe: Subscription;
   public allCardChart: Chart;
   public allExpensesByMonthChart: Chart;
   public eachMonthExpenses: Chart;
+  public divisionChart: Chart;
   private getCharts$: Subject<void> = new Subject<void>();
 
   ngOnInit() {
@@ -43,6 +47,7 @@ export class BankManagementChartComponent implements OnInit {
         if (data.loaded && this.chartDataToSubscribe) {
           this.chartTransactions = data.data.chartGroupByCardName;
           this.chartByMonthTransactions = data.data.chartGroupByMonth;
+          this.chartDivisions = data.data.chartGroupByDivision;
           this.assignDataToCharts();
         }
       });
@@ -61,11 +66,15 @@ export class BankManagementChartComponent implements OnInit {
     this.resetCharts();
     this.chartTransactions.forEach(transactionData => {
       this.arrayCardsNames.push(transactionData.cardName);
-      this.arrayCardsTotalPrice.push(transactionData.price);
+      this.arrayCardsTotalPrice.push((transactionData.price as any).toFixed(0));
     });
     this.chartByMonthTransactions.forEach(element => {
       this.arrayExpansesEachMonth.push(element.monthPurchase);
-      this.arrayEachMonthData.push(element.price);
+      this.arrayEachMonthData.push((element.price).toFixed(0));
+    });
+    this.chartDivisions.forEach(element => {
+      this.arrayDivisionNames.push(element.typeProduct);
+      this.arrayEachMonthDivision.push((element.price as any).toFixed(0));
     });
     this.chartDataToSubscribe.unsubscribe();
     this.loadCharts();
@@ -92,6 +101,13 @@ export class BankManagementChartComponent implements OnInit {
         }]
       },
       options: {
+        legend: {
+          labels: {
+            fontColor: 'white',
+            fontSize: 14,
+            fontFamily: "'Varela Round', 'sans-serif'",
+          }
+        },
         animation: false,
       }
     });
@@ -105,11 +121,18 @@ export class BankManagementChartComponent implements OnInit {
           data: this.arrayEachMonthData,
           backgroundColor: ['#fbd0c6', '#f6c1a6', '#c8c87a', '#79c0b0', '#7ec2a3', '#65b6bd',
             '#70a6ca', '#90b4cb']
-        }, ],
+        },],
 
         labels: this.arrayExpansesEachMonth,
       },
       options: {
+        legend: {
+          labels: {
+            fontColor: 'white',
+            fontSize: 14,
+            fontFamily: "'Varela Round', 'sans-serif'",
+          }
+        },
         scales: {
           xAxes: [{
             stacked: true,
@@ -128,9 +151,53 @@ export class BankManagementChartComponent implements OnInit {
       }
     });
   }
+  divisionChartDisplay(type: string): void {
+    this.allCardChart = new Chart('divisionChart', {
+      type,
+      data: {
+        labels: this.arrayDivisionNames,
+        datasets: [{
+          backgroundColor: [
+            '#ff6361',
+            '#bc5090',
+            'blue',
+            'orange',
+            'purple',
+            'red',
+            'yellow',
+            'lightblue',
+            '#5F4842',
+            '#CBBAED',
+            '#19381F',
+            '#E9DF00',
+            '#000300',
+            '#2E282A',
+            '#1C3144',
+            '#EFE9F4',
+
+          ],
+          borderColor: 'black',
+          data: this.arrayEachMonthDivision
+        }]
+      },
+      options: {
+        animation: false,
+        legend: {
+          labels: {
+            fontColor: 'white',
+            fontSize: 14,
+            fontFamily: "'Varela Round', 'sans-serif'",
+          }
+        },
+      },
+
+    });
+
+  }
   loadCharts(): void {
     this.cardsChart('pie');
     this.eachMonthChartDisplay('bar');
+    this.divisionChartDisplay('doughnut');
   }
   resetCharts(): void {
     this.arrayCardsTotalPrice = [];

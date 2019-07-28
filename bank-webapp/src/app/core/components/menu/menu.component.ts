@@ -14,6 +14,7 @@ export class MenuComponent implements OnInit {
   constructor(private router: Router, private loginService: LoginService, public dialog: MatDialog) {
    }
   ngOnInit() {
+    this.selectedTab = 0;
     this.router.navigate(['user-management/management']);
   }
   changedTab(event: MatTabChangeEvent) {

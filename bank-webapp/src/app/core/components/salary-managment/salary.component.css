@@ -1,5 +1,4 @@
-.salary-management {
-  background-color: #F5F1ED !important;
+html,body {
   height: 100%;
 }
 .mat-form-field-appearance-legacy .mat-form-field-wrapper {
@@ -16,12 +15,7 @@ table th {
   font-weight: bold !important;
   text-align: center;
 }
-.list-of-salary td {
-  width: 10%;
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: center;
-}
+
 
 .form-salary {
   margin: auto;
@@ -37,3 +31,18 @@ table th {
   margin: auto;
   display: block;
 }
+
+.list-of-salary th {
+  text-align: center;
+  color: white;
+}
+
+.list-of-salary td {
+  width: 10%;
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+  word-break: break-all;
+  color: white;
+}
+

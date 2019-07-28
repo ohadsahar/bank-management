@@ -17,9 +17,16 @@ async function groupCategories(transactions) {
       monthPurchase,
       price: lodash(transactions).sumBy('eachMonth'),
     })).value();
+
+  const groupByDivisions = lodash(transactions).groupBy('typeProduct')
+    .map((items, typeProduct) => ({
+      typeProduct,
+      price: lodash.sumBy(items, 'eachMonth'),
+    })).value();
   return {
     groupedByCardName: groupByCardName,
     groupedByMonth: groupByMonth,
+    groupedByCategoires: groupByDivisions,
   };
 }
 async function update(resultOfValidateTransactionData) {
@@ -30,7 +37,9 @@ async function update(resultOfValidateTransactionData) {
   }, resultOfValidateTransactionData);
 }
 async function deletePayment(transactionId) {
-  await TransactionModel.findOneAndDelete({ _id: transactionId });
+  await TransactionModel.findOneAndDelete({
+    _id: transactionId
+  });
 }
 async function archivePayment(transaction) {
   const transactionSave = new TransactionArchivesModel({

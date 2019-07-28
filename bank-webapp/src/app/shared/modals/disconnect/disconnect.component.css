@@ -2,13 +2,16 @@
 
   direction: rtl;
 }
+
 h2 {
   text-align: center;
 }
 
 ::ng-deep .mat-dialog-container {
 
-  background-color: #fcfdff !important;
+  width: 100%;
+  background-image: linear-gradient(45deg, #600df9, #7c1bf1, #9e2be8);
+  color: white;
 }
 
 .disconnect-dialog .mat-dialog-content {
@@ -17,6 +20,9 @@ h2 {
 
 }
 
-::ng-deep .disconnect-dialog .mat-form-field-appearance-legacy .mat-form-field-infix, h2, .mat-hint, button {
+::ng-deep .disconnect-dialog .mat-form-field-appearance-legacy .mat-form-field-infix,
+h2,
+.mat-hint,
+button {
   font-family: 'Varela Round', sans-serif !important;
 }

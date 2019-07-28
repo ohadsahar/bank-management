@@ -1,6 +1,5 @@
 
-.bank-component .statistic-section {
-  background-color: #F5F1ED;
-  overflow-x: hidden;
-
+.mat-divider {
+  width: 50%;
+  margin: auto;
 }

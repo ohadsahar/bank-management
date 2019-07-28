@@ -3,12 +3,6 @@ html {
   overflow-x: hidden;
 }
 
-.payment-component table,
-th,
-td {
-  background-color: #F5F1ED;
-  text-align: center !important;
-}
 
 td.mat-cell:first-of-type,
 td.mat-footer-cell:first-of-type,
@@ -19,14 +13,10 @@ th.mat-header-cell:first-of-type {
 
 .payment-component .purchase-list {
   text-align: right;
-  background-color: #F5F1ED;
   padding: 20px;
   height: 100vh;
 }
 
-.mat-paginator-container {
-  background-color: #F5F1ED;
-}
 
 .payment-component .purchase-list .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
   width: 30%;
@@ -43,19 +33,7 @@ table th {
   font-weight: bold !important;
 }
 
-.list-of-transactions th {
-  text-align: right !important;
 
-
-}
-
-.list-of-transactions td {
-  width: 10%;
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: center;
-
-}
 
 .input-new-transaction table {
   width: 100%;
@@ -67,6 +45,22 @@ table th {
   width: 12.5%;
 
 }
+
+.list-of-transactions th {
+  text-align: center !important;
+  color: white;
+}
+
+.list-of-transactions td {
+  width: 10%;
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+  word-break: break-all;
+  color: white;
+}
+
+
 
 .mat-option {
 
@@ -87,7 +81,6 @@ table th {
 .input-new-transaction {
   direction: rtl;
   font-size: 13px;
-  background-color:#F5F1ED;
   display: flex;
 }
 
@@ -105,7 +98,7 @@ table th {
 }
 
 .mat-form-field-appearance-legacy .mat-form-field-wrapper {
-  width: 70%;
+  width: 100%;
   text-align: right;
 }
 
@@ -158,32 +151,11 @@ h3 {
   font-size: 12px;
 }
 
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #888;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
 i {
   cursor: pointer;
 }
 
-
 .payment-component .statistic-section {
-  background-color: #F5F1ED;
   overflow-x: hidden;
 
 }

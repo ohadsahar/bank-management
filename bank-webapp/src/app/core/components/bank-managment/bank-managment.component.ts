@@ -12,6 +12,7 @@ import { Bank } from '../../../shared/models/bank-data.model';
 import { BankValues } from '../../../shared/models/bank.model';
 import * as transactionActions from '../../../store/actions/transaction.actions';
 import { MessageService } from '../../services/message.service';
+import * as lodash from 'lodash';
 import {
   bottomSideItemTrigger,
   upSideItemTrigger
@@ -36,6 +37,8 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   myControl = new FormControl();
   private counter: number;
   public numberOfPayments: number;
+  public productSearch: string;
+  public totalCash: number;
   public editEnable: boolean;
   public updateAble: boolean;
   public isLoading: boolean;
@@ -194,7 +197,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.dataSource.sort = this.sort;
   }
   applyFilter(filterValue: string): void {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+      this.dataSource.filter = filterValue.trim().toLowerCase();
   }
   sortData(sort: Sort) {
     this.sortedData = this.allTransactions;

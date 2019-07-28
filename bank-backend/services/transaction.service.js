@@ -36,6 +36,7 @@ async function getCharts(username) {
   return {
     chartGroupByCardName: resultLodashTransactions.groupedByCardName,
     chartGroupByMonth: resultLodashTransactions.groupedByMonth,
+    chartGroupByDivision: resultLodashTransactions.groupedByCategoires,
   };
 }
 async function get(username) {

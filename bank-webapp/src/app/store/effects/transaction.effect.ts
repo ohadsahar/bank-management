@@ -48,9 +48,9 @@ export class TransactionEffect {
   @Effect()
   public deleteTransaction$ = this.actions$.pipe(ofType(transactionActions.DELETE_TRANSACTION))
     .pipe(exhaustMap((action: transactionActions.DeleteTransaction) => {
-      console.log(action.payload);
+      const idToDelete = action.payload;
       return this.bankService.deleteTransaction(action.payload).pipe(
-        map(transaction => new transactionActions.DeleteTransactionSuccess(transaction)),
+        map(data => new transactionActions.DeleteTransactionSuccess(idToDelete)),
         catchError(error => of(new transactionActions.GetAllTransactionsFailed(error))));
     }));
   @Effect()

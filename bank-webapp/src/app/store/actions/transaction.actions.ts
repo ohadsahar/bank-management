@@ -57,11 +57,11 @@ export class RegisterTransactionFailed implements Action {
 }
 export class DeleteTransaction implements Action {
   readonly type = DELETE_TRANSACTION;
-  constructor(public payload: any) { }
+  constructor(public payload: any) {}
 }
 export class DeleteTransactionSuccess implements Action {
   readonly type = DELETE_TRANSACTION_SUCCESS;
-  constructor(public payload: any) { }
+  constructor(public payload: any) {}
 }
 export class DeleteTransactionFailed implements Action {
   readonly type = DELETE_TRANSACTION_FAILED;

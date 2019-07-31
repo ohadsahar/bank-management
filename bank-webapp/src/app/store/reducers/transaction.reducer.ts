@@ -1,7 +1,5 @@
 
 import * as transactionActions from '../actions/transaction.actions';
-import { Bank } from '../../shared/models/bank-data.model';
-
 
 export interface State {
   data: any;

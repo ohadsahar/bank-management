@@ -1,8 +1,9 @@
 const TransactionModel = require('../models/transaction');
 const transactionUtil = require('../utils/transcation');
 const validatorUtil = require('../utils/validator');
-
+const moment = require('moment');
 async function register(transactionData) {
+  transactionData.purchaseDate = moment(transactionData.purchaseDate).format('L');
   const transactionToCreate = new TransactionModel({
     cardName: transactionData.cardName,
     username: transactionData.username,

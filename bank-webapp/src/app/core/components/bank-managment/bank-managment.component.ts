@@ -13,7 +13,7 @@ import { Bank } from '../../../shared/models/bank-data.model';
 import { BankValues } from '../../../shared/models/bank.model';
 import * as transactionActions from '../../../store/actions/transaction.actions';
 import { MessageService } from '../../services/message.service';
-import * as lodash from 'lodash';
+import * as moment from 'moment';
 import {
   bottomSideItemTrigger,
   upSideItemTrigger
@@ -99,7 +99,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       this.afterUpdate();
     });
     this.webSocketService.listen('transaction-removed').subscribe(response => {
-      const deleteTransaction = this.allTransactions.filter(transaction => transaction._id !== this.deletedId);
+      const deleteTransaction = this.allTransactions.filter(transaction => transaction._id !== response.message);
       this.allTransactions = deleteTransaction;
       this.afterDeleteTransaction();
     });
@@ -131,7 +131,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.store.dispatch(new transactionActions.DeleteTransaction(transactionId));
     const dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((data) => {
-        if (data.loaded && data.data.success) {
+        if (data.loaded) {
           this.deletedId = transactionId;
           this.webSocketService.emit('delete-transaction', data.data);
           dataToSubscribe.unsubscribe();
@@ -139,6 +139,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       });
   }
   updateTransaction(): void {
+    this.bankEditTransaction.purchaseDate = moment(this.bankEditTransaction.purchaseDate).format('L');
     this.store.dispatch(new transactionActions.UpdateTransaction(this.bankEditTransaction));
     this.dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((data) => {

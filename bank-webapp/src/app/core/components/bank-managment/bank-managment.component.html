@@ -131,7 +131,7 @@
             <div *ngIf="!editoptionsable[i]">{{element?.purchaseDate}}</div>
             <div *ngIf="editEnable && editoptionsable[i]">
               <mat-form-field class="new-transaction">
-                <input matInput [matDatepicker]="picker"
+                <input (ngModelChange)="calculateEachMonthEdit()" matInput [matDatepicker]="picker"
                   [(ngModel)]="bankEditTransaction.purchaseDate" value="bankEditTransaction.purchaseDate" required>
                 <mat-datepicker-toggle matSuffix [for]="picker" style="color: white"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>

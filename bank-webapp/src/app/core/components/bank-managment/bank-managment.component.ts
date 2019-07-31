@@ -51,6 +51,9 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<void> = new Subject<void>();
   public editoptionsable: any = {};
   public deletedId: string;
+  purchaseD: string;
+  today: string;
+  monthDifference: number;
   public cancelBankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '');
   public bankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '');
   constructor(private messageService: MessageService, private store: Store<fromRoot.State>,
@@ -234,14 +237,27 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
   calculateEachMonthEdit(): void {
-    if (this.bankEditTransaction.numberofpayments) {
-      this.bankEditTransaction.eachMonth = this.bankEditTransaction.price / this.bankEditTransaction.numberofpayments;
-      this.bankEditTransaction.eachMonth = Number(this.bankEditTransaction.eachMonth.toFixed(2));
-      this.bankEditTransaction.leftPayments = this.bankEditTransaction.numberofpayments;
-    } else {
-      this.bankEditTransaction.eachMonth = null;
-      this.bankEditTransaction.leftPayments = null;
-    }
+    this.purchaseD = moment(this.bankEditTransaction.purchaseDate).format('LL');
+    this.today = moment(new Date()).format('LL');
+
+
+    this.monthDifference = moment(this.bankEditTransaction.purchaseDate).diff(moment(new Date()), 'days');
+    console.log(this.monthDifference);
+    const duration = moment.duration(this.monthDifference);
+
+    console.log(duration.years()); // 8 years
+    console.log(duration.months()); // 5 months
+    console.log(duration.days()); // 2 days
+
+
+    // if (this.bankEditTransaction.numberofpayments) {
+    //   this.bankEditTransaction.eachMonth = this.bankEditTransaction.price / this.bankEditTransaction.numberofpayments;
+    //   this.bankEditTransaction.eachMonth = Number(this.bankEditTransaction.eachMonth.toFixed(2));
+    //   this.bankEditTransaction.leftPayments = this.bankEditTransaction.numberofpayments;
+    // } else {
+    //   this.bankEditTransaction.eachMonth = null;
+    //   this.bankEditTransaction.leftPayments = null;
+    // }
   }
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();

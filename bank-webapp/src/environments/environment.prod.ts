@@ -3,7 +3,8 @@ export const environment = {
   backendUrl: 'http://bankcontrol.us-east-2.elasticbeanstalk.com/api/bank/',
   backendUrlArchive: 'http://bankcontrol.us-east-2.elasticbeanstalk.com/api/payments',
   backendUrlSalary: 'http://bankcontrol.us-east-2.elasticbeanstalk.com/api/salary',
-  backendUrlLogin: 'http://bankcontrol.us-east-2.elasticbeanstalk.com/api/login'
+  backendUrlLogin: 'http://bankcontrol.us-east-2.elasticbeanstalk.com/api/login',
+  backendUrlSocketIo: 'http://bank-management-socket.us-east-2.elasticbeanstalk.com'
 };
 
 

@@ -3,6 +3,7 @@ const cors = require('cors');
 
 const app = express();
 const PORT = process.env.PORT || '3000';
+// const ioServer = require('../bank-backend-socket.io/app');
 const config = require('./utils/config');
 const transactionRoute = require('./routes/transactions');
 const paymentRoute = require('./routes/payment');
@@ -22,4 +23,5 @@ app.use('/api/salary', salaryRoute);
 app.use('/api/bank', transactionRoute);
 app.use('/api/payments', paymentRoute);
 app.use('/api/login', loginRoute);
+
 module.exports = app;

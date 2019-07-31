@@ -4,15 +4,15 @@ import { Bank } from '../../shared/models/bank-data.model';
 
 
 export interface State {
+  data: any;
   loading: boolean;
   loaded: boolean;
-  data: Bank | any;
 }
 
 const initialState: State = {
-  loading: false,
+  data: [],
+  loading: true,
   loaded: false,
-  data: null,
 };
 
 export function transactionReducer(state = initialState, action: transactionActions.Actions) {

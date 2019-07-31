@@ -1,3 +1,4 @@
+import { WebSocketService } from './../../services/web-socket.service';
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource, Sort } from '@angular/material';
@@ -49,11 +50,13 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   public updateTransaction$: Subject<void> = new Subject<void>();
   private ngUnsubscribe: Subject<void> = new Subject<void>();
   public editoptionsable: any = {};
+  public deletedId: string;
   public cancelBankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '');
   public bankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '');
   constructor(private messageService: MessageService, private store: Store<fromRoot.State>,
     public router: Router, public dialog: MatDialog, private loginService: LoginService,
-    private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService) {
+    private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService,
+    private webSocketService: WebSocketService) {
     this.isLoading = true;
     this.counter = 0;
     this.numberOfPayments = 0;
@@ -83,6 +86,23 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       map(value => this._filter(value))
     );
     this.getAllTransactions();
+    this.startSocketing();
+  }
+  startSocketing() {
+    this.webSocketService.listen('transaction-added').subscribe(response => {
+      this.allTransactions.push(response.message);
+      this.afterRegisterNewCard();
+    });
+    this.webSocketService.listen('transaction-updated').subscribe(response => {
+      const index = this.allTransactions.findIndex(transaction => transaction._id === response.message.bankData._id);
+      this.allTransactions[index] = response.message.bankData;
+      this.afterUpdate();
+    });
+    this.webSocketService.listen('transaction-removed').subscribe(response => {
+      const deleteTransaction = this.allTransactions.filter(transaction => transaction._id !== this.deletedId);
+      this.allTransactions = deleteTransaction;
+      this.afterDeleteTransaction();
+    });
   }
   getAllTransactions(): void {
     const loggedInUsername = this.loginService.getUsernameAndId().username;
@@ -102,23 +122,19 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.registerNewTransactionNgrx))
       .subscribe((data) => {
         if (data.loaded) {
-          this.allTransactions.push(data.data);
-          this.afterRegisterNewCard();
+          this.webSocketService.emit('create-transaction', data.data);
           this.dataToSubscribe.unsubscribe();
         }
       });
   }
   deleteTransaction(transactionId: string): void {
     this.store.dispatch(new transactionActions.DeleteTransaction(transactionId));
-    this.dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.ngUnsubscribe))
+    const dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((data) => {
-        if (data.data) {
-          const dataId = data.data.toString();
-          const deleteTransaction = this.allTransactions.filter(transaction => transaction._id !== dataId);
-          this.allTransactions = deleteTransaction;
-          this.afterDeleteTransaction();
-          this.messageService.successMessage('העסקה נמחקה בהצלחה', 'סגור');
-          this.dataToSubscribe.unsubscribe();
+        if (data.loaded && data.data.success) {
+          this.deletedId = transactionId;
+          this.webSocketService.emit('delete-transaction', data.data);
+          dataToSubscribe.unsubscribe();
         }
       });
   }
@@ -126,10 +142,8 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.store.dispatch(new transactionActions.UpdateTransaction(this.bankEditTransaction));
     this.dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((data) => {
-        if (data.data) {
-          const index = this.allTransactions.findIndex(transaction => transaction._id === data.data._id);
-          this.allTransactions[index] = data.data;
-          this.afterUpdate();
+        if (data.loaded) {
+          this.webSocketService.emit('update-transaction', data.data);
           this.dataToSubscribe.unsubscribe();
         }
       });
@@ -142,6 +156,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   afterUpdate(): void {
     this.updateAble = false;
     this.messageService.successMessage('העסקה עודכנה בהצלחה', 'סגור');
+    this.updateTable();
   }
   registerNewTransactionDialog(): void {
     const dialogRef = this.dialog.open(RegisterNewTransactionModalComponent);
@@ -152,18 +167,16 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     });
   }
   afterRegisterNewCard(): void {
-
     this.shareDataService.changeTransactions(this.allTransactions as any);
     this.messageService.successMessage('הקנייה התווספה בהצלחה', 'סגור');
     this.updateTable();
     this.shareDataService.changeDestroy(true);
-
   }
   afterDeleteTransaction(): void {
     this.shareDataService.changeTransactions(this.allTransactions as any);
     this.messageService.successMessage('העסקה נמחקה בהצלחה', 'סגור');
-    this.updateTable();
     this.shareDataService.changeDestroy(true);
+    this.updateTable();
   }
   editTransaction(transactionData: Bank): void {
     this.updateAble = true;
@@ -197,7 +210,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.dataSource.sort = this.sort;
   }
   applyFilter(filterValue: string): void {
-      this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
   sortData(sort: Sort) {
     this.sortedData = this.allTransactions;

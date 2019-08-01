@@ -1,5 +1,10 @@
-
 ::ng-deep .mat-tab-label {
   color: white;
   font-weight: bold;
+}
+ ::ng-deep .mat-tab-labels {
+  direction: rtl;
+}
+::ng-deep .mat-tab-label .mat-tab-label-content {
+  white-space: pre !important;
 }

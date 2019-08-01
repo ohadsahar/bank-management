@@ -13,7 +13,6 @@ import { BankManagementChartComponent } from '../bank-management-chart/bank-mana
     CommonModule,
     AngularMaterialModule,
     BankManagementRouting,
-    AngularMaterialModule,
     FormsModule,
     Ng4LoadingSpinnerModule.forRoot()
   ]

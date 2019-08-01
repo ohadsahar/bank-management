@@ -1,4 +1,3 @@
-import { HomePageComponent } from './core/components/home/home.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { enableProdMode, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -36,7 +35,6 @@ if (environment.production) {
     MenuComponent,
     MainMenuComponent,
     LoginModalComponent,
-    HomePageComponent
   ],
   imports: [
     BrowserModule,

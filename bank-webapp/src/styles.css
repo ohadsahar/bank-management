@@ -9,12 +9,15 @@ body {
 body {
   margin: 0;
 }
-th.mat-header-cell:first-of-type {
-  text-align: center !important;
-}
 
 html * {
-  direction: rtl;
+  font-family: 'Varela Round', sans-serif !important;
+}
+.fas, .fa * {
+  font-family: "Font Awesome 5 Free" !important;
+}
+th.mat-header-cell:first-of-type {
+  text-align: center !important;
 }
 
 ::-webkit-scrollbar {

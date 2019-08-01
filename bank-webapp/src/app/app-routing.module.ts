@@ -1,4 +1,3 @@
-import { HomePageComponent } from './core/components/home/home.component';
 import { AuthGuard } from './shared/modals/login/auth.guard';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -6,7 +5,10 @@ import { MainMenuComponent } from './core/components/main-menu/main-menu.compone
 
 const routes: Routes = [
   { path: '', component: MainMenuComponent },
-  { path: 'home', component: HomePageComponent },
+  {
+    path: 'user-home',
+    loadChildren: './core/components/home/home-module/home.module#HomeModule'
+  },
   {
     path: 'user-payment',
     loadChildren: './core/components/payment-management/payment-management-modules/payment-management.module#PaymentManagementModule'

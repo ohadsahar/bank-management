@@ -15,11 +15,11 @@ export class MenuComponent implements OnInit {
    }
   ngOnInit() {
     this.selectedTab = 0;
-    this.router.navigate(['home']);
+    this.router.navigate(['user-home/home']);
   }
   changedTab(event: MatTabChangeEvent) {
     if (event.index === 0) {
-      this.router.navigate(['user-management/management']);
+      this.router.navigate(['user-home/home']);
     }
     if (event.index === 1) {
       this.router.navigate(['user-management/management']);

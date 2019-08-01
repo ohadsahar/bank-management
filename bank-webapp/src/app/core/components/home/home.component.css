@@ -1,0 +1,52 @@
+body {
+  font-family: 'Varela Round', sans-serif;
+}
+
+.home-component {
+  direction: rtl;
+}
+
+.home-component .short-info {
+  background-color: #392759;
+  height: 40vh;
+  padding: 50px;
+}
+
+.home-component .quick-information {
+  background-color: #1F0318;
+  height: 60vh;
+}
+
+.home-component .mat-card-title {
+  font-weight: bold;
+  text-align: center;
+}
+
+h1 {
+  font-size: 54px;
+}
+
+.info-card {
+  max-width: 400px;
+  margin: auto;
+  display: block;
+  bottom: 42%;
+  margin-bottom: 2%;
+  font-family: 'Varela Round', sans-serif;
+}
+
+.info-card p {
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.short-info {
+  color: white;
+  text-align: center;
+}
+
+ul {
+  list-style-type: none;
+}
+

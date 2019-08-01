@@ -1,3 +1,4 @@
+
 import { HomePageService } from './../../services/home-page.service';
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '@app/services/login.service';
@@ -6,7 +7,7 @@ import { LoginService } from '@app/services/login.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
 })
 
 export class HomePageComponent implements OnInit {
@@ -24,7 +25,6 @@ export class HomePageComponent implements OnInit {
   onLoadComponent() {
     this.username = this.loginService.getUsernameAndId().username;
     this.homePageService.getQuickInformation(this.username).subscribe(response => {
-      console.log(response);
       this.categoryLargestExpenditure = response.message.resultOfCurrentCategoryExpense.largestExpense.price;
       this.categoryLargestExpenditureCategory = response.message.
         resultOfCurrentCategoryExpense.largestExpense.typeProduct;

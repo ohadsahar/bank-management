@@ -7,7 +7,6 @@ async function getExpensesCurrentMonth(req, res) {
     try {
         const username = req.params.username;
         const resultOfExpenseCurrentMonth = await transactionService.getCurrentCategoryExpense(username);
-        console.log(resultOfExpenseCurrentMonth);
         res.status(200).json({
             message: resultOfExpenseCurrentMonth,
             success: true

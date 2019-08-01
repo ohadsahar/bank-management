@@ -1,23 +1,31 @@
-html,body {
+html,
+body {
   height: 100%;
 }
+
 .mat-form-field-appearance-legacy .mat-form-field-wrapper {
   width: 30% !important;
   text-align: right;
   margin: auto;
 }
+
 .list-of-salary table {
   width: 100%;
   table-layout: fixed;
   direction: rtl;
 }
+
 table th {
   font-weight: bold !important;
   text-align: center;
 }
 
-
 .form-salary {
+  margin: auto;
+  display: block;
+}
+
+#submit-button {
   margin: auto;
   display: block;
 }
@@ -32,6 +40,10 @@ table th {
 .salary-input {
   width: 100%;
   text-align: right;
+}
+
+th.mat-header-cell {
+  text-align: center !important;
 }
 
 .mat-raised-button {
@@ -52,4 +64,3 @@ table th {
   word-break: break-all;
   color: white;
 }
-

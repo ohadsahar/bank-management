@@ -1,0 +1,9 @@
+#chartInComeData {
+  padding: 100px;
+}
+
+@media only screen and (max-width: 800px) {
+  #chartInComeData {
+    padding: 0px;
+  }
+}

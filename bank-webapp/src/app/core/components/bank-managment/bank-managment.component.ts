@@ -55,9 +55,9 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   public cancelBankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '');
   public bankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '');
   constructor(private messageService: MessageService, private store: Store<fromRoot.State>,
-              public router: Router, public dialog: MatDialog, private loginService: LoginService,
-              private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService,
-              private webSocketService: WebSocketService) {
+    public router: Router, public dialog: MatDialog, private loginService: LoginService,
+    private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService,
+    private webSocketService: WebSocketService) {
     this.isLoading = true;
     this.counter = 0;
     this.numberOfPayments = 0;
@@ -126,6 +126,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.registerNewTransactionNgrx))
       .subscribe((data) => {
         if (data.loaded) {
+          this.currentCash += data.data.eachMonth;
           this.webSocketService.emit('create-transaction', data.data);
           this.dataToSubscribe.unsubscribe();
         }
@@ -175,12 +176,10 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.shareDataService.changeTransactions(this.allTransactions as any);
     this.messageService.successMessage('הקנייה התווספה בהצלחה', 'סגור');
     this.updateTable();
-    this.shareDataService.changeDestroy(true);
   }
   afterDeleteTransaction(): void {
     this.shareDataService.changeTransactions(this.allTransactions as any);
     this.messageService.successMessage('העסקה נמחקה בהצלחה', 'סגור');
-    this.shareDataService.changeDestroy(true);
     this.updateTable();
   }
   editTransaction(transactionData: Bank): void {

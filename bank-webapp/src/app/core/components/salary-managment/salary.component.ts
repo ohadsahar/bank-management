@@ -41,8 +41,8 @@ export class SalaryComponent implements OnInit {
   public monthArray: string[] = [];
   public salaryArray: number[] = [];
   constructor(private salaryService: SalaryService, private loginService: LoginService,
-              private messageService: MessageService, private store: Store<fromRoot.State>,
-              private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService) {
+    private messageService: MessageService, private store: Store<fromRoot.State>,
+    private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService) {
     this.editEnable = false;
     this.counter = 0;
     this.updateAble = false;
@@ -59,7 +59,6 @@ export class SalaryComponent implements OnInit {
   onLoadComponent() {
     const username = this.loginService.getUsernameAndId().username;
     this.salaryService.get(username).subscribe(response => {
-      this.shareDataService.changeSalary(response.message.salaryByMonth);
       this.allSalary = response.message.salary as any;
       this.updateTable();
     });
@@ -78,14 +77,12 @@ export class SalaryComponent implements OnInit {
         if (data.loaded) {
           this.allSalary.push(data.data);
           this.getSalaryByMonths();
-          this.shareDataService.changeSalaryDestroyStatus(true);
           this.updateTable();
           this.messageService.successMessage('המשכורת התווספה בהצלחה', 'סגור');
           this.dataToSubscribe.unsubscribe();
         }
       });
   }
-
   getSalaryByMonths() {
     const username = this.loginService.getUsernameAndId().username;
     this.salaryService.get(username).subscribe(response => {
@@ -100,7 +97,6 @@ export class SalaryComponent implements OnInit {
           const deleteSalary = this.allSalary.filter(salary => salary._id !== salaryId);
           this.allSalary = deleteSalary;
           this.getSalaryByMonths();
-          this.shareDataService.changeSalaryDestroyStatus(true);
           this.updateTable();
           this.messageService.successMessage('המשכורת נמחקה בהצלחה', 'סגור');
           this.dataToSubscribe.unsubscribe();
@@ -128,7 +124,6 @@ export class SalaryComponent implements OnInit {
           const index = this.allSalary.findIndex(salary => salary._id === this.id);
           this.allSalary[index] = data.data;
           this.getSalaryByMonths();
-          this.shareDataService.changeSalaryDestroyStatus(true);
           this.updateTable();
           this.updateAble = false;
           this.messageService.successMessage('המשכורת עודכנה בהצלחה', 'סגור');

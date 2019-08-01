@@ -1,7 +1,9 @@
-import { ShareDataService } from './../../../services/share-data.service';
+import { SalaryService } from 'src/app/core/services/salary.service';
+import { ShareDataService } from '../../../services/share-data.service';
 import { Chart } from 'chart.js';
 import { Component, OnInit } from '@angular/core';
 import { topItemTrigger } from 'src/app/shared/animations/payment/payment.animation';
+import { LoginService } from '@app/services/login.service';
 
 @Component({
   selector: 'app-salary-chart',
@@ -16,12 +18,16 @@ export class SalaryManagementChartComponent implements OnInit {
   public monthArray: string[] = [];
   public salaryArray: number[] = [];
 
-  constructor(private shareDataService: ShareDataService) { }
+  constructor(private shareDataService: ShareDataService, private loginService: LoginService, private salaryService: SalaryService) { }
 
   ngOnInit() {
     this.onLoadComponent();
   }
   onLoadComponent() {
+    const username = this.loginService.getUsernameAndId().username;
+    this.salaryService.get(username).subscribe(response => {
+      this.shareDataService.changeSalary(response.message.salaryByMonth);
+    });
     this.waitingForChartData();
   }
   waitingForChartData() {

@@ -1,10 +1,10 @@
+import { MenuComponent } from './core/components/menu/menu.component';
 import { AuthGuard } from './shared/modals/login/auth.guard';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { MainMenuComponent } from './core/components/main-menu/main-menu.component';
 
 const routes: Routes = [
-  { path: '', component: MainMenuComponent },
+  // { path: '', component: MenuComponent },
   {
     path: 'user-home',
     loadChildren: './core/components/home/home-module/home.module#HomeModule'

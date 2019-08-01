@@ -3,11 +3,11 @@ import { NgForm } from '@angular/forms';
 import { Component, Output, EventEmitter } from '@angular/core';
 import * as validator from '../../../shared/validate/validate-register.function';
 import { ResponseRegisterModel } from '../../models/register-response.model';
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
+
 })
 
 export class LoginModalComponent {

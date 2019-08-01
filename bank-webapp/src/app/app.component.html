@@ -1,3 +1,4 @@
-<app-menu *ngIf="isLogged" ></app-menu>
+<app-menu *ngIf="isLogged"></app-menu>
+<app-main-menu *ngIf="!isLogged"></app-main-menu>
 <router-outlet></router-outlet>
 <ng4-loading-spinner> </ng4-loading-spinner>

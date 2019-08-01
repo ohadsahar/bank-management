@@ -11,7 +11,8 @@
             [type]="hide ? 'password' : 'text'" required>
           <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
             [attr.aria-pressed]="hide">
-            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            <i class="fas fa-eye" *ngIf="!hide"></i>
+            <i class="fas fa-eye-slash" *ngIf="hide"></i>
           </button>
           <mat-error *ngIf="password.invalid">הסיסמא חייבת להכיל בדיוק 8 תווים</mat-error>
         </mat-form-field>

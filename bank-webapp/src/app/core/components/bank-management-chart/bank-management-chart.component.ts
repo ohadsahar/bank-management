@@ -5,11 +5,11 @@ import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ShareDataService } from 'src/app/core/services/share-data.service';
 import { bottomSideItemTrigger } from 'src/app/shared/animations/bank-management/bank-management-animations.animations';
-import * as fromRoot from '../../../../app.reducer';
-import * as chartActions from '../../../../store/actions/chart.actions';
-import { ChartByCardName } from './../../../../shared/models/chart-by-cardname.model';
-import { ChartDivision } from './../../../../shared/models/chart-division.model';
-import { LoginService } from './../../../services/login.service';
+import * as fromRoot from '../../../app.reducer';
+import * as chartActions from '../../../store/actions/chart.actions';
+import { ChartByCardName } from './../../../shared/models/chart-by-cardname.model';
+import { ChartDivision } from './../../../shared/models/chart-division.model';
+import { LoginService } from './../../services/login.service';
 import * as moment from 'moment';
 @Component({
   selector: 'app-bank-management-chart',

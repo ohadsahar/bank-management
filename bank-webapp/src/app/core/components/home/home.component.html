@@ -2,7 +2,12 @@
   <section class="short-info">
     <ul>
       <li>
-        <p> ההוצאה הכי גדולה החודש:  {{categoryLargestExpenditure}} <i class="fas fa-shekel-sign"></i> , בקטגורית: {{ categoryLargestExpenditureCategory}} </p>
+        <p> ההוצאה הכי גדולה החודש: {{categoryLargestExpenditure}} <i class="fas fa-shekel-sign"></i> , בקטגורית:
+          {{ categoryLargestExpenditureCategory}} </p>
+      </li>
+      <li>
+        <p> ההוצאה הכי קטנה החודש: {{minimumExpenseCurrentMonthCash}} <i class="fas fa-shekel-sign"></i> , בקטגורית:
+          {{ minimumExpenseCurrentMonthCashType}} </p>
       </li>
     </ul>
   </section>
@@ -14,7 +19,7 @@
             <mat-card-title>הוצאות</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <p><i class="fas fa-shekel-sign"></i> {{categoryLargestExpenditure}} {{ categoryLargestExpenditureCategory}}
+            <p><i class="fas fa-shekel-sign"></i> {{totalExpenseCurrentMonth}}
             </p>
           </mat-card-content>
         </mat-card>
@@ -35,7 +40,7 @@
             <mat-card-title>אתה יכול לחסוך החודש</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <p><i class="fas fa-shekel-sign"></i> {{totalSalaryCurrentMonth}} </p>
+            <p><i class="fas fa-shekel-sign"></i> {{saveCurrentMonth}} </p>
           </mat-card-content>
         </mat-card>
       </div>

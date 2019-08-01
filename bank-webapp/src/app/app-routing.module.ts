@@ -10,6 +10,10 @@ const routes: Routes = [
     loadChildren: './core/components/home/home-module/home.module#HomeModule'
   },
   {
+    path: 'user-chart',
+    loadChildren: './core/components/bank-management-chart/bank-management-chart-modules/bank-management-chart.module#BankManagementChartModule'
+  },
+  {
     path: 'user-payment',
     loadChildren: './core/components/payment-management/payment-management-modules/payment-management.module#PaymentManagementModule'
   },

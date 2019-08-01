@@ -12,7 +12,7 @@ import { LoginService } from '../../services/login.service';
 export class MenuComponent implements OnInit {
   public selectedTab: number;
   constructor(private router: Router, private loginService: LoginService, public dialog: MatDialog) {
-   }
+  }
   ngOnInit() {
     this.selectedTab = 0;
     this.router.navigate(['user-home/home']);
@@ -31,7 +31,10 @@ export class MenuComponent implements OnInit {
       this.router.navigate(['user-salary/salary']);
     }
     if (event.index === 4) {
-      this.selectedTab = 4;
+      this.router.navigate(['user-chart/chart']);
+    }
+    if (event.index === 5) {
+      this.selectedTab = 5;
       const dialog = this.dialog.open(DisconnectDialogComponent);
       dialog.afterClosed().subscribe(result => {
         if (result === true) {

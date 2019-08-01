@@ -15,6 +15,8 @@ async function getCurrentCategoryLargestExpense(username) {
       price: lodash.sumBy(items, 'eachMonth'),
     })).value();
   const maxCategory = lodash.maxBy(groupByDivisions, 'price');
+  const minCategory = lodash.minBy(groupByDivisions, 'price');
+  const totalExpense = lodash.sumBy(groupByDivisions, 'price');
 
   const allSalaryOfCurrentMonth = await SalaryModel.find({ username , monthOfSalary: currentMonth});
   const groupBySalary = lodash(allSalaryOfCurrentMonth).groupBy('monthOfSalary')
@@ -23,7 +25,7 @@ async function getCurrentCategoryLargestExpense(username) {
     salary: lodash.sumBy(items, 'salary')
   })).value();
   const maxSalary = lodash.maxBy(groupBySalary, 'salary');
-  return {largestExpense: maxCategory, salaryTotal: maxSalary}
+  return {largestExpense: maxCategory, salaryTotal: maxSalary, minimumExpense: minCategory, totalExpenseCash: totalExpense}
 }
 async function groupCategories(transactions) {
   const groupByCardName = lodash(transactions).groupBy('cardName')

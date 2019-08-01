@@ -1,9 +1,9 @@
-import { WebSocketService } from './../../services/web-socket.service';
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource, Sort } from '@angular/material';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import * as moment from 'moment';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { map, startWith, takeUntil } from 'rxjs/operators';
@@ -13,13 +13,10 @@ import { Bank } from '../../../shared/models/bank-data.model';
 import { BankValues } from '../../../shared/models/bank.model';
 import * as transactionActions from '../../../store/actions/transaction.actions';
 import { MessageService } from '../../services/message.service';
-import * as moment from 'moment';
-import {
-  bottomSideItemTrigger,
-  upSideItemTrigger
-} from './../../../shared/animations/bank-management/bank-management-animations.animations';
+import { bottomSideItemTrigger, upSideItemTrigger } from './../../../shared/animations/bank-management/bank-management-animations.animations';
 import { LoginService } from './../../services/login.service';
 import { ShareDataService } from './../../services/share-data.service';
+import { WebSocketService } from './../../services/web-socket.service';
 
 @Component({
   selector: 'app-bank-managment',
@@ -58,9 +55,9 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   public cancelBankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '');
   public bankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '');
   constructor(private messageService: MessageService, private store: Store<fromRoot.State>,
-    public router: Router, public dialog: MatDialog, private loginService: LoginService,
-    private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService,
-    private webSocketService: WebSocketService) {
+              public router: Router, public dialog: MatDialog, private loginService: LoginService,
+              private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService,
+              private webSocketService: WebSocketService) {
     this.isLoading = true;
     this.counter = 0;
     this.numberOfPayments = 0;
@@ -91,7 +88,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     );
     this.shareDataService.currentCashToPass.subscribe(response => {
       this.currentCash = response;
-    })
+    });
     this.getAllTransactions();
     this.startSocketing();
   }

@@ -1,22 +1,20 @@
-import { FormsModule } from '@angular/forms';
-import { BankManagementRouting } from './bank-management-routing.module';
+import { BankManagementChartRouting } from './bank-management-chart-routing.module';
+import { BankManagementChartComponent } from './../bank-management-chart.component';
 import { AngularMaterialModule } from './../../../../angular-material.module';
-import { BankManagmentComponent } from './../bank-managment.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 
 @NgModule({
-  declarations: [BankManagmentComponent],
+  declarations: [BankManagementChartComponent],
   imports: [
     CommonModule,
     AngularMaterialModule,
-    BankManagementRouting,
-    FormsModule,
+    BankManagementChartRouting,
     Ng4LoadingSpinnerModule.forRoot()
   ]
 })
 
-export class BankManagementModule { }
+export class BankManagementChartModule { }
 

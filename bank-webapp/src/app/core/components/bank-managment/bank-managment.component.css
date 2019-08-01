@@ -17,6 +17,12 @@ th.mat-header-cell {
   padding: 20px;
 }
 
+.current-status {
+  color: white;
+  font-size: 40px;
+
+}
+
 .mat-select-value {
   color: white !important;
 }

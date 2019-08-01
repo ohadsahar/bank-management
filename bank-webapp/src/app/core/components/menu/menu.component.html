@@ -1,6 +1,11 @@
 <mat-tab-group mat-align-tabs="center" (selectedTabChange)="changedTab($event)" [selectedIndex]="selectedTab">
-    <mat-tab label="עסקאות עתידיות"></mat-tab>
-    <mat-tab label="עסקאות בארכיון"></mat-tab>
-    <mat-tab label="הכנסות"></mat-tab>
-    <mat-tab label="התנתק"></mat-tab>
-  </mat-tab-group>
+  <mat-tab>
+    <ng-template mat-tab-label>
+        <i class="fas fa-home"></i>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="עסקאות עתידיות"></mat-tab>
+  <mat-tab label="עסקאות בארכיון"></mat-tab>
+  <mat-tab label="הכנסות"></mat-tab>
+  <mat-tab label="התנתק"></mat-tab>
+</mat-tab-group>

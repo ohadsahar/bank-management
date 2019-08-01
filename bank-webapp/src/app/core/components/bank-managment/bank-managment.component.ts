@@ -51,6 +51,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<void> = new Subject<void>();
   public editoptionsable: any = {};
   public deletedId: string;
+  currentCash: number;
   purchaseD: string;
   today: string;
   monthDifference: number;
@@ -88,6 +89,9 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       startWith(''),
       map(value => this._filter(value))
     );
+    this.shareDataService.currentCashToPass.subscribe(response => {
+      this.currentCash = response;
+    })
     this.getAllTransactions();
     this.startSocketing();
   }
@@ -250,14 +254,14 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     console.log(duration.days()); // 2 days
 
 
-    // if (this.bankEditTransaction.numberofpayments) {
-    //   this.bankEditTransaction.eachMonth = this.bankEditTransaction.price / this.bankEditTransaction.numberofpayments;
-    //   this.bankEditTransaction.eachMonth = Number(this.bankEditTransaction.eachMonth.toFixed(2));
-    //   this.bankEditTransaction.leftPayments = this.bankEditTransaction.numberofpayments;
-    // } else {
-    //   this.bankEditTransaction.eachMonth = null;
-    //   this.bankEditTransaction.leftPayments = null;
-    // }
+    if (this.bankEditTransaction.numberofpayments) {
+      this.bankEditTransaction.eachMonth = this.bankEditTransaction.price / this.bankEditTransaction.numberofpayments;
+      this.bankEditTransaction.eachMonth = Number(this.bankEditTransaction.eachMonth.toFixed(2));
+      this.bankEditTransaction.leftPayments = this.bankEditTransaction.numberofpayments;
+    } else {
+      this.bankEditTransaction.eachMonth = null;
+      this.bankEditTransaction.leftPayments = null;
+    }
   }
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();

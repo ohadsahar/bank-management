@@ -9,6 +9,7 @@
             <input matInput (keyup)="applyFilter($event.target.value)" placeholder="חיפוש חופשי">
           </mat-form-field>
         </div>
+        <h1 class="current-status">עו"ש: {{currentCash}} <i class="fas fa-shekel-sign"></i>  </h1>
         <div class="list-of-transactions" *ngIf="!isLoading">
           <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort
             (matSortChange)="sortData($event)">

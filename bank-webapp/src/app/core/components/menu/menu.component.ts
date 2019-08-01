@@ -15,20 +15,23 @@ export class MenuComponent implements OnInit {
    }
   ngOnInit() {
     this.selectedTab = 0;
-    this.router.navigate(['user-management/management']);
+    this.router.navigate(['home']);
   }
   changedTab(event: MatTabChangeEvent) {
     if (event.index === 0) {
       this.router.navigate(['user-management/management']);
     }
     if (event.index === 1) {
-      this.router.navigate(['user-payment/payment']);
+      this.router.navigate(['user-management/management']);
     }
     if (event.index === 2) {
-      this.router.navigate(['user-salary/salary']);
+      this.router.navigate(['user-payment/payment']);
     }
     if (event.index === 3) {
-      this.selectedTab = 3;
+      this.router.navigate(['user-salary/salary']);
+    }
+    if (event.index === 4) {
+      this.selectedTab = 4;
       const dialog = this.dialog.open(DisconnectDialogComponent);
       dialog.afterClosed().subscribe(result => {
         if (result === true) {

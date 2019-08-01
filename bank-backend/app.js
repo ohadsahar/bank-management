@@ -9,6 +9,7 @@ const transactionRoute = require('./routes/transactions');
 const paymentRoute = require('./routes/payment');
 const salaryRoute = require('./routes/salary');
 const loginRoute = require('./routes/login');
+const homeRoute = require('./routes/home');
 const connection = require('./dev');
 
 connection.connectMongoDB();
@@ -19,6 +20,7 @@ app.listen(PORT, () => {
   console.log(`Server is on, via port: ${PORT}`);
 });
 
+app.use('/api/home', homeRoute)
 app.use('/api/salary', salaryRoute);
 app.use('/api/bank', transactionRoute);
 app.use('/api/payments', paymentRoute);

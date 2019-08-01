@@ -18,7 +18,7 @@
             "request": "launch",
             "name": "bank-management-debugger",
             "runtimeExecutable": "nodemon",
-            "program": "${workspaceFolder}/app.js",
+            "program": "${workspaceFolder}/bank-backend/app.js",
             "restart": true,
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen"

@@ -10,7 +10,7 @@ async function validateUpdateData(transactionData) {
   throw new Error('One of the transaction data is invalid, transactionData did not passed the validator test');
 }
 async function validateSalary(salaryData) {
-  const currentMonth = moment().month() + 1;
+  const currentMonth = moment().format('MMMM');
   if (salaryData) {
     const salaryObject = {
       username: salaryData.username,

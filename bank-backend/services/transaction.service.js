@@ -2,6 +2,7 @@ const TransactionModel = require('../models/transaction');
 const transactionUtil = require('../utils/transcation');
 const validatorUtil = require('../utils/validator');
 const moment = require('moment');
+
 async function register(transactionData) {
   transactionData.purchaseDate = moment(transactionData.purchaseDate).format('L');
   const transactionToCreate = new TransactionModel({
@@ -32,6 +33,7 @@ async function deleteX(transactionId) {
   await TransactionModel.findOneAndDelete({ _id: transactionId });
 }
 async function getCharts(username) {
+
   const fetchedTransactions = await TransactionModel.find({ username });
   const resultLodashTransactions = await transactionUtil.groupCategories(fetchedTransactions);
   return {
@@ -58,6 +60,10 @@ async function getTransactionById(id) {
   }
   throw new Error('There is a problem with fetching specific transaction!');
 }
+async function getCurrentCategoryExpense(username) {
+  const resultOfCurrentCategoryExpense = await transactionUtil.getCurrentCategoryLargestExpense(username);
+  return {resultOfCurrentCategoryExpense}
+}
 module.exports = {
   register,
   get,
@@ -65,4 +71,5 @@ module.exports = {
   getCharts,
   updatePurchaseDate,
   getTransactionById,
+  getCurrentCategoryExpense
 };

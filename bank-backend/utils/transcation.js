@@ -3,7 +3,28 @@ const lodash = require('lodash');
 const moment = require('moment');
 const TransactionModel = require('../models/transaction');
 const TransactionArchivesModel = require('../models/transaction-archives');
+const SalaryModel = require('../models/salary');
 
+async function getCurrentCategoryLargestExpense(username) {
+  const currentMonth = moment().format('MMMM');
+  const fetchedTransactions = await TransactionModel.find({ username, monthPurchase: currentMonth });
+  const groupByDivisions = lodash(fetchedTransactions).groupBy('typeProduct')
+    .map((items, typeProduct) => ({
+      typeProduct,
+      month: currentMonth,
+      price: lodash.sumBy(items, 'eachMonth'),
+    })).value();
+  const maxCategory = lodash.maxBy(groupByDivisions, 'price');
+
+  const allSalaryOfCurrentMonth = await SalaryModel.find({ username , monthOfSalary: currentMonth});
+  const groupBySalary = lodash(allSalaryOfCurrentMonth).groupBy('monthOfSalary')
+  .map((items, monthOfSalary) => ({
+    monthOfSalary,
+    salary: lodash.sumBy(items, 'salary')
+  })).value();
+  const maxSalary = lodash.maxBy(groupBySalary, 'salary');
+  return {largestExpense: maxCategory, salaryTotal: maxSalary}
+}
 async function groupCategories(transactions) {
   const groupByCardName = lodash(transactions).groupBy('cardName')
     .map((items, cardName) => ({
@@ -15,7 +36,7 @@ async function groupCategories(transactions) {
   const groupByMonth = lodash(transactions).groupBy('monthPurchase')
     .map((items, monthPurchase) => ({
       monthPurchase,
-      price: lodash(transactions).sumBy('eachMonth'),
+      eachMonth: lodash.sumBy(items, 'eachMonth'),
     })).value();
 
   const groupByDivisions = lodash(transactions).groupBy('typeProduct')
@@ -92,4 +113,5 @@ module.exports = {
   allBushinessNames,
   archivePayment,
   deletePayment,
+  getCurrentCategoryLargestExpense
 };

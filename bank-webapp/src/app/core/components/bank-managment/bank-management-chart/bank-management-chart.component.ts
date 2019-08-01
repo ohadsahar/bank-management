@@ -10,7 +10,7 @@ import * as chartActions from '../../../../store/actions/chart.actions';
 import { ChartByCardName } from './../../../../shared/models/chart-by-cardname.model';
 import { ChartDivision } from './../../../../shared/models/chart-division.model';
 import { LoginService } from './../../../services/login.service';
-
+import * as moment from 'moment';
 @Component({
   selector: 'app-bank-management-chart',
   templateUrl: './bank-management-chart.component.html',
@@ -19,7 +19,7 @@ import { LoginService } from './../../../services/login.service';
 })
 
 export class BankManagementChartComponent implements OnInit {
-  constructor(private loginService: LoginService, private store: Store<fromRoot.State>, private shareDataService: ShareDataService) { }
+
   public chartTransactions: ChartByCardName[];
   public chartDivisions: ChartDivision[];
   public arrayCardsNames: string[] = [];
@@ -34,8 +34,11 @@ export class BankManagementChartComponent implements OnInit {
   public allExpensesByMonthChart: Chart;
   public eachMonthExpenses: Chart;
   public divisionChart: Chart;
+  public currentMonth: string;
   private getCharts$: Subject<void> = new Subject<void>();
-
+  constructor(private loginService: LoginService, private store: Store<fromRoot.State>, private shareDataService: ShareDataService) {
+    this.currentMonth = moment().format('MMMM');
+  }
   ngOnInit() {
     this.getAllCharts();
     this.waitingForDataCharts();
@@ -68,10 +71,12 @@ export class BankManagementChartComponent implements OnInit {
       this.arrayCardsNames.push(transactionData.cardName);
       this.arrayCardsTotalPrice.push((transactionData.price as any).toFixed(0));
     });
+
     this.chartByMonthTransactions.forEach(element => {
       this.arrayExpansesEachMonth.push(element.monthPurchase);
-      this.arrayEachMonthData.push((element.price).toFixed(0));
+      this.arrayEachMonthData.push((element.eachMonth).toFixed(0));
     });
+
     this.chartDivisions.forEach(element => {
       this.arrayDivisionNames.push(element.typeProduct);
       this.arrayEachMonthDivision.push((element.price as any).toFixed(0));
@@ -105,7 +110,7 @@ export class BankManagementChartComponent implements OnInit {
           labels: {
             fontColor: 'white',
             fontSize: 14,
-            fontFamily: "'Varela Round', 'sans-serif'",
+            fontFamily: '\'Varela Round\', \'sans-serif\'',
           }
         },
         animation: false,
@@ -130,7 +135,7 @@ export class BankManagementChartComponent implements OnInit {
           labels: {
             fontColor: 'white',
             fontSize: 14,
-            fontFamily: "'Varela Round', 'sans-serif'",
+            fontFamily: '\'Varela Round\', \'sans-serif\'',
           }
         },
         scales: {
@@ -186,7 +191,7 @@ export class BankManagementChartComponent implements OnInit {
           labels: {
             fontColor: 'white',
             fontSize: 14,
-            fontFamily: "'Varela Round', 'sans-serif'",
+            fontFamily: '\'Varela Round\', \'sans-serif\'',
           }
         },
       },

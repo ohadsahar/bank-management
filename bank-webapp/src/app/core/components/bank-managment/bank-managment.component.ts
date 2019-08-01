@@ -50,7 +50,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   public deletedId: string;
   currentCash: number;
   purchaseD: string;
-  today: string;
+  today: Date;
   monthDifference: number;
   public cancelBankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '');
   public bankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '');
@@ -237,19 +237,14 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
   calculateEachMonthEdit(): void {
-    this.purchaseD = moment(this.bankEditTransaction.purchaseDate).format('LL');
-    this.today = moment(new Date()).format('LL');
-
-
-    this.monthDifference = moment(this.bankEditTransaction.purchaseDate).diff(moment(new Date()), 'days');
-    console.log(this.monthDifference);
-    const duration = moment.duration(this.monthDifference);
-
-    console.log(duration.years()); // 8 years
-    console.log(duration.months()); // 5 months
-    console.log(duration.days()); // 2 days
-
-
+    // this.purchaseD = this.bankEditTransaction.purchaseDate;
+    // this.purchaseD = new Date(this.purchaseD) as any;
+    // this.today = new Date();
+    // // this.monthDifference = moment(this.today).diff(moment(this.purchaseD), 'months');
+    // const years = moment(this.purchaseD).diff(this.today, 'years');
+    // console.log(years);
+    // const months = moment(this.purchaseD).diff(this.today, 'months') - (years * 12);
+    // console.log(months);
     if (this.bankEditTransaction.numberofpayments) {
       this.bankEditTransaction.eachMonth = this.bankEditTransaction.price / this.bankEditTransaction.numberofpayments;
       this.bankEditTransaction.eachMonth = Number(this.bankEditTransaction.eachMonth.toFixed(2));
@@ -258,6 +253,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       this.bankEditTransaction.eachMonth = null;
       this.bankEditTransaction.leftPayments = null;
     }
+    this.monthDifference = 0;
   }
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();

@@ -7,8 +7,8 @@
   width: 29%;
   padding: 8px;
   overflow-x: hidden;
-  font-family: 'Varela Round', sans-serif !important;
   background-image: linear-gradient(45deg, #600df9, #7c1bf1, #9e2be8);
+  width: 100%;
 }
 
 .input-new-transaction .mat-form-field {
@@ -18,10 +18,14 @@
 
 .input-new-transaction .mat-form-field-appearance-legacy .mat-form-field-wrapper {
 
-      text-align: right;
-      direction: rtl;
-      margin: auto;
-      width: 100%;
+  text-align: right;
+  direction: rtl;
+  margin: auto;
+  width: 100%;
+}
+
+#new-transaction-button {
+  margin-right: 3%;
 }
 
 .mat-raised-button {
@@ -29,7 +33,6 @@
   cursor: pointer;
   font-weight: bold;
   cursor: pointer;
-  font-family: 'Varela Round', sans-serif !important;
 }
 
 @media only screen and (max-width: 800px) {

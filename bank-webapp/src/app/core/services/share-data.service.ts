@@ -8,6 +8,7 @@ export class ShareDataService {
   private passSalaryCharts = new BehaviorSubject<any>(null);
   private passDestroySalaryCharts = new BehaviorSubject<boolean>(false);
   private passCurrentCash = new BehaviorSubject<number>(0);
+  private passRegisterTransaction = new BehaviorSubject<Bank>(null);
   currentStatusOfDestroy = this.passDestroyCharts.asObservable();
   currentTransactions = this.passTransactions.asObservable();
   currentSalary = this.passSalaryCharts.asObservable();

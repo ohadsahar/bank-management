@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Bank } from 'src/app/shared/models/bank-data.model';
+import { CategoriesModel } from 'src/app/shared/models/categories.model';
+import { OptionModel } from 'src/app/shared/models/option.model';
 @Injectable({ providedIn: 'root' })
 export class ShareDataService {
   private passTransactions = new BehaviorSubject<any>(null);
@@ -8,12 +10,17 @@ export class ShareDataService {
   private passSalaryCharts = new BehaviorSubject<any>(null);
   private passDestroySalaryCharts = new BehaviorSubject<boolean>(false);
   private passCurrentCash = new BehaviorSubject<number>(0);
-  private passRegisterTransaction = new BehaviorSubject<Bank>(null);
+  private passCategories = new BehaviorSubject<CategoriesModel>(null);
+  private passOptions = new BehaviorSubject<OptionModel>(null);
+
+
   currentStatusOfDestroy = this.passDestroyCharts.asObservable();
   currentTransactions = this.passTransactions.asObservable();
   currentSalary = this.passSalaryCharts.asObservable();
   currentStatusDestroySalaryCharts = this.passDestroySalaryCharts.asObservable();
   currentCashToPass = this.passCurrentCash.asObservable();
+  currentCategories = this.passCategories.asObservable();
+  currentOptions = this.passOptions.asObservable();
   constructor() { }
 
   changeTransactions(transactions: Bank) {
@@ -29,6 +36,12 @@ export class ShareDataService {
     this.passDestroySalaryCharts.next(value);
   }
   changeCurrentCash(value: number) {
-    this.passCurrentCash.next(value);
+    this.passCurrentCash.next(Number(value.toFixed(2)));
+  }
+  changeOptions(value: OptionModel) {
+    this.passOptions.next(value);
+  }
+  changeCategories(value: CategoriesModel) {
+    this.passCategories.next(value);
   }
 }

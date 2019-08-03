@@ -52,8 +52,8 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   purchaseD: string;
   today: Date;
   monthDifference: number;
-  public cancelBankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '');
-  public bankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '');
+  public cancelBankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null);
+  public bankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null);
   constructor(private messageService: MessageService, private store: Store<fromRoot.State>,
     public router: Router, public dialog: MatDialog, private loginService: LoginService,
     private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService,
@@ -95,6 +95,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   startSocketing() {
     this.webSocketService.listen('transaction-added').subscribe(response => {
       this.allTransactions.push(response.message);
+      this.registerNewTransaction(response.message);
       this.afterRegisterNewCard();
     });
     this.webSocketService.listen('transaction-updated').subscribe(response => {
@@ -114,6 +115,8 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.dataToSubscribe = this.store.select(fromRoot.fetchedTransaction).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((data) => {
         if (data.loaded) {
+          this.shareDataService.changeCategories(data.data.groupOfCategories);
+          this.shareDataService.changeOptions(data.data.groupOfbusiness);
           this.spinnerService.hide();
           this.loading = false;
           this.allTransactions = data.data.foundTranscations;
@@ -127,7 +130,6 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       .subscribe((data) => {
         if (data.loaded) {
           this.currentCash += data.data.eachMonth;
-          this.webSocketService.emit('create-transaction', data.data);
           this.dataToSubscribe.unsubscribe();
         }
       });
@@ -165,12 +167,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.updateTable();
   }
   registerNewTransactionDialog(): void {
-    const dialogRef = this.dialog.open(RegisterNewTransactionModalComponent);
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.registerNewTransaction(result);
-      }
-    });
+    this.dialog.open(RegisterNewTransactionModalComponent);
   }
   afterRegisterNewCard(): void {
     this.shareDataService.changeTransactions(this.allTransactions as any);

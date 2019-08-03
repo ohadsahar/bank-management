@@ -1,8 +1,8 @@
-import { LoginService } from './../../../core/services/login.service';
+import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Component, Output, EventEmitter } from '@angular/core';
 import * as validator from '../../../shared/validate/validate-register.function';
 import { ResponseRegisterModel } from '../../models/register-response.model';
+import { LoginService } from './../../../core/services/login.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -13,7 +13,7 @@ import { ResponseRegisterModel } from '../../models/register-response.model';
 export class LoginModalComponent {
   registerMessage: ResponseRegisterModel;
   hide = true;
-  @Output() event: EventEmitter<boolean> = new EventEmitter();
+
   constructor(private loginService: LoginService) { }
   login(form: NgForm) {
     if (form.invalid) {
@@ -21,11 +21,7 @@ export class LoginModalComponent {
     }
     if (validator.validateRegister(form.value)) {
       this.loginService.login(form.value);
-      this.sendDataToAppComponent(true);
     }
-  }
-  sendDataToAppComponent(value: boolean) {
-    this.event.emit(value);
   }
 }
 

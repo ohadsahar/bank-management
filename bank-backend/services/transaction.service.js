@@ -16,6 +16,7 @@ async function register(transactionData) {
     leftPayments: transactionData.leftPayments,
     purchaseDate: transactionData.purchaseDate,
     monthPurchase: transactionData.monthPurchase,
+    yearOfTransaction: transactionData.yearOfTransaction
   });
   await transactionToCreate.save();
   return {
@@ -51,6 +52,8 @@ async function get(username) {
     bushinessNames: resultOfAllBushinessNames,
     chartGroupByCardName: resultLodashTransactions.groupedByCardName,
     chartGroupByMonth: resultLodashTransactions.groupedByMonth,
+    groupOfCategories: resultLodashTransactions.productsGroup,
+    groupOfbusiness: resultLodashTransactions.businessGroup
   };
 }
 async function getTransactionById(id) {

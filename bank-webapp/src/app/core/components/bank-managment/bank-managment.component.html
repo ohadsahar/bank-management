@@ -71,7 +71,7 @@
                   <mat-form-field class="new-transaction">
                     <mat-select [(ngModel)]="bankEditTransaction.typeProduct" value="bankEditTransaction.typeProduct">
                       <mat-option *ngFor="let category of categories" [value]="category.value">
-                        {{category?.value}}
+                        {{category?.typeProduct}}
                       </mat-option>
                     </mat-select>
                     <mat-placeholder class="placeholder">קטגוריה</mat-placeholder>

@@ -30,14 +30,20 @@ export class HomePageComponent implements OnInit {
   onLoadComponent() {
     this.username = this.loginService.getUsernameAndId().username;
     this.homePageService.getQuickInformation(this.username).subscribe(response => {
-      this.minimumExpenseCurrentMonthCash = response.message.resultOfCurrentCategoryExpense.minimumExpense.price;
-      this.minimumExpenseCurrentMonthCashType = response.message.resultOfCurrentCategoryExpense.minimumExpense.typeProduct;
+      if (response.message.resultOfCurrentCategoryExpense.minimumExpense) {
+        this.minimumExpenseCurrentMonthCashType = response.message.resultOfCurrentCategoryExpense.minimumExpense.typeProduct;
+        this.minimumExpenseCurrentMonthCash = response.message.resultOfCurrentCategoryExpense.minimumExpense.price;
+      }
       this.totalExpenseCurrentMonth = response.message.resultOfCurrentCategoryExpense.totalExpenseCash;
-      this.categoryLargestExpenditure = response.message.resultOfCurrentCategoryExpense.largestExpense.price;
-      this.categoryLargestExpenditureCategory = response.message.
-        resultOfCurrentCategoryExpense.largestExpense.typeProduct;
-      this.totalSalaryCurrentMonth = response.message.resultOfCurrentCategoryExpense.salaryTotal.salary;
-      this.saveCurrentMonth = this.totalSalaryCurrentMonth - this.totalExpenseCurrentMonth;
+      if (response.message.resultOfCurrentCategoryExpense.largestExpense) {
+        this.categoryLargestExpenditure = response.message.resultOfCurrentCategoryExpense.largestExpense.price;
+        this.categoryLargestExpenditureCategory = response.message.
+          resultOfCurrentCategoryExpense.largestExpense.typeProduct;
+      }
+      if (response.message.resultOfCurrentCategoryExpense.salaryTotal !== undefined) {
+        this.totalSalaryCurrentMonth = response.message.resultOfCurrentCategoryExpense.salaryTotal.salary;
+        this.saveCurrentMonth = this.totalSalaryCurrentMonth - this.totalExpenseCurrentMonth;
+      }
       this.shareDataService.changeCurrentCash(this.totalExpenseCurrentMonth);
     });
   }

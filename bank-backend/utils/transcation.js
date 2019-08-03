@@ -7,7 +7,10 @@ const SalaryModel = require('../models/salary');
 
 async function getCurrentCategoryLargestExpense(username) {
   const currentMonth = moment().format('MMMM');
-  const fetchedTransactions = await TransactionModel.find({ username, monthPurchase: currentMonth });
+  const fetchedTransactions = await TransactionModel.find({
+    username,
+    monthPurchase: currentMonth
+  });
   const groupByDivisions = lodash(fetchedTransactions).groupBy('typeProduct')
     .map((items, typeProduct) => ({
       typeProduct,
@@ -18,14 +21,22 @@ async function getCurrentCategoryLargestExpense(username) {
   const minCategory = lodash.minBy(groupByDivisions, 'price');
   const totalExpense = lodash.sumBy(groupByDivisions, 'price');
 
-  const allSalaryOfCurrentMonth = await SalaryModel.find({ username , monthOfSalary: currentMonth});
+  const allSalaryOfCurrentMonth = await SalaryModel.find({
+    username,
+    monthOfSalary: currentMonth
+  });
   const groupBySalary = lodash(allSalaryOfCurrentMonth).groupBy('monthOfSalary')
-  .map((items, monthOfSalary) => ({
-    monthOfSalary,
-    salary: lodash.sumBy(items, 'salary')
-  })).value();
+    .map((items, monthOfSalary) => ({
+      monthOfSalary,
+      salary: lodash.sumBy(items, 'salary')
+    })).value();
   const maxSalary = lodash.maxBy(groupBySalary, 'salary');
-  return {largestExpense: maxCategory, salaryTotal: maxSalary, minimumExpense: minCategory, totalExpenseCash: totalExpense}
+  return {
+    largestExpense: maxCategory,
+    salaryTotal: maxSalary,
+    minimumExpense: minCategory,
+    totalExpenseCash: totalExpense
+  }
 }
 async function groupCategories(transactions) {
   const groupByCardName = lodash(transactions).groupBy('cardName')
@@ -33,7 +44,6 @@ async function groupCategories(transactions) {
       cardName,
       price: lodash.sumBy(items, 'price'),
     })).value();
-
   // eslint-disable-next-line no-unused-vars
   const groupByMonth = lodash(transactions).groupBy('monthPurchase')
     .map((items, monthPurchase) => ({
@@ -46,13 +56,24 @@ async function groupCategories(transactions) {
       typeProduct,
       price: lodash.sumBy(items, 'eachMonth'),
     })).value();
-    
+  const typeProductsOnly = lodash(transactions).groupBy('typeProduct')
+    .map((items, typeProduct) => ({
+      typeProduct,
+    })).value();
+
+  const businessNames = lodash(transactions).groupBy('name')
+    .map((items, name) => ({
+      name,
+    })).value();
   return {
     groupedByCardName: groupByCardName,
     groupedByMonth: groupByMonth,
     groupedByCategoires: groupByDivisions,
+    businessGroup: businessNames,
+    productsGroup: typeProductsOnly
   };
 }
+
 async function update(resultOfValidateTransactionData) {
   // eslint-disable-next-line no-underscore-dangle
   await TransactionModel.findByIdAndUpdate({
@@ -116,5 +137,5 @@ module.exports = {
   allBushinessNames,
   archivePayment,
   deletePayment,
-  getCurrentCategoryLargestExpense
+  getCurrentCategoryLargestExpense,
 };

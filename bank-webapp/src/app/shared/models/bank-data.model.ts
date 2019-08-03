@@ -11,7 +11,7 @@ export interface Bank {
   leftPayments: number;
   purchaseDate: string;
   monthPurchase: string;
-
+  yearOfTransaction: number;
 }
 
 

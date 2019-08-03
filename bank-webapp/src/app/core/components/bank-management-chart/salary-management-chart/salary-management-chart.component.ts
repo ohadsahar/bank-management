@@ -60,7 +60,7 @@ export class SalaryManagementChartComponent implements OnInit {
       type,
       data: {
         datasets: [{
-          label: 'משכורות לפי חודשים',
+          label: 'חודשים',
           data: this.salaryArray,
           backgroundColor: ['#fbd0c6', '#f6c1a6', '#c8c87a', '#79c0b0', '#7ec2a3', '#65b6bd',
             '#70a6ca', '#90b4cb']
@@ -69,11 +69,24 @@ export class SalaryManagementChartComponent implements OnInit {
         labels: this.monthArray,
       },
       options: {
+        legend: {
+          labels: {
+            fontColor: 'white',
+            fontSize: 18,
+            fontFamily: '\'Varela Round\', \'sans-serif\'',
+          }
+        },
         scales: {
           xAxes: [{
             stacked: true,
             barThickness: 8,
-            maxBarThickness: 10
+            maxBarThickness: 10,
+               ticks: {
+              fontColor: 'white',
+              fontSize: 18,
+              stepSize: 1,
+              beginAtZero: true
+            }
           }],
           yAxes: [{
             stacked: true,

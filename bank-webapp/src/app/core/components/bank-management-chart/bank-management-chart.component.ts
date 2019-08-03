@@ -74,7 +74,7 @@ export class BankManagementChartComponent implements OnInit {
 
     this.chartByMonthTransactions.forEach(element => {
       this.arrayExpansesEachMonth.push(element.monthPurchase);
-      this.arrayEachMonthData.push((element.eachMonth).toFixed(0));
+      this.arrayEachMonthData.push(Number(element.eachMonth).toFixed(0));
     });
 
     this.chartDivisions.forEach(element => {
@@ -122,7 +122,7 @@ export class BankManagementChartComponent implements OnInit {
       type,
       data: {
         datasets: [{
-          label: 'לפי חודשים',
+          label: 'חודשים',
           data: this.arrayEachMonthData,
           backgroundColor: ['#fbd0c6', '#f6c1a6', '#c8c87a', '#79c0b0', '#7ec2a3', '#65b6bd',
             '#70a6ca', '#90b4cb']
@@ -134,23 +134,27 @@ export class BankManagementChartComponent implements OnInit {
         legend: {
           labels: {
             fontColor: 'white',
-            fontSize: 14,
+            fontSize: 18,
             fontFamily: '\'Varela Round\', \'sans-serif\'',
           }
         },
         scales: {
-          xAxes: [{
-            stacked: true,
-            barThickness: 8,
-            maxBarThickness: 10,
-
-          }],
           yAxes: [{
             stacked: true,
             barThickness: 8,
             maxBarThickness: 10,
-
-          }]
+          }],
+          xAxes: [{
+            stacked: true,
+            barThickness: 8,
+            maxBarThickness: 10,
+            ticks: {
+              fontColor: 'white',
+              fontSize: 18,
+              stepSize: 1,
+              beginAtZero: true
+            }
+          }],
         },
         animation: false,
       }

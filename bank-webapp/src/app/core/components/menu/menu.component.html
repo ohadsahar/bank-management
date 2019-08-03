@@ -1,4 +1,5 @@
-<mat-tab-group mat-align-tabs="center" (selectedTabChange)="changedTab($event)" [selectedIndex]="selectedTab">
+<mat-tab-group mat-align-tabs="center" (selectedTabChange)="changedTab($event)" [selectedIndex]="selectedTab"
+  *ngIf="!isMobile">
   <mat-tab>
     <ng-template mat-tab-label>
       <i class="fas fa-home"></i> בית
@@ -31,3 +32,40 @@
     </ng-template>
   </mat-tab>
 </mat-tab-group>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light" *ngIf="isMobile">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" [routerLink]="['user-home/home']"> <i class="fas fa-home"></i> בית <span
+            class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['user-management/management']"> <i class="fas fa-shopping-cart"></i> חיוב
+          קרוב</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['user-payment/payment']"> <i class="fas fa-folder-open"></i> עסקאות
+          בארכיון
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['user-salary/salary']"> <i class="fas fa-suitcase"></i> הכנסות
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['user-chart/chart']"> <i class="fas fa-chart-line"></i> סטטיסטיקה
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" (click)="disconnect()"> <i class="fas fa-sign-out-alt"></i> התנתק
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>

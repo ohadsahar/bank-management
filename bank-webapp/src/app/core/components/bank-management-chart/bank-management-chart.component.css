@@ -29,6 +29,7 @@ h1 {
 @media only screen and (max-width: 800px) {
   #eachMonthExpenses {
     padding: 0px;
+    overflow-x: scroll;
   }
 
 }

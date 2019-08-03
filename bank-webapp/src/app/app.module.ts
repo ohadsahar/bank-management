@@ -44,6 +44,7 @@ if (environment.production) {
     ReactiveFormsModule,
     AngularMaterialModule,
     HttpClientModule,
+    DeviceDetectorModule.forRoot(),
     StoreModule.forRoot(Reducers),
     EffectsModule.forRoot([BankManagementEffects, TransactionEffect, SalaryEffects]),
     DeviceDetectorModule.forRoot(),

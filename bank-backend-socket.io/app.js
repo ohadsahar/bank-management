@@ -15,6 +15,12 @@ io.on('connection', function (socket) {
             message: data
         });
     });
+
+    socket.on('before-create-transaction', function (data) {
+        io.emit('transaction-before-added', {
+            message: data
+        });
+    });
     socket.on('update-transaction', function (data) {
         io.emit('transaction-updated', {
             message: data

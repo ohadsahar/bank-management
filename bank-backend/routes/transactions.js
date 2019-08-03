@@ -80,7 +80,6 @@ async function deleteTransaction(req, res) {
 }
 async function update(req, res) {
   try {
-    console.log(req.body);
     const transactionData = req.body;
     // eslint-disable-next-line max-len
     const resultOfUpdateDataTransaction = await transactionService.updatePurchaseDate(transactionData);

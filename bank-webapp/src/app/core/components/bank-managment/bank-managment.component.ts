@@ -55,9 +55,9 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   public cancelBankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null);
   public bankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null);
   constructor(private messageService: MessageService, private store: Store<fromRoot.State>,
-              public router: Router, public dialog: MatDialog, private loginService: LoginService,
-              private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService,
-              private webSocketService: WebSocketService) {
+    public router: Router, public dialog: MatDialog, private loginService: LoginService,
+    private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService,
+    private webSocketService: WebSocketService) {
     this.isLoading = true;
     this.counter = 0;
     this.numberOfPayments = 0;
@@ -87,10 +87,15 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   }
   startSocketing() {
     this.webSocketService.listen('transaction-added').subscribe(response => {
+      this.allTransactions.push(response.message);
+      this.currentCash += response.message.eachMonth;
+      this.afterRegisterNewCard();
+    });
+    this.webSocketService.listen('transaction-before-added').subscribe(response => {
       this.registerNewTransaction(response.message);
     });
+
     this.webSocketService.listen('transaction-updated').subscribe(response => {
-      console.log(response);
       const index = this.allTransactions.findIndex(transaction => transaction._id === response.message.bankData._id);
       this.allTransactions[index] = response.message.bankData;
       this.afterUpdate();
@@ -123,9 +128,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     const dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.registerNewTransactionNgrx))
       .subscribe((data) => {
         if (data.loaded) {
-          this.allTransactions.push(data.data);
-          this.currentCash += data.data.eachMonth;
-          this.afterRegisterNewCard();
+          this.webSocketService.emit('create-transaction', data.data);
           dataToSubscribe.unsubscribe();
         }
       });

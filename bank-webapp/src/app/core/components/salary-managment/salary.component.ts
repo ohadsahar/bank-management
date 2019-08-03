@@ -51,7 +51,7 @@ export class SalaryComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource();
-  displayedColumns: string[] = ['id', 'salary', 'monthOfSalary'];
+  displayedColumns: string[] = ['id', 'salary', 'monthOfSalary', 'yearOfSalary'];
 
   ngOnInit() {
     this.onLoadComponent();
@@ -72,7 +72,6 @@ export class SalaryComponent implements OnInit {
       username: this.loginService.getUsernameAndId().username,
       yearOfSalary: Number(moment(Date.now()).format('YYYY'))
     };
-    console.log(salaryData);
     this.store.dispatch(new salaryActions.RegisterNewSalary(salaryData));
     this.dataToSubscribe = this.store.select(fromRoot.getSalaryData).pipe(takeUntil(this.ngbSubscribe))
       .subscribe((data) => {

@@ -4,7 +4,7 @@ body {
 }
 
 .mat-form-field-appearance-legacy .mat-form-field-wrapper {
-  width: 30% !important;
+  width: 50%;
   text-align: right;
   margin: auto;
 }
@@ -65,10 +65,18 @@ th.mat-header-cell {
   color: white;
 }
 
-i{
+i {
   cursor: pointer;
 }
 
-.fa-edit:before, .fa-check-double:before {
+.placeholder {
+  color: white !important;
+  font-weight: bold;
+  text-align: right;
+  word-break: break-all;
+}
+
+.fa-edit:before,
+.fa-check-double:before {
   padding: 10px;
 }

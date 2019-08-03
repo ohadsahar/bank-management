@@ -56,7 +56,7 @@ export class RegisterNewTransactionModalComponent implements OnInit {
       this.bankTransaction.username = this.loginService.getUsernameAndId().username;
       this.categories.push({ typeProduct: this.bankTransaction.typeProduct });
       this.options.push({ name: this.bankTransaction.name });
-      this.webSocketService.emit('create-transaction', this.bankTransaction);
+      this.webSocketService.emit('before-create-transaction', this.bankTransaction);
       this.resetAfterRegister();
     }
     return false;

@@ -41,6 +41,20 @@
               </div>
             </td>
           </ng-container>
+
+          <ng-container matColumnDef="yearOfSalary">
+            <th mat-header-cell *matHeaderCellDef> <i class="fab fa-product-hunt"></i> משכורת עבור חודש </th>
+            <td mat-cell *matCellDef="let element; let  i = index">
+              <div *ngIf="!editoptionsable[i]">{{element?.yearOfSalary}}</div>
+              <div *ngIf="editEnable && editoptionsable[i]" class="edit-section">
+                <mat-form-field class="new-transaction">
+                  <input matInput [(ngModel)]="salaryEditData.yearOfSalary" value="{{salaryEditData?.yearOfSalary}}">
+                  <mat-placeholder class="placeholder">חובה לבחור שנה</mat-placeholder>
+                  <mat-error>אנא בחר שנה</mat-error>
+                </mat-form-field>
+              </div>
+            </td>
+          </ng-container>
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>

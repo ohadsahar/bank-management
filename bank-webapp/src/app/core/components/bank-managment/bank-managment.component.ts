@@ -30,7 +30,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   public sortedData: Bank[];
   public allTransactions: Bank[];
-  options: string[] = ['הספרייה', 'רנואר', 'קאסטרו', 'אייבורי'];
+  options: string[] = [];
   filteredOptions: Observable<string[]>;
   myControl = new FormControl();
   private counter: number;
@@ -55,9 +55,9 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   public cancelBankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null);
   public bankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null);
   constructor(private messageService: MessageService, private store: Store<fromRoot.State>,
-    public router: Router, public dialog: MatDialog, private loginService: LoginService,
-    private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService,
-    private webSocketService: WebSocketService) {
+              public router: Router, public dialog: MatDialog, private loginService: LoginService,
+              private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService,
+              private webSocketService: WebSocketService) {
     this.isLoading = true;
     this.counter = 0;
     this.numberOfPayments = 0;
@@ -70,10 +70,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   ];
   cards: any[] = [{ value: 'הוט' }, { value: 'שופרסל' }, { value: 'נגב' }, { value: 'יוניק' },
   { value: 'דרים קארד' }, { value: 'מאסטר-קארד אוהד' }, { value: 'דרים קארד אוהד' }, { value: 'לייף - סטייל' }];
-  categories: any[] = [{ value: 'חשמל' }, { value: 'ביגוד' }, { value: 'ריהוט' },
-  { value: 'אוכל' }, { value: 'תכשיטים' }, { value: 'בריאות' }, { value: 'חו"ל' }, { value: 'רכבת ישראל' },
-  { value: 'ביטוח' }, { value: 'רכב' }, { value: 'משיכת מזומן' }, { value: 'מספרה' }, { value: 'תחבורה ציבורית' },
-  { value: 'מרכז קניות' }, { value: 'אחר' }];
+  categories: any[];
 
 
   ngOnInit() {
@@ -82,10 +79,6 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   onLoadSite(): void {
     this.isLoading = true;
     this.spinnerService.show();
-    this.filteredOptions = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value))
-    );
     this.shareDataService.currentCashToPass.subscribe(response => {
       this.currentCash = response;
     });
@@ -94,11 +87,10 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   }
   startSocketing() {
     this.webSocketService.listen('transaction-added').subscribe(response => {
-      this.allTransactions.push(response.message);
       this.registerNewTransaction(response.message);
-      this.afterRegisterNewCard();
     });
     this.webSocketService.listen('transaction-updated').subscribe(response => {
+      console.log(response);
       const index = this.allTransactions.findIndex(transaction => transaction._id === response.message.bankData._id);
       this.allTransactions[index] = response.message.bankData;
       this.afterUpdate();
@@ -115,6 +107,8 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.dataToSubscribe = this.store.select(fromRoot.fetchedTransaction).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((data) => {
         if (data.loaded) {
+          this.categories = data.data.groupOfCategories;
+          this.options = data.data.groupOfbusiness;
           this.shareDataService.changeCategories(data.data.groupOfCategories);
           this.shareDataService.changeOptions(data.data.groupOfbusiness);
           this.spinnerService.hide();
@@ -126,11 +120,13 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   }
   registerNewTransaction(result: any): void {
     this.store.dispatch(new transactionActions.RegisterTransaction(result));
-    this.dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.registerNewTransactionNgrx))
+    const dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.registerNewTransactionNgrx))
       .subscribe((data) => {
         if (data.loaded) {
+          this.allTransactions.push(data.data);
           this.currentCash += data.data.eachMonth;
-          this.dataToSubscribe.unsubscribe();
+          this.afterRegisterNewCard();
+          dataToSubscribe.unsubscribe();
         }
       });
   }
@@ -251,10 +247,6 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       this.bankEditTransaction.leftPayments = null;
     }
     this.monthDifference = 0;
-  }
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.options.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
   }
   ngOnDestroy() {
     this.registerNewTransactionNgrx.unsubscribe();

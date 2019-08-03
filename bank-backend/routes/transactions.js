@@ -13,7 +13,6 @@ async function create(req, res) {
       success: true,
     });
   } catch (error) {
-    console.log(error);
     res.status(400).json({
       message: error,
       success: false,
@@ -81,6 +80,7 @@ async function deleteTransaction(req, res) {
 }
 async function update(req, res) {
   try {
+    console.log(req.body);
     const transactionData = req.body;
     // eslint-disable-next-line max-len
     const resultOfUpdateDataTransaction = await transactionService.updatePurchaseDate(transactionData);

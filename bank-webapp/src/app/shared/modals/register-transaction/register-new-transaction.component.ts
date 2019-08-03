@@ -53,7 +53,6 @@ export class RegisterNewTransactionModalComponent implements OnInit {
       this.bankTransaction.purchaseDate = this.date;
       this.bankTransaction.monthPurchase = this.purchaseMonth;
       this.bankTransaction.yearOfTransaction = moment(Date.now()).format('YYYY') as any;
-      console.log(this.bankTransaction.yearOfTransaction);
       this.bankTransaction.username = this.loginService.getUsernameAndId().username;
       this.categories.push({ typeProduct: this.bankTransaction.typeProduct });
       this.options.push({ name: this.bankTransaction.name });

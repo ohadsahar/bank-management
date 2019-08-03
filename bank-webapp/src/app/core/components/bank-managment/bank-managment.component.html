@@ -70,7 +70,7 @@
                 <div *ngIf="editEnable && editoptionsable[i]">
                   <mat-form-field class="new-transaction">
                     <mat-select [(ngModel)]="bankEditTransaction.typeProduct" value="bankEditTransaction.typeProduct">
-                      <mat-option *ngFor="let category of categories" [value]="category.value">
+                      <mat-option *ngFor="let category of categories" [value]="category.typeProduct">
                         {{category?.typeProduct}}
                       </mat-option>
                     </mat-select>

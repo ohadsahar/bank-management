@@ -9,6 +9,7 @@ async function create(salaryData) {
     username: afterValidateData.username,
     salary: afterValidateData.salary,
     monthOfSalary: afterValidateData.salaryMonth,
+    yearOfSalary:salaryData.yearOfSalary,
   });
   await salaryDataSave.save();
   return salaryDataSave;

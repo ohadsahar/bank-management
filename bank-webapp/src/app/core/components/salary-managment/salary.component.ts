@@ -15,7 +15,7 @@ import { LoginService } from './../../services/login.service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { bottomItemTrigger, topItemTrigger } from 'src/app/shared/animations/salary/salary.animation';
 import { ShareDataService } from '../../services/share-data.service';
-
+import * as moment from 'moment';
 @Component({
   selector: 'app-salary',
   templateUrl: './salary.component.html',
@@ -69,8 +69,10 @@ export class SalaryComponent implements OnInit {
     }
     const salaryData = {
       salary: form.value.salary,
-      username: this.loginService.getUsernameAndId().username
+      username: this.loginService.getUsernameAndId().username,
+      yearOfSalary: Number(moment(Date.now()).format('YYYY'))
     };
+    console.log(salaryData);
     this.store.dispatch(new salaryActions.RegisterNewSalary(salaryData));
     this.dataToSubscribe = this.store.select(fromRoot.getSalaryData).pipe(takeUntil(this.ngbSubscribe))
       .subscribe((data) => {

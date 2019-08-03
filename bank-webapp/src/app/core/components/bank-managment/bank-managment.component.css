@@ -67,6 +67,11 @@ table th {
   width: 12.5%;
 }
 
+.fa-plus:before {
+  font-size: 35px;
+  color: white;
+}
+
 
 .mat-paginator-container,
 .mat-elevation-z8 {
@@ -226,5 +231,10 @@ i {
   th.mat-header-cell {
     font-size: 10px;
 
+  }
+
+  .fa-plus:before {
+    font-size: 25px;
+    color: white;
   }
 }

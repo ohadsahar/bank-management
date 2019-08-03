@@ -64,3 +64,11 @@ th.mat-header-cell {
   word-break: break-all;
   color: white;
 }
+
+i{
+  cursor: pointer;
+}
+
+.fa-edit:before, .fa-check-double:before {
+  padding: 10px;
+}

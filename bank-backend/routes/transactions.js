@@ -23,6 +23,7 @@ async function get(req, res) {
   try {
     const username = req.params.username;
     const resultOfFetchedTranscations = await transactionService.get(username);
+    console.log(resultOfFetchedTranscations);
     res.status(200).json({
       message: resultOfFetchedTranscations,
       success: true,

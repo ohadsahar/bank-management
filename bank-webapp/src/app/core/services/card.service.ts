@@ -15,8 +15,13 @@ export class CardService {
   createCard(cardData: CardsModel) {
     return this.http.post<{ message: CardsModel }>(backendUrl, cardData);
   }
-
   getAllCards(username: string) {
     return this.http.get<{ message: CardsModel[] }>(`${backendUrl}/${username}`);
+  }
+  deleteCard(id: string) {
+    return this.http.delete<{ message: string }>(`${backendUrl}/${id}`);
+  }
+  updateCard(cardData: CardsModel) {
+    return this.http.put<{message: CardsModel}>(backendUrl, cardData);
   }
 }

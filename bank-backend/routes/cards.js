@@ -33,6 +33,38 @@ async function get(req, res) {
     });
   }
 }
+async function deleteCard(req, res) {
+  try {
+    const idToDelete = req.params.id;
+    await cardService.deleteCard(idToDelete);
+    res.status(200).json({
+      message: idToDelete,
+      success: true,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: error,
+      success: false,
+    });
+  }
+}
+async function update(req, res) {
+  try {
+    const cardData = req.body;
+    const resultOfUpdate = await cardService.updateCard(cardData);
+    res.status(200).json({
+      message: resultOfUpdate,
+      success: true,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: error,
+      success: false,
+    });
+  }
+}
 module.exports = router;
 router.post('', create);
 router.get('/:username', get);
+router.put('', update);
+router.delete('/:id', deleteCard);

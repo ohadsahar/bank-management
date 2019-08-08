@@ -11,7 +11,7 @@
           <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort
             (matSortChange)="sortData($event)">
             <ng-container matColumnDef="id">
-              <th mat-header-cell *matHeaderCellDef> <i class="fab fa-cc-visa"></i> אפשרויות </th>
+              <th mat-header-cell *matHeaderCellDef> <i class="fab fa-cc-visa"></i> מס' עסקה </th>
               <td mat-cell *matCellDef="let element; let i = index">
                 <div>{{i + 1}}</div>
               </td>

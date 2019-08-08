@@ -1,9 +1,11 @@
+import { MessageService } from './../../services/message.service';
+import { EditCardModel } from './../../../shared/models/edit-card.model';
 import { MatTableDataSource } from '@angular/material';
 import { LoginService } from '@app/services/login.service';
 import { CardService } from './../../services/card.service';
 import { NgForm } from '@angular/forms';
 import { CardsModel } from './../../../shared/models/cards.model';
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 
 @Component({
@@ -15,10 +17,12 @@ import { Component, ViewEncapsulation, OnInit } from '@angular/core';
 export class CardsManagementComponent implements OnInit {
 
   public cards: CardsModel[];
-  displayedColumns: string[] = ['cardName', 'billingDate'];
+  editCardForm = new EditCardModel('', '', '', null);
+  displayedColumns: string[] = ['options', 'cardName', 'billingDate'];
   currentUsername: string;
   dataSource = new MatTableDataSource(this.cards);
-  constructor(private cardService: CardService, private loginService: LoginService) {
+  editoptionsable: any = {};
+  constructor(private cardService: CardService, private loginService: LoginService, private messageService: MessageService) {
     this.cards = [];
   }
 
@@ -30,20 +34,65 @@ export class CardsManagementComponent implements OnInit {
     this.getAllCards();
   }
   createNewCard(form: NgForm) {
+    if (form.invalid) {
+      return;
+    }
     form.value.username = this.currentUsername;
     this.cardService.createCard(form.value).subscribe(response => {
       this.cards.push(response.message);
       form.reset();
       this.updateTable();
+    }, (error) => {
+      this.messageService.failedMessage(error, ' Dismiss');
     });
   }
   getAllCards() {
     this.cardService.getAllCards(this.currentUsername).subscribe(response => {
       this.cards = response.message;
       this.updateTable();
-    });
+    },
+      (error) => {
+        this.messageService.failedMessage(error, ' Dismiss');
+      }
+    );
+  }
+  deleteCard(id: string) {
+    this.cardService.deleteCard(id).subscribe(response => {
+      const deleteCards = this.cards.filter(card => card._id !== response.message);
+      this.cards = deleteCards;
+      this.updateTable();
+    },
+      (error) => {
+        this.messageService.failedMessage(error, ' Dismiss');
+      }
+    );
   }
   updateTable() {
     this.dataSource = new MatTableDataSource(this.cards);
+  }
+  editCard(card: CardsModel) {
+    this.editCardForm._id = card._id;
+    this.editCardForm.username = card.username;
+    this.editCardForm.cardName = card.cardName;
+    this.editCardForm.billingDate = card.billingDate;
+  }
+  updateCard() {
+    if (this.validateCard()) {
+      this.cardService.updateCard(this.editCardForm).subscribe(response => {
+        const index = this.cards.findIndex(card => card._id === response.message._id);
+        this.cards[index] = response.message;
+        this.updateTable();
+      },
+        (error) => {
+          this.messageService.failedMessage(error, ' Dismiss');
+        }
+      );
+    }
+  }
+  validateCard() {
+    if (this.editCardForm.billingDate && this.editCardForm.cardName) {
+      return true;
+    }
+    return false;
   }
 }

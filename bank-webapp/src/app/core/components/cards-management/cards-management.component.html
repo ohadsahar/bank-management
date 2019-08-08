@@ -1,23 +1,58 @@
 <div class="cards-management-component">
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="options">
+      <th mat-header-cell *matHeaderCellDef> <i class="fab fa-cc-visa"></i> אפשרויות </th>
+      <td mat-cell *matCellDef="let element; let i = index">
+        <i class="fas fa-trash" (click)="deleteCard(element._id)"></i>
+        <i class="fas fa-edit" (click)="editCard(element);editoptionsable[i] = !editoptionsable[i]"
+          *ngIf="!editoptionsable[i] && !updateAble"></i>
+        <i class="fas fa-check-double" *ngIf="editoptionsable[i]"
+          (click)="updateCard();editoptionsable[i] = !editoptionsable[i]"></i>
+        <i class="fas fa-times" *ngIf="editEnable && editoptionsable[i]"
+          (click)="cancelUpdate();editoptionsable[i] = !editoptionsable[i]"></i>
+      </td>
+    </ng-container>
     <ng-container matColumnDef="cardName">
       <th mat-header-cell *matHeaderCellDef>שם הכרטיס</th>
-      <td mat-cell *matCellDef="let element"> {{element?.cardName}} </td>
+      <td mat-cell *matCellDef="let element;let i = index">
+        <div *ngIf="!editoptionsable[i]">{{element?.cardName}}</div>
+        <div *ngIf="editoptionsable[i]">
+          <mat-form-field class="edit-card">
+            <input matInput type="text" name="cardName" [(ngModel)]="editCardForm.cardName"
+              [value]="editCardForm.cardName">
+            <mat-placeholder class="placeholder">שם כרטיס</mat-placeholder>
+            <mat-error>חובה למלא את סוג שם הכרטיס </mat-error>
+          </mat-form-field>
+        </div>
+      </td>
     </ng-container>
     <ng-container matColumnDef="billingDate">
       <th mat-header-cell *matHeaderCellDef>תאריך חיוב</th>
-      <td mat-cell *matCellDef="let element"> {{element?.billingDate}} </td>
+      <td mat-cell *matCellDef="let element; let i = index">
+          <div *ngIf="!editoptionsable[i]">{{element?.billingDate}} </div>
+          <div *ngIf="editoptionsable[i]">
+              <mat-form-field class="edit-card">
+                <input matInput type="number" name="billingDate" [(ngModel)]="editCardForm.billingDate"
+                  [value]="editCardForm.billingDate">
+                <mat-placeholder class="placeholder">יום החיוב</mat-placeholder>
+                <mat-error>חובה למלא את יום החיוב </mat-error>
+              </mat-form-field>
+            </div>
+      </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
   <section class="card-form">
-    <form #cardForm="ngForm" (submit)="createNewCard(cardForm)"  ngForm>
+    <form #cardForm="ngForm" (submit)="createNewCard(cardForm)" ngForm>
       <mat-form-field class="full-width">
-          <input matInput type="text" name="cardName" #cardName="ngModel" ngModel placeholder="שם הכרטיס" required>
+        <input matInput type="text" name="cardName" #cardName="ngModel" ngModel placeholder="שם הכרטיס" required>
+        <mat-error *ngIf="cardName.invalid">חובה להכניס את שם הכרטיס</mat-error>
       </mat-form-field>
       <mat-form-field class="full-width">
-          <input matInput type="number" name="billingDate" #billingDate="ngModel" ngModel placeholder="תאריך חיוב" required>
+        <input matInput type="number" name="billingDate" #billingDate="ngModel" ngModel placeholder="תאריך חיוב"
+          required>
+        <mat-error *ngIf="billingDate.invalid">חובה להכניס את יום החיוב</mat-error>
       </mat-form-field>
       <button type="submit" mat-raised-button color="link" style="font-weight: bold;">צור כרטיס חדש</button>
     </form>

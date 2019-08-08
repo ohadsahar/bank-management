@@ -4,7 +4,7 @@ const localStorage = require('store');
 const paymentService = require('../services/payment.service');
 
 
-schedule.scheduleJob('* * * * *', () => {
+schedule.scheduleJob('0 0 * * *', () => {
   const username = localStorage.get('username');
   paymentService.checkPayCheck(username);
 });

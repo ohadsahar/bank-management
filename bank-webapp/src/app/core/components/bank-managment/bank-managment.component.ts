@@ -17,6 +17,7 @@ import { bottomSideItemTrigger, upSideItemTrigger } from './../../../shared/anim
 import { LoginService } from './../../services/login.service';
 import { ShareDataService } from './../../services/share-data.service';
 import { WebSocketService } from './../../services/web-socket.service';
+import { CardsModel } from 'src/app/shared/models/cards.model';
 
 @Component({
   selector: 'app-bank-managment',
@@ -54,8 +55,8 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   today: Date;
   monthDifference: number;
   endDate: string;
-  public cancelBankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null);
-  public bankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null);
+  public cancelBankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null, null);
+  public bankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null, null);
   constructor(private messageService: MessageService, private store: Store<fromRoot.State>,
     public router: Router, public dialog: MatDialog, private loginService: LoginService,
     private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService,
@@ -70,8 +71,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = [
     'id', 'cardName', 'name', 'type', 'price', 'numberofpayments', 'eachMonth', 'leftPayments', 'purchaseDate'
   ];
-  cards: any[] = [{ value: 'הוט' }, { value: 'שופרסל' }, { value: 'נגב' }, { value: 'יוניק' },
-  { value: 'דרים קארד' }, { value: 'מאסטר-קארד אוהד' }, { value: 'דרים קארד אוהד' }, { value: 'לייף - סטייל' }];
+  cards: CardsModel[] = [];
   categories: any[];
 
   ngOnInit() {
@@ -117,6 +117,8 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
           this.options = data.data.groupOfbusiness;
           this.shareDataService.changeCategories(data.data.groupOfCategories);
           this.shareDataService.changeOptions(data.data.groupOfbusiness);
+          this.shareDataService.changeCards(data.data.allCards);
+          this.cards = data.data.allCards;
           this.spinnerService.hide();
           this.loading = false;
           this.allTransactions = data.data.foundTranscations;
@@ -125,7 +127,6 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       });
   }
   registerNewTransaction(result: any): void {
-    console.log(result);
     this.store.dispatch(new transactionActions.RegisterTransaction(result));
     const dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.registerNewTransactionNgrx))
       .subscribe((data) => {

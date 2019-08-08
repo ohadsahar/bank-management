@@ -2,8 +2,8 @@ const TransactionModel = require('../models/transaction');
 const transactionUtil = require('../utils/transcation');
 const TransactionArchivesModel = require('../models/transaction-archives');
 
-async function checkPayCheck() {
-  const fetchedTransactions = await TransactionModel.find();
+async function checkPayCheck(username) {
+  const fetchedTransactions = await TransactionModel.find({ username });
   await transactionUtil.paymentsTime(fetchedTransactions);
 }
 async function get(username) {

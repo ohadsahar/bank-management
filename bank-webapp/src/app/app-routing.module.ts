@@ -25,6 +25,10 @@ const routes: Routes = [
     path: 'user-salary',
     loadChildren: './core/components/salary-managment/salary.module#SalaryModule'
   },
+  {
+    path: 'user-card-management',
+    loadChildren: './core/components/cards-management/cards-management-modules/cards-management.module#CardManagementModule'
+  },
 ];
 
 @NgModule({

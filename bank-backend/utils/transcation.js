@@ -99,14 +99,16 @@ async function archivePayment(transaction) {
     leftPayments: transaction.leftPayments,
     purchaseDate: transaction.purchaseDate,
     monthPurchase: transaction.monthPurchase,
+    yearOfTransaction: transaction.yearOfTransaction,
+    billingDate: transaction.billingDate,
   });
   await transactionSave.save();
 }
 async function paymentsTime(transactionData) {
   const dayOfMonth = moment().get('date');
-  if (dayOfMonth === 10) {
+  if (dayOfMonth === 2 || dayOfMonth === 10 || dayOfMonth === 15 || dayOfMonth === 8) {
     await transactionData.forEach((transaction) => {
-      if (transaction.numberofpayments >= 0) {
+      if (transaction.billingDate === dayOfMonth) {
         // eslint-disable-next-line no-param-reassign
         transaction.numberofpayments += 1;
         if (transaction.numberofpayments === transaction.leftPayments) {

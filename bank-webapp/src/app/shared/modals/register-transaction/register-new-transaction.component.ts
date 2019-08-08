@@ -1,3 +1,4 @@
+import { CardsModel } from './../../models/cards.model';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import * as moment from 'moment';
@@ -24,14 +25,13 @@ export class RegisterNewTransactionModalComponent implements OnInit {
   myControl = new FormControl();
   filteredOptions: Observable<string[]>;
 
-  cards: any[] = [{ value: 'הוט' }, { value: 'שופרסל' }, { value: 'נגב' }, { value: 'יוניק' },
-  { value: 'דרים קארד' }, { value: 'מאסטר-קארד אוהד' }, { value: 'דרים קארד אוהד' }, { value: 'לייף סטייל' }];
+  cards: CardsModel[] = [];
   options: OptionModel[];
   categories: CategoriesModel[];
 
   constructor(private loginService: LoginService, private shareDataService: ShareDataService,
     private webSocketService: WebSocketService) { }
-  public bankTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null);
+  public bankTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null, null);
 
   ngOnInit() {
     this.onLoadComponent();
@@ -41,6 +41,9 @@ export class RegisterNewTransactionModalComponent implements OnInit {
       this.options = response as any;
       this.shareDataService.currentCategories.subscribe(data => {
         this.categories = data as any;
+        this.shareDataService.currentCards.subscribe(cardsData => {
+          this.cards = cardsData as any;
+        });
       });
     });
   }
@@ -52,6 +55,7 @@ export class RegisterNewTransactionModalComponent implements OnInit {
       this.purchaseMonth = moment().month(this.purchaseMonth).format('MMMM');
       this.bankTransaction.purchaseDate = this.date;
       this.bankTransaction.monthPurchase = this.purchaseMonth;
+      this.bankTransaction.numberofpayments = 1;
       this.bankTransaction.yearOfTransaction = moment(Date.now()).format('YYYY') as any;
       this.bankTransaction.username = this.loginService.getUsernameAndId().username;
       this.categories.push({ typeProduct: this.bankTransaction.typeProduct });
@@ -64,7 +68,7 @@ export class RegisterNewTransactionModalComponent implements OnInit {
   resetAfterRegister() {
     this.myControl.reset();
     const cardName = this.bankTransaction.cardName;
-    this.bankTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null);
+    this.bankTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null, this.bankTransaction.billingDate);
     this.bankTransaction.cardName = cardName;
   }
   validateNewTransaction() {
@@ -82,6 +86,9 @@ export class RegisterNewTransactionModalComponent implements OnInit {
       this.bankTransaction.eachMonth = null;
       this.bankTransaction.leftPayments = null;
     }
+  }
+  addBillingDate(billingDate: number): void {
+    this.bankTransaction.billingDate = billingDate;
   }
 }
 

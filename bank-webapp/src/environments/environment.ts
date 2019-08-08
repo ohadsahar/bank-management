@@ -9,6 +9,7 @@ export const environment = {
   backendUrlSalary: 'http://localhost:3000/api/salary',
   backendUrlLogin: 'http://localhost:3000/api/login',
   backendUrlHome: 'http://localhost:3000/api/home',
+  backendUrlCards: 'http://localhost:3000/api/cards',
   backendUrlSocketIo: 'http://localhost:3001',
 };
 

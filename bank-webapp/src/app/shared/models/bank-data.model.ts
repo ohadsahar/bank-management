@@ -12,6 +12,7 @@ export interface Bank {
   purchaseDate: string;
   monthPurchase: string;
   yearOfTransaction: number;
+  billingDate: number;
 }
 
 

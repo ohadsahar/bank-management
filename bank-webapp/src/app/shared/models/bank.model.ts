@@ -11,5 +11,6 @@ export class BankValues {
               public leftPayments: number,
               public purchaseDate: string,
               public monthPurchase: string,
-              public yearOfTransaction: number) {}
+              public yearOfTransaction: number,
+              public billingDate: number) {}
 }

@@ -2,9 +2,15 @@ const validator = require('validator');
 const moment = require('moment');
 
 async function validateUpdateData(transactionData) {
-  if (validator.isLength(transactionData.cardName, { min: 3 })
-        && validator.isLength(transactionData.name, { min: 4 })
-        && validator.isLength(transactionData.typeProduct, { min: 4 })) {
+  if (validator.isLength(transactionData.cardName, {
+    min: 3,
+  })
+    && validator.isLength(transactionData.name, {
+      min: 4,
+    })
+    && validator.isLength(transactionData.typeProduct, {
+      min: 4,
+    })) {
     return transactionData;
   }
   throw new Error('One of the transaction data is invalid, transactionData did not passed the validator test');
@@ -21,18 +27,26 @@ async function validateSalary(salaryData) {
   }
   throw new Error('Salary data is not numeric!!');
 }
+
 function validateBeforeDelete(salaryId) {
-  if (validator.isLength(salaryId, { min: 3 })) {
+  if (validator.isLength(salaryId, {
+    min: 3,
+  })) {
     return salaryId;
   }
   throw new Error('Id length lower then zero, no id at all!');
 }
+
 function validateRegisterData(registerData) {
-  if (validator.isEmail(registerData.username) && validator.isLength(registerData.password, { min: 8, max: 8 })) {
+  if (validator.isEmail(registerData.username) && validator.isLength(registerData.password, {
+    min: 8,
+    max: 8,
+  })) {
     return true;
   }
   throw new Error('Validation of register new user has problem with data!');
 }
+
 function validateSalaryDataBeforeUpdate(salaryData) {
   if (salaryData) {
     return salaryData;
@@ -40,6 +54,15 @@ function validateSalaryDataBeforeUpdate(salaryData) {
   throw new Error('Data of update is not valid, sorry! cannot update');
 }
 
+function validateCardData(cardData) {
+  if (validator.isLength(cardData.cardName, {
+    min: 1,
+    max: 20,
+  })) {
+    return cardData;
+  }
+  throw new Error('data of card not valid, try again!');
+}
 module.exports = {
 
   validateUpdateData,
@@ -47,4 +70,5 @@ module.exports = {
   validateRegisterData,
   validateBeforeDelete,
   validateSalaryDataBeforeUpdate,
+  validateCardData,
 };

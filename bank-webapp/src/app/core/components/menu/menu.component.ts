@@ -38,7 +38,10 @@ export class MenuComponent implements OnInit {
       this.router.navigate(['user-chart/chart']);
     }
     if (event.index === 5) {
-      this.selectedTab = 5;
+      this.router.navigate(['user-card-management/cards-management']);
+    }
+    if (event.index === 6) {
+      this.selectedTab = 6;
       this.disconnect();
     }
   }

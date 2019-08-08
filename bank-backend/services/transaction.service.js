@@ -2,6 +2,7 @@ const moment = require('moment');
 const TransactionModel = require('../models/transaction');
 const transactionUtil = require('../utils/transcation');
 const validatorUtil = require('../utils/validator');
+const cardService = require('./card.service');
 
 async function register(transactionData) {
   transactionData.purchaseDate = moment(transactionData.purchaseDate).format('L');
@@ -17,6 +18,7 @@ async function register(transactionData) {
     purchaseDate: transactionData.purchaseDate,
     monthPurchase: transactionData.monthPurchase,
     yearOfTransaction: transactionData.yearOfTransaction,
+    billingDate: transactionData.billingDate,
   });
   await transactionToCreate.save();
   return {
@@ -46,6 +48,7 @@ async function getCharts(username) {
 async function get(username) {
   const currentYear = new Date().getFullYear();
   const fetchedTransactions = await TransactionModel.find({ username, yearOfTransaction: currentYear });
+  const resultCards = await cardService.getCards(username);
   const resultLodashTransactions = await transactionUtil.groupCategories(fetchedTransactions);
   const resultOfAllBushinessNames = await transactionUtil.allBushinessNames(fetchedTransactions);
   return {
@@ -55,6 +58,7 @@ async function get(username) {
     chartGroupByMonth: resultLodashTransactions.groupedByMonth,
     groupOfCategories: resultLodashTransactions.productsGroup,
     groupOfbusiness: resultLodashTransactions.businessGroup,
+    allCards: resultCards,
   };
 }
 async function getTransactionById(id) {

@@ -1,3 +1,4 @@
+import { CardsModel } from './../../shared/models/cards.model';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Bank } from 'src/app/shared/models/bank-data.model';
@@ -5,6 +6,7 @@ import { CategoriesModel } from 'src/app/shared/models/categories.model';
 import { OptionModel } from 'src/app/shared/models/option.model';
 @Injectable({ providedIn: 'root' })
 export class ShareDataService {
+  private passCards = new BehaviorSubject<CardsModel>(null);
   private passTransactions = new BehaviorSubject<any>(null);
   private passDestroyCharts = new BehaviorSubject<boolean>(false);
   private passSalaryCharts = new BehaviorSubject<any>(null);
@@ -21,6 +23,7 @@ export class ShareDataService {
   currentCashToPass = this.passCurrentCash.asObservable();
   currentCategories = this.passCategories.asObservable();
   currentOptions = this.passOptions.asObservable();
+  currentCards = this.passCards.asObservable();
   constructor() { }
 
   changeTransactions(transactions: Bank) {
@@ -43,5 +46,8 @@ export class ShareDataService {
   }
   changeCategories(value: CategoriesModel) {
     this.passCategories.next(value);
+  }
+  changeCards(value: CardsModel) {
+    this.passCards.next(value);
   }
 }

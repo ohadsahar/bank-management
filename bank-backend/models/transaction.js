@@ -11,6 +11,7 @@ const transaction = mongoose.Schema({
   leftPayments: { type: Number, required: true },
   purchaseDate: { type: String, required: true },
   monthPurchase: { type: String, required: true },
-  yearOfTransaction: {type: Number, required: true},
+  yearOfTransaction: { type: Number, required: true },
+  billingDate: { type: Number, required: true },
 });
 module.exports = mongoose.model('transaction', transaction);

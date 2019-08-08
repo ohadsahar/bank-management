@@ -26,6 +26,12 @@
       <i class="fas fa-chart-line"></i> סטטיסטיקה
     </ng-template>
   </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+        <i class="fas fa-wallet"></i> ניהול כרטיסים
+    </ng-template>
+  </mat-tab>
   <mat-tab>
     <ng-template mat-tab-label>
       <i class="fas fa-sign-out-alt"></i> התנתק
@@ -60,6 +66,11 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" [routerLink]="['user-chart/chart']"> <i class="fas fa-chart-line"></i> סטטיסטיקה
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['user-card-management/cards-management']"> <i class="fas fa-wallet"></i>
+          ניהול כרטיסים
         </a>
       </li>
       <li class="nav-item">

@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const localStorage = require('store');
 const LoginModel = require('../models/users');
 
 async function login(userData) {
@@ -12,6 +13,12 @@ async function login(userData) {
     const userData = {
       user: fetchedUser, id: fetchedUser.id, username: fetchedUser.username, token, expiresIn: 3600, message: 'Login successful', success: true,
     };
+    if (localStorage.get('username')) {
+      localStorage.remove('username');
+    }
+    localStorage.set('username', userData.username);
+
+
     return { userData, success: true };
   }
   throw new Error('Username or password invalid, sorry!');

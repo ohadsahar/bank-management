@@ -3,6 +3,10 @@ body {
   height: 100%;
 }
 
+.salary-management {
+  text-align: right;
+  padding: 20px;
+}
 .mat-form-field-appearance-legacy .mat-form-field-wrapper {
   width: 50%;
   text-align: right;

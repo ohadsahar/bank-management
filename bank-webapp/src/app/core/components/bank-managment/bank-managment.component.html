@@ -10,7 +10,7 @@
           </mat-form-field>
         </div>
         <h1 class="current-status">עו"ש: {{currentCash}} <i class="fas fa-shekel-sign"></i>  </h1>
-        <div class="list-of-transactions" *ngIf="!isLoading">
+        <div class="list-of-transactions">
           <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort
             (matSortChange)="sortData($event)">
             <ng-container matColumnDef="id">
@@ -147,8 +147,9 @@
         </table>
       </div>
       <i class="fas fa-plus" (click)="registerNewTransactionDialog()"></i>
-      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+
     </div>
   </div>
 </div>
 </div>
+<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>

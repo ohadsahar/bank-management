@@ -1,5 +1,7 @@
 .cards-management-component {
   direction: rtl;
+  padding: 20px;
+  text-align: right;
 }
 
 .cards-management-component table {
@@ -23,6 +25,8 @@ th {
   display: block;
   text-align: center;
   padding: 20px;
+  width: 50%;
+  margin-top: 3%;
 }
 
 ::ng-deep .cards-management-component .mat-form-field-appearance-legacy .mat-form-field-wrapper {
@@ -54,5 +58,14 @@ i {
   ::ng-deep .cards-management-component .mat-form-field-appearance-legacy .mat-form-field-wrapper {
     width: 100%;
     margin: auto;
+  }
+
+  .cards-management-component .card-form {
+    margin: auto;
+    display: block;
+    text-align: center;
+    padding: 20px;
+    width: 100%;
+    margin-top: 3%;
   }
 }

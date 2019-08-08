@@ -43,6 +43,7 @@ export class HomePageComponent implements OnInit {
       if (response.message.resultOfCurrentCategoryExpense.salaryTotal !== undefined) {
         this.totalSalaryCurrentMonth = response.message.resultOfCurrentCategoryExpense.salaryTotal.salary;
         this.saveCurrentMonth = this.totalSalaryCurrentMonth - this.totalExpenseCurrentMonth;
+        this.saveCurrentMonth = Number(this.saveCurrentMonth.toFixed(2));
       }
       this.shareDataService.changeCurrentCash(this.totalExpenseCurrentMonth);
     });

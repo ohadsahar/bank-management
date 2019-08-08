@@ -7,13 +7,13 @@ body {
 }
 
 .home-component .short-info {
-  background-color: #392759;
+  background-color: #e113131a;
   height: 40vh;
   padding: 50px;
 }
 
 .home-component .quick-information {
-  background-color: #1F0318;
+  background-color: #ebebeb;
   height: 60vh;
 }
 
@@ -49,4 +49,3 @@ h1 {
 ul {
   list-style-type: none;
 }
-

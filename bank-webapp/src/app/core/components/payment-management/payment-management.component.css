@@ -25,7 +25,7 @@ th.mat-header-cell:first-of-type {
 
 .mat-paginator-container,
 .mat-elevation-z8 {
-  background-image: linear-gradient(45deg, #2d2c31, #7925df, #490972);
+  background-image: linear-gradient(45deg,#72092ff0, #ab5e03fa, #72092ff0);
   color: white;
   font-weight: bold;
 }
@@ -179,5 +179,9 @@ i {
   .payment-component .purchase-list {
 
     padding: 0px !important;
+  }
+
+  .payment-component .purchase-list .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+    width: 100%;
   }
 }

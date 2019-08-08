@@ -1,7 +1,7 @@
+const moment = require('moment');
 const TransactionModel = require('../models/transaction');
 const transactionUtil = require('../utils/transcation');
 const validatorUtil = require('../utils/validator');
-const moment = require('moment');
 
 async function register(transactionData) {
   transactionData.purchaseDate = moment(transactionData.purchaseDate).format('L');
@@ -16,7 +16,7 @@ async function register(transactionData) {
     leftPayments: transactionData.leftPayments,
     purchaseDate: transactionData.purchaseDate,
     monthPurchase: transactionData.monthPurchase,
-    yearOfTransaction: transactionData.yearOfTransaction
+    yearOfTransaction: transactionData.yearOfTransaction,
   });
   await transactionToCreate.save();
   return {
@@ -34,8 +34,8 @@ async function deleteX(transactionId) {
   await TransactionModel.findOneAndDelete({ _id: transactionId });
 }
 async function getCharts(username) {
-
-  const fetchedTransactions = await TransactionModel.find({ username });
+  const currentYear = new Date().getFullYear();
+  const fetchedTransactions = await TransactionModel.find({ username, yearOfTransaction: currentYear });
   const resultLodashTransactions = await transactionUtil.groupCategories(fetchedTransactions);
   return {
     chartGroupByCardName: resultLodashTransactions.groupedByCardName,
@@ -44,7 +44,8 @@ async function getCharts(username) {
   };
 }
 async function get(username) {
-  const fetchedTransactions = await TransactionModel.find({ username });
+  const currentYear = new Date().getFullYear();
+  const fetchedTransactions = await TransactionModel.find({ username, yearOfTransaction: currentYear });
   const resultLodashTransactions = await transactionUtil.groupCategories(fetchedTransactions);
   const resultOfAllBushinessNames = await transactionUtil.allBushinessNames(fetchedTransactions);
   return {
@@ -53,7 +54,7 @@ async function get(username) {
     chartGroupByCardName: resultLodashTransactions.groupedByCardName,
     chartGroupByMonth: resultLodashTransactions.groupedByMonth,
     groupOfCategories: resultLodashTransactions.productsGroup,
-    groupOfbusiness: resultLodashTransactions.businessGroup
+    groupOfbusiness: resultLodashTransactions.businessGroup,
   };
 }
 async function getTransactionById(id) {
@@ -65,7 +66,7 @@ async function getTransactionById(id) {
 }
 async function getCurrentCategoryExpense(username) {
   const resultOfCurrentCategoryExpense = await transactionUtil.getCurrentCategoryLargestExpense(username);
-  return {resultOfCurrentCategoryExpense}
+  return { resultOfCurrentCategoryExpense };
 }
 module.exports = {
   register,
@@ -74,5 +75,5 @@ module.exports = {
   getCharts,
   updatePurchaseDate,
   getTransactionById,
-  getCurrentCategoryExpense
+  getCurrentCategoryExpense,
 };

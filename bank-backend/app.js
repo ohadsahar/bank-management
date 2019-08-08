@@ -20,7 +20,7 @@ app.listen(PORT, () => {
   console.log(`Server is on, via port: ${PORT}`);
 });
 
-app.use('/api/home', homeRoute)
+app.use('/api/home', homeRoute);
 app.use('/api/salary', salaryRoute);
 app.use('/api/bank', transactionRoute);
 app.use('/api/payments', paymentRoute);

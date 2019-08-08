@@ -7,9 +7,11 @@ const SalaryModel = require('../models/salary');
 
 async function getCurrentCategoryLargestExpense(username) {
   const currentMonth = moment().format('MMMM');
+  const currentYear = new Date().getFullYear();
   const fetchedTransactions = await TransactionModel.find({
     username,
-    monthPurchase: currentMonth
+    monthPurchase: currentMonth,
+    yearOfTransaction: currentYear,
   });
   const groupByDivisions = lodash(fetchedTransactions).groupBy('typeProduct')
     .map((items, typeProduct) => ({
@@ -23,20 +25,20 @@ async function getCurrentCategoryLargestExpense(username) {
 
   const allSalaryOfCurrentMonth = await SalaryModel.find({
     username,
-    monthOfSalary: currentMonth
+    monthOfSalary: currentMonth,
   });
   const groupBySalary = lodash(allSalaryOfCurrentMonth).groupBy('monthOfSalary')
     .map((items, monthOfSalary) => ({
       monthOfSalary,
-      salary: lodash.sumBy(items, 'salary')
+      salary: lodash.sumBy(items, 'salary'),
     })).value();
   const maxSalary = lodash.maxBy(groupBySalary, 'salary');
   return {
     largestExpense: maxCategory,
     salaryTotal: maxSalary,
     minimumExpense: minCategory,
-    totalExpenseCash: totalExpense
-  }
+    totalExpenseCash: totalExpense,
+  };
 }
 async function groupCategories(transactions) {
   const groupByCardName = lodash(transactions).groupBy('cardName')
@@ -70,10 +72,9 @@ async function groupCategories(transactions) {
     groupedByMonth: groupByMonth,
     groupedByCategoires: groupByDivisions,
     businessGroup: businessNames,
-    productsGroup: typeProductsOnly
+    productsGroup: typeProductsOnly,
   };
 }
-
 async function update(resultOfValidateTransactionData) {
   // eslint-disable-next-line no-underscore-dangle
   await TransactionModel.findByIdAndUpdate({
@@ -83,7 +84,7 @@ async function update(resultOfValidateTransactionData) {
 }
 async function deletePayment(transactionId) {
   await TransactionModel.findOneAndDelete({
-    _id: transactionId
+    _id: transactionId,
   });
 }
 async function archivePayment(transaction) {

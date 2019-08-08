@@ -34,11 +34,11 @@ export class CardsManagementComponent implements OnInit {
     this.onLoadComponent();
   }
   onLoadComponent() {
-    this.loading();
     this.currentUsername = this.loginService.getUsernameAndId().username;
     this.getAllCards();
   }
   createNewCard(form: NgForm) {
+    this.loading();
     if (form.invalid) {
       return;
     }
@@ -47,13 +47,16 @@ export class CardsManagementComponent implements OnInit {
       this.cards.push(response.message);
       form.reset();
       this.updateTable();
+      this.loaded();
     }, (error) => {
       this.messageService.failedMessage(error, ' Dismiss');
     });
   }
   getAllCards() {
+    this.loading();
     this.cardService.getAllCards(this.currentUsername).subscribe(response => {
       this.cards = response.message;
+      this.loaded();
       this.updateTable();
     },
       (error) => {
@@ -68,6 +71,7 @@ export class CardsManagementComponent implements OnInit {
       const deleteCards = this.cards.filter(card => card._id !== response.message);
       this.cards = deleteCards;
       this.updateTable();
+      this.loaded();
     },
       (error) => {
         this.loaded();
@@ -77,7 +81,6 @@ export class CardsManagementComponent implements OnInit {
   }
   updateTable() {
     this.dataSource = new MatTableDataSource(this.cards);
-    this.loaded();
   }
   editCard(card: CardsModel) {
     this.editCardForm._id = card._id;
@@ -92,6 +95,7 @@ export class CardsManagementComponent implements OnInit {
         const index = this.cards.findIndex(card => card._id === response.message._id);
         this.cards[index] = response.message;
         this.updateTable();
+        this.loaded();
       },
         (error) => {
           this.loaded();

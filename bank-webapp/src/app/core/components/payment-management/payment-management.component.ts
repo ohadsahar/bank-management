@@ -49,10 +49,10 @@ export class PaymentManagementComponent implements OnInit {
     this.onLoadSite();
   }
   onLoadSite(): void {
-    this.loading();
     this.getAllTransactions();
   }
   getAllTransactions(): void {
+    this.loading();
     const username = this.loginService.getUsernameAndId().username;
     this.store.dispatch(new transactionActions.GetAllArchiveTransactions(username));
     this.dataToSubscribe = this.store.select(fromRoot.fetchedTransaction).pipe(takeUntil(this.ngbSubscribe))

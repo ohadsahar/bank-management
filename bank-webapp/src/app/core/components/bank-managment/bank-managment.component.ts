@@ -132,6 +132,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
         if (data.loaded) {
           this.webSocketService.emit('create-transaction', data.data);
           dataToSubscribe.unsubscribe();
+          this.loaded();
         }
       }, (error) => {
         this.loaded();
@@ -147,6 +148,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
           this.deletedId = transactionId;
           this.webSocketService.emit('delete-transaction', data.data);
           dataToSubscribe.unsubscribe();
+          this.loaded();
         }
       }, (error) => {
         this.loaded();
@@ -162,6 +164,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
         if (data.loaded) {
           this.webSocketService.emit('update-transaction', data.data);
           this.dataToSubscribe.unsubscribe();
+          this.loaded();
         }
       }, (error) => {
         this.loaded();

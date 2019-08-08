@@ -1,8 +1,10 @@
-
-import { HomePageService } from './../../services/home-page.service';
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '@app/services/login.service';
 import { ShareDataService } from '@app/services/share-data.service';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import { HomePageService } from './../../services/home-page.service';
+import { MessageService } from './../../services/message.service';
+
 
 
 @Component({
@@ -20,14 +22,17 @@ export class HomePageComponent implements OnInit {
   minimumExpenseCurrentMonthCash: number;
   minimumExpenseCurrentMonthCashType: string;
   saveCurrentMonth: number;
-  constructor(private homePageService: HomePageService, private loginService: LoginService, private shareDataService: ShareDataService) {
+  isLoading: boolean;
+  constructor(private homePageService: HomePageService, private loginService: LoginService, private shareDataService: ShareDataService,
+              private messageService: MessageService, private spinnerService: Ng4LoadingSpinnerService) {
+    this.isLoading = false;
   }
 
   ngOnInit() {
     this.onLoadComponent();
   }
-
   onLoadComponent() {
+    this.loading();
     this.username = this.loginService.getUsernameAndId().username;
     this.homePageService.getQuickInformation(this.username).subscribe(response => {
       if (response.message.resultOfCurrentCategoryExpense.minimumExpense) {
@@ -46,6 +51,18 @@ export class HomePageComponent implements OnInit {
         this.saveCurrentMonth = Number(this.saveCurrentMonth.toFixed(2));
       }
       this.shareDataService.changeCurrentCash(this.totalExpenseCurrentMonth);
+      this.loaded();
+    }, (error) => {
+      this.loaded();
+      this.messageService.failedMessage(error, 'Dismiss');
     });
+  }
+  loading() {
+    this.isLoading = true;
+    this.spinnerService.show();
+  }
+  loaded() {
+    this.isLoading = false;
+    this.spinnerService.hide();
   }
 }

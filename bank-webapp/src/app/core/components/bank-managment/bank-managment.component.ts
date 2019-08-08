@@ -41,8 +41,6 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   public editEnable: boolean;
   public updateAble: boolean;
   public isLoading: boolean;
-  public loading: boolean;
-  public loaded: boolean;
   public dataToSubscribe: Subscription;
   public registerNewTransactionNgrx: Subject<void> = new Subject<void>();
   public updateTransaction$: Subject<void> = new Subject<void>();
@@ -61,7 +59,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     public router: Router, public dialog: MatDialog, private loginService: LoginService,
     private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService,
     private webSocketService: WebSocketService) {
-    this.isLoading = true;
+    this.isLoading = false;
     this.counter = 0;
     this.numberOfPayments = 0;
     this.editEnable = false;
@@ -78,8 +76,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.onLoadSite();
   }
   onLoadSite(): void {
-    this.isLoading = true;
-    this.spinnerService.show();
+    this.loading();
     this.shareDataService.currentCashToPass.subscribe(response => {
       this.currentCash = response;
     });
@@ -119,14 +116,16 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
           this.shareDataService.changeOptions(data.data.groupOfbusiness);
           this.shareDataService.changeCards(data.data.allCards);
           this.cards = data.data.allCards;
-          this.spinnerService.hide();
-          this.loading = false;
           this.allTransactions = data.data.foundTranscations;
           this.afterFetchedAllData();
         }
+      }, (error) => {
+        this.loaded();
+        this.messageService.failedMessage(error, 'Dismiss');
       });
   }
   registerNewTransaction(result: any): void {
+    this.loading();
     this.store.dispatch(new transactionActions.RegisterTransaction(result));
     const dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.registerNewTransactionNgrx))
       .subscribe((data) => {
@@ -134,9 +133,13 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
           this.webSocketService.emit('create-transaction', data.data);
           dataToSubscribe.unsubscribe();
         }
+      }, (error) => {
+        this.loaded();
+        this.messageService.failedMessage(error, 'Dismiss');
       });
   }
   deleteTransaction(transactionId: string): void {
+    this.loading();
     this.store.dispatch(new transactionActions.DeleteTransaction(transactionId));
     const dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((data) => {
@@ -145,9 +148,13 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
           this.webSocketService.emit('delete-transaction', data.data);
           dataToSubscribe.unsubscribe();
         }
+      }, (error) => {
+        this.loaded();
+        this.messageService.failedMessage(error, 'Dismiss');
       });
   }
   updateTransaction(): void {
+    this.loading();
     this.bankEditTransaction.purchaseDate = moment(this.bankEditTransaction.purchaseDate).format('L');
     this.store.dispatch(new transactionActions.UpdateTransaction(this.bankEditTransaction));
     this.dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.ngUnsubscribe))
@@ -156,11 +163,14 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
           this.webSocketService.emit('update-transaction', data.data);
           this.dataToSubscribe.unsubscribe();
         }
+      }, (error) => {
+        this.loaded();
+        this.messageService.failedMessage(error, 'Dismiss');
       });
   }
   afterFetchedAllData(): void {
     this.updateTable();
-    this.isLoading = false;
+    this.loaded();
     this.dataToSubscribe.unsubscribe();
   }
   afterUpdate(): void {
@@ -256,9 +266,18 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.purchaseD = null;
     this.monthDifference = 0;
   }
+  loading() {
+    this.isLoading = true;
+    this.spinnerService.show();
+  }
+  loaded() {
+    this.isLoading = false;
+    this.spinnerService.hide();
+  }
   ngOnDestroy() {
     this.registerNewTransactionNgrx.unsubscribe();
     this.ngUnsubscribe.unsubscribe();
   }
+
 }
 

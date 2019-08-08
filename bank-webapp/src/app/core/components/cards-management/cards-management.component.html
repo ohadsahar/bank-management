@@ -1,4 +1,6 @@
-<div class="cards-management-component">
+<ng4-loading-spinner [threshold]="isLoading" [timeout]="9999999" [loadingText]="'Please wait...'" [zIndex]="9999">
+</ng4-loading-spinner>
+<div class="cards-management-component" *ngIf="!isLoading">
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
     <ng-container matColumnDef="options">
       <th mat-header-cell *matHeaderCellDef> <i class="fab fa-cc-visa"></i> אפשרויות </th>

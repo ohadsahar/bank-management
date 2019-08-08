@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { SalaryComponent } from './salary.component';
 import { CommonModule } from '@angular/common';
 import { SalaryRoutingModule } from './salary-routing.module';
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { SalaryRoutingModule } from './salary-routing.module';
     CommonModule,
     AngularMaterialModule,
     FormsModule,
-    SalaryRoutingModule
+    SalaryRoutingModule,
+    Ng4LoadingSpinnerModule
   ]
 })
 export class SalaryModule {

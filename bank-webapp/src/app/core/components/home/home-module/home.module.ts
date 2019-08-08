@@ -1,3 +1,4 @@
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 import { HomePageRouting } from './home-routing.module';
 import { HomePageComponent } from './../home.component';
 import { AngularMaterialModule } from './../../../../angular-material.module';
@@ -9,7 +10,8 @@ import { CommonModule } from '@angular/common';
   imports: [
     CommonModule,
     AngularMaterialModule,
-    HomePageRouting
+    HomePageRouting,
+    Ng4LoadingSpinnerModule
   ]
 })
 export class HomeModule { }

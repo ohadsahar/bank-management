@@ -41,8 +41,8 @@ export class SalaryComponent implements OnInit {
   public monthArray: string[] = [];
   public salaryArray: number[] = [];
   constructor(private salaryService: SalaryService, private loginService: LoginService,
-    private messageService: MessageService, private store: Store<fromRoot.State>,
-    private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService) {
+              private messageService: MessageService, private store: Store<fromRoot.State>,
+              private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService) {
     this.editEnable = false;
     this.counter = 0;
     this.updateAble = false;
@@ -57,16 +57,22 @@ export class SalaryComponent implements OnInit {
     this.onLoadComponent();
   }
   onLoadComponent() {
+    this.loading();
     const username = this.loginService.getUsernameAndId().username;
     this.salaryService.get(username).subscribe(response => {
       this.allSalary = response.message.salary as any;
       this.updateTable();
+      this.loaded();
+    }, (error) => {
+      this.loaded();
+      this.messageService.failedMessage(error, 'Dismiss');
     });
   }
   registerSalary(form: NgForm): void {
     if (form.invalid) {
       return;
     }
+    this.loading();
     const salaryData = {
       salary: form.value.salary,
       username: this.loginService.getUsernameAndId().username,
@@ -81,16 +87,26 @@ export class SalaryComponent implements OnInit {
           this.updateTable();
           this.messageService.successMessage('המשכורת התווספה בהצלחה', 'סגור');
           this.dataToSubscribe.unsubscribe();
+          this.loaded();
         }
+      }, (error) => {
+        this.loaded();
+        this.messageService.failedMessage(error, 'Dismiss');
       });
   }
   getSalaryByMonths() {
+    this.loading();
     const username = this.loginService.getUsernameAndId().username;
     this.salaryService.get(username).subscribe(response => {
       this.shareDataService.changeSalary(response.message.salaryByMonth);
+      this.loaded();
+    }, (error) => {
+      this.loaded();
+      this.messageService.failedMessage(error, 'Dismiss');
     });
   }
   deleteSalary(salaryId: string): void {
+    this.loading();
     this.store.dispatch(new salaryActions.DeleteSalary(salaryId));
     this.dataToSubscribe = this.store.select(fromRoot.getSalaryData).pipe(takeUntil(this.ngbSubscribe))
       .subscribe((data) => {
@@ -101,7 +117,11 @@ export class SalaryComponent implements OnInit {
           this.updateTable();
           this.messageService.successMessage('המשכורת נמחקה בהצלחה', 'סגור');
           this.dataToSubscribe.unsubscribe();
+          this.loaded();
         }
+      }, (error) => {
+        this.loaded();
+        this.messageService.failedMessage(error, 'Dismiss');
       });
   }
   editSalary(salaryData: SalaryData): void {
@@ -118,6 +138,7 @@ export class SalaryComponent implements OnInit {
     }
   }
   updateSalary(): void {
+    this.loading();
     this.store.dispatch(new salaryActions.UpdateSalary(this.salaryEditData));
     this.dataToSubscribe = this.store.select(fromRoot.getSalaryData).pipe(takeUntil(this.ngbSubscribe))
       .subscribe((data) => {
@@ -129,7 +150,11 @@ export class SalaryComponent implements OnInit {
           this.updateAble = false;
           this.messageService.successMessage('המשכורת עודכנה בהצלחה', 'סגור');
           this.dataToSubscribe.unsubscribe();
+          this.loaded();
         }
+      }, (error) => {
+        this.loaded();
+        this.messageService.failedMessage(error, 'Dismiss');
       });
   }
   cancelUpdate(): void {
@@ -165,11 +190,11 @@ export class SalaryComponent implements OnInit {
   compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
-  startLoading() {
+  loading() {
     this.isLoading = true;
     this.spinnerService.show();
   }
-  stopLoading() {
+  loaded() {
     this.isLoading = false;
     this.spinnerService.hide();
   }

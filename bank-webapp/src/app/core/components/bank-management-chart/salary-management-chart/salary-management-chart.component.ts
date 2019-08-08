@@ -1,3 +1,5 @@
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import { MessageService } from './../../../services/message.service';
 import { SalaryService } from 'src/app/core/services/salary.service';
 import { ShareDataService } from '../../../services/share-data.service';
 import { Chart } from 'chart.js';
@@ -15,18 +17,26 @@ import { LoginService } from '@app/services/login.service';
 export class SalaryManagementChartComponent implements OnInit {
   public chartInComeData: Chart;
   public allInComeData: any[];
+  isLoading: boolean;
   public monthArray: string[] = [];
   public salaryArray: number[] = [];
 
-  constructor(private shareDataService: ShareDataService, private loginService: LoginService, private salaryService: SalaryService) { }
+  constructor(private shareDataService: ShareDataService, private loginService: LoginService, private salaryService: SalaryService,
+    private messageService: MessageService, private spinnerService: Ng4LoadingSpinnerService) {
+    this.isLoading = false;
+  }
 
   ngOnInit() {
     this.onLoadComponent();
   }
   onLoadComponent() {
+    this.loading();
     const username = this.loginService.getUsernameAndId().username;
     this.salaryService.get(username).subscribe(response => {
       this.shareDataService.changeSalary(response.message.salaryByMonth);
+    }, (error) => {
+      this.loaded();
+      this.messageService.failedMessage(error, 'Dismiss');
     });
     this.waitingForChartData();
   }
@@ -50,6 +60,7 @@ export class SalaryManagementChartComponent implements OnInit {
       this.salaryArray.push(element.salary);
     });
     this.expensesByCurrentMonthChart('bar');
+    this.loaded();
   }
   resetArrays() {
     this.monthArray = [];
@@ -81,7 +92,7 @@ export class SalaryManagementChartComponent implements OnInit {
             stacked: true,
             barThickness: 8,
             maxBarThickness: 10,
-               ticks: {
+            ticks: {
               fontColor: 'white',
               fontSize: 18,
               stepSize: 1,
@@ -102,5 +113,14 @@ export class SalaryManagementChartComponent implements OnInit {
     this.shareDataService.changeSalaryDestroyStatus(false);
     this.chartInComeData.destroy();
     this.assignChartDataInCome();
+  }
+
+  loading() {
+    this.isLoading = true;
+    this.spinnerService.show();
+  }
+  loaded() {
+    this.isLoading = false;
+    this.spinnerService.hide();
   }
 }

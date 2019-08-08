@@ -1,3 +1,4 @@
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { MessageService } from './../../services/message.service';
 import { EditCardModel } from './../../../shared/models/edit-card.model';
 import { MatTableDataSource } from '@angular/material';
@@ -20,9 +21,12 @@ export class CardsManagementComponent implements OnInit {
   editCardForm = new EditCardModel('', '', '', null);
   displayedColumns: string[] = ['options', 'cardName', 'billingDate'];
   currentUsername: string;
+  isLoading: boolean;
   dataSource = new MatTableDataSource(this.cards);
   editoptionsable: any = {};
-  constructor(private cardService: CardService, private loginService: LoginService, private messageService: MessageService) {
+  constructor(private cardService: CardService, private loginService: LoginService, private messageService: MessageService,
+              private spinnerService: Ng4LoadingSpinnerService) {
+    this.isLoading = false;
     this.cards = [];
   }
 
@@ -30,6 +34,7 @@ export class CardsManagementComponent implements OnInit {
     this.onLoadComponent();
   }
   onLoadComponent() {
+    this.loading();
     this.currentUsername = this.loginService.getUsernameAndId().username;
     this.getAllCards();
   }
@@ -52,23 +57,27 @@ export class CardsManagementComponent implements OnInit {
       this.updateTable();
     },
       (error) => {
+        this.loaded();
         this.messageService.failedMessage(error, ' Dismiss');
       }
     );
   }
   deleteCard(id: string) {
+    this.loading();
     this.cardService.deleteCard(id).subscribe(response => {
       const deleteCards = this.cards.filter(card => card._id !== response.message);
       this.cards = deleteCards;
       this.updateTable();
     },
       (error) => {
+        this.loaded();
         this.messageService.failedMessage(error, ' Dismiss');
       }
     );
   }
   updateTable() {
     this.dataSource = new MatTableDataSource(this.cards);
+    this.loaded();
   }
   editCard(card: CardsModel) {
     this.editCardForm._id = card._id;
@@ -77,6 +86,7 @@ export class CardsManagementComponent implements OnInit {
     this.editCardForm.billingDate = card.billingDate;
   }
   updateCard() {
+    this.loading();
     if (this.validateCard()) {
       this.cardService.updateCard(this.editCardForm).subscribe(response => {
         const index = this.cards.findIndex(card => card._id === response.message._id);
@@ -84,6 +94,7 @@ export class CardsManagementComponent implements OnInit {
         this.updateTable();
       },
         (error) => {
+          this.loaded();
           this.messageService.failedMessage(error, ' Dismiss');
         }
       );
@@ -94,5 +105,13 @@ export class CardsManagementComponent implements OnInit {
       return true;
     }
     return false;
+  }
+  loading() {
+    this.isLoading = true;
+    this.spinnerService.show();
+  }
+  loaded() {
+    this.isLoading = false;
+    this.spinnerService.hide();
   }
 }

@@ -3,6 +3,7 @@ import { AngularMaterialModule } from './../../../../angular-material.module';
 import { CommonModule } from '@angular/common';
 import { PaymentManagementComponent } from './../payment-management.component';
 import { NgModule } from "@angular/core";
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 
 
@@ -13,7 +14,8 @@ import { NgModule } from "@angular/core";
   imports: [
     CommonModule,
     AngularMaterialModule,
-    PaymentManagementRouting
+    PaymentManagementRouting,
+    Ng4LoadingSpinnerModule
   ],
 })
 

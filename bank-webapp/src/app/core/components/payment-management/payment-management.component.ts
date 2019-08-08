@@ -11,6 +11,7 @@ import * as fromRoot from '../../../app.reducer';
 import { Bank } from '../../../shared/models/bank-data.model';
 import * as transactionActions from '../../../store/actions/transaction.actions';
 import { LoginService } from './../../services/login.service';
+import { MessageService } from './../../services/message.service';
 @Component({
   selector: 'app-payment-management',
   templateUrl: './payment-management.component.html',
@@ -25,16 +26,18 @@ export class PaymentManagementComponent implements OnInit {
   public sortedData: Bank[];
   public allTransactions: Bank[];
   myControl = new FormControl();
-  public isLoading: boolean;
   public dataToSubscribe: Subscription;
   public ngbSubscribe: Subject<void> = new Subject<void>();
+  isLoading: boolean;
   constructor(
     private spinnerService: Ng4LoadingSpinnerService,
     public router: Router,
     public dialog: MatDialog,
+    private messageService: MessageService,
     public loginService: LoginService,
     private store: Store<fromRoot.State>
   ) {
+    this.isLoading = false;
   }
   dataSource = new MatTableDataSource();
   dataSourceOldTransactions = new MatTableDataSource();
@@ -46,6 +49,7 @@ export class PaymentManagementComponent implements OnInit {
     this.onLoadSite();
   }
   onLoadSite(): void {
+    this.loading();
     this.getAllTransactions();
   }
   getAllTransactions(): void {
@@ -56,8 +60,12 @@ export class PaymentManagementComponent implements OnInit {
         if (data.loaded) {
           this.allTransactions = data.data.archivesTransactions;
           this.updateTable();
+          this.loaded();
           this.dataToSubscribe.unsubscribe();
         }
+      }, (error) => {
+        this.loaded();
+        this.messageService.failedMessage(error, 'Dismiss');
       });
   }
   applyFilter(filterValue: string): void {
@@ -87,12 +95,11 @@ export class PaymentManagementComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-  startLoading() {
+  loading() {
     this.isLoading = true;
     this.spinnerService.show();
   }
-
-  stopLoading() {
+  loaded() {
     this.isLoading = false;
     this.spinnerService.hide();
   }

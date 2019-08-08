@@ -1,3 +1,4 @@
+import { MessageService } from './../../services/message.service';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Chart } from 'chart.js';
@@ -11,6 +12,7 @@ import { ChartByCardName } from './../../../shared/models/chart-by-cardname.mode
 import { ChartDivision } from './../../../shared/models/chart-division.model';
 import { LoginService } from './../../services/login.service';
 import * as moment from 'moment';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 @Component({
   selector: 'app-bank-management-chart',
   templateUrl: './bank-management-chart.component.html',
@@ -35,8 +37,11 @@ export class BankManagementChartComponent implements OnInit {
   public eachMonthExpenses: Chart;
   public divisionChart: Chart;
   public currentMonth: string;
+  isLoading: boolean;
   private getCharts$: Subject<void> = new Subject<void>();
-  constructor(private loginService: LoginService, private store: Store<fromRoot.State>, private shareDataService: ShareDataService) {
+  constructor(private loginService: LoginService, private store: Store<fromRoot.State>, private shareDataService: ShareDataService,
+              private spinnerService: Ng4LoadingSpinnerService, private messageService: MessageService) {
+    this.isLoading = false;
     this.currentMonth = moment().format('MMMM');
   }
   ngOnInit() {
@@ -44,6 +49,7 @@ export class BankManagementChartComponent implements OnInit {
     this.waitingForDataCharts();
   }
   getAllCharts(): void {
+    this.loading();
     this.store.dispatch(new chartActions.GetCharts(this.loginService.getUsernameAndId().username));
     this.chartDataToSubscribe = this.store.select(fromRoot.getChartsData).pipe(takeUntil(this.getCharts$))
       .subscribe((data) => {
@@ -53,6 +59,9 @@ export class BankManagementChartComponent implements OnInit {
           this.chartDivisions = data.data.chartGroupByDivision;
           this.assignDataToCharts();
         }
+      }, (error) => {
+        this.messageService.failedMessage(error, 'Dismiss');
+        this.loaded();
       });
   }
   waitingForDataCharts() {
@@ -83,6 +92,7 @@ export class BankManagementChartComponent implements OnInit {
     });
     this.chartDataToSubscribe.unsubscribe();
     this.loadCharts();
+    this.loaded();
   }
   cardsChart(type: string): void {
     this.allCardChart = new Chart('allCardChart', {
@@ -219,5 +229,13 @@ export class BankManagementChartComponent implements OnInit {
     this.eachMonthExpenses.destroy();
     this.shareDataService.changeDestroy(false);
     this.getAllCharts();
+  }
+  loading() {
+    this.isLoading = true;
+    this.spinnerService.show();
+  }
+  loaded() {
+    this.isLoading = false;
+    this.spinnerService.hide();
   }
 }

@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import * as moment from 'moment';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { map, startWith, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { RegisterNewTransactionModalComponent } from 'src/app/shared/modals/register-transaction/register-new-transaction.component';
 import * as fromRoot from '../../../app.reducer';
 import { Bank } from '../../../shared/models/bank-data.model';
@@ -49,9 +49,11 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   public editoptionsable: any = {};
   public deletedId: string;
   currentCash: number;
+
   purchaseD: string;
   today: Date;
   monthDifference: number;
+  endDate: string;
   public cancelBankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null);
   public bankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null);
   constructor(private messageService: MessageService, private store: Store<fromRoot.State>,
@@ -71,7 +73,6 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   cards: any[] = [{ value: 'הוט' }, { value: 'שופרסל' }, { value: 'נגב' }, { value: 'יוניק' },
   { value: 'דרים קארד' }, { value: 'מאסטר-קארד אוהד' }, { value: 'דרים קארד אוהד' }, { value: 'לייף - סטייל' }];
   categories: any[];
-
 
   ngOnInit() {
     this.onLoadSite();
@@ -124,6 +125,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       });
   }
   registerNewTransaction(result: any): void {
+    console.log(result);
     this.store.dispatch(new transactionActions.RegisterTransaction(result));
     const dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.registerNewTransactionNgrx))
       .subscribe((data) => {
@@ -232,23 +234,25 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
-  calculateEachMonthEdit(): void {
-    // this.purchaseD = this.bankEditTransaction.purchaseDate;
-    // this.purchaseD = new Date(this.purchaseD) as any;
-    // this.today = new Date();
-    // // this.monthDifference = moment(this.today).diff(moment(this.purchaseD), 'months');
-    // const years = moment(this.purchaseD).diff(this.today, 'years');
-    // console.log(years);
-    // const months = moment(this.purchaseD).diff(this.today, 'months') - (years * 12);
-    // console.log(months);
+  calculateEachMonthEdit($event): void {
+    this.purchaseD = moment($event).format('L');
+    this.today = new Date();
+    this.endDate = moment(this.purchaseD).add(this.bankEditTransaction.numberofpayments, 'months').format('L');
+    this.monthDifference = moment(this.today).diff(this.purchaseD, 'M');
+    this.bankEditTransaction.numberofpayments = this.monthDifference + 1;
     if (this.bankEditTransaction.numberofpayments) {
-      this.bankEditTransaction.eachMonth = this.bankEditTransaction.price / this.bankEditTransaction.numberofpayments;
+      this.bankEditTransaction.eachMonth = this.bankEditTransaction.price / this.bankEditTransaction.leftPayments;
       this.bankEditTransaction.eachMonth = Number(this.bankEditTransaction.eachMonth.toFixed(2));
-      this.bankEditTransaction.leftPayments = this.bankEditTransaction.numberofpayments;
     } else {
       this.bankEditTransaction.eachMonth = null;
       this.bankEditTransaction.leftPayments = null;
     }
+    this.resetDate();
+  }
+  resetDate() {
+    this.endDate = null;
+    this.today = null;
+    this.purchaseD = null;
     this.monthDifference = 0;
   }
   ngOnDestroy() {

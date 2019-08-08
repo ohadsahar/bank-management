@@ -108,8 +108,8 @@ async function paymentsTime(transactionData) {
     await transactionData.forEach((transaction) => {
       if (transaction.numberofpayments >= 0) {
         // eslint-disable-next-line no-param-reassign
-        transaction.numberofpayments -= 1;
-        if (transaction.numberofpayments <= 0) {
+        transaction.numberofpayments += 1;
+        if (transaction.numberofpayments === transaction.leftPayments) {
           archivePayment(transaction);
           // eslint-disable-next-line no-underscore-dangle
           deletePayment(transaction._id);

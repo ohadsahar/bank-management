@@ -7,6 +7,15 @@ body {
   height: 100%;
 }
 
+.mat-cell,
+.mat-footer-cell {
+  color: rgba(77, 62, 62, 0.87) !important;
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-infix {
+  color: black;
+}
+
 body {
   margin: 0;
 }

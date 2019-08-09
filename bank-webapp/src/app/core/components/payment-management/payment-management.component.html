@@ -1,7 +1,7 @@
 <ng4-loading-spinner [threshold]="isLoading" [timeout]="9999999" [loadingText]="'Please wait...'" [zIndex]="9999">
 </ng4-loading-spinner>
-<div class="payment-component" *ngIf="!isLoading">
-  <div class="row">
+<div class="payment-component">
+  <div class="row" *ngIf="!isLoading">
     <div class="col-sm-12 col-md-12 col-lg-12">
       <div class="purchase-list">
         <div class="search-section">
@@ -51,7 +51,7 @@
             <ng-container matColumnDef="numberofpayments">
               <th mat-sort-header="numberofpayments" mat-header-cell *matHeaderCellDef> <i
                   class="fas fa-shopping-bag"></i>
-                  מספר תשלומים שנשארו </th>
+                מספר תשלומים שנשארו </th>
               <td mat-cell *matCellDef="let element; let i = index">
                 <div>{{element?.numberofpayments}}</div>
               </td>
@@ -64,7 +64,7 @@
             </ng-container>
             <ng-container matColumnDef="leftPayments">
               <th mat-sort-header="leftPayments" mat-header-cell *matHeaderCellDef><i class="fas fa-trophy"></i>
-               סה"כ תשלומים
+                סה"כ תשלומים
               </th>
               <td mat-cell *matCellDef="let element"> {{element?.leftPayments}} </td>
             </ng-container>
@@ -81,5 +81,5 @@
       </div>
     </div>
   </div>
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 </div>
-<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>

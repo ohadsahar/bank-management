@@ -3,7 +3,6 @@ html {
   overflow-x: hidden;
 }
 
-
 td.mat-cell:first-of-type,
 td.mat-footer-cell:first-of-type,
 th.mat-header-cell:first-of-type {
@@ -11,71 +10,60 @@ th.mat-header-cell:first-of-type {
   text-align: center !important;
 }
 
+.payment-component {
+  padding: 20px;
+  font-weight: bold;
+}
 
 .payment-component .purchase-list {
   text-align: right;
-  padding: 20px;
-  height: 100vh;
 }
-
 
 .payment-component .purchase-list .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
   width: 30%;
 }
 
+table {
+  border: none;
+  width: 100%;
+}
+
+th.mat-header-cell:first-of-type {
+  text-align: center !important;
+}
+
 .mat-paginator-container,
 .mat-elevation-z8 {
-  background-image: linear-gradient(45deg,#72092ff0, #ab5e03fa, #72092ff0);
-  color: white;
   font-weight: bold;
 }
 
-.list-of-transactions table {
-  width: 100%;
-  table-layout: fixed;
-  direction: rtl;
-}
-
 table th {
-
   font-weight: bold !important;
-}
-
-
-
-.input-new-transaction table {
-  width: 100%;
-  table-layout: fixed;
-  direction: rtl;
-}
-
-.input-new-transaction td {
-  width: 12.5%;
-
 }
 
 .list-of-transactions th {
   text-align: center !important;
-  color: white;
 }
 
 .list-of-transactions td {
   width: 10%;
-  border: 1px solid #ddd;
+  border: 0.5px solid #ddd;
   padding: 8px;
   text-align: center;
   word-break: break-all;
-  color: white;
 }
 
 
+td:hover {
+  background-image: linear-gradient(#AB3428, #f5eaeab7, #ffffff);
+  color: black;
+  font-weight: bold;
+}
 
 .mat-option {
-
   text-align: right !important;
   font-weight: 500;
   font-size: 12px;
-
 }
 
 #search {
@@ -85,24 +73,10 @@ table th {
 
 }
 
-
-.input-new-transaction {
-  direction: rtl;
-  font-size: 13px;
-  display: flex;
-}
-
 .placeholder {
   color: black !important;
   font-weight: bold;
   text-align: right
-}
-
-.input-new-transaction .mat-form-field-appearance-legacy .mat-form-field-wrapper {
-  width: 60%;
-  text-align: right;
-  direction: rtl;
-
 }
 
 .mat-form-field-appearance-legacy .mat-form-field-wrapper {
@@ -110,10 +84,16 @@ table th {
   text-align: right;
 }
 
-.edit-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
-
-  width: 70% !important;
+#search {
+  text-align: right;
+  direction: rtl;
+  width: 100%;
 }
+
+.mat-form-field-appearance-legacy .mat-form-field-infix {
+  color: white;
+}
+
 
 .fa-edit:before {
 
@@ -133,6 +113,8 @@ table th {
 .edit-section .placeholder {
   font-weight: 100;
 }
+
+
 .money-management-area {
   display: inline-flex;
   margin: auto;
@@ -179,6 +161,10 @@ i {
   .payment-component .purchase-list {
 
     padding: 0px !important;
+  }
+
+  .list-of-transactions {
+    overflow-x: scroll;
   }
 
   .payment-component .purchase-list .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {

@@ -1,7 +1,7 @@
 <ng4-loading-spinner [threshold]="isLoading" [timeout]="9999999" [loadingText]="'Please wait...'" [zIndex]="9999">
 </ng4-loading-spinner>
-<div class="salary-management" *ngIf="!isLoading">
-  <div class="row">
+<div class="salary-management">
+  <div class="row" *ngIf="!isLoading">
     <div class="col-sm-12 col-md-12 col-lg-12">
       <div class="list-of-salary">
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort (matSortChange)="sortData($event)">
@@ -63,7 +63,7 @@
       </div>
     </div>
   </div>
-  <div class="form-salary" >
+  <div class="form-salary" *ngIf="!isLoading">
     <div class="row">
       <div class="col-sm-12 col-md-12 col-lg-12">
         <form name="salaryForm" (submit)="registerSalary(salaryForm)" #salaryForm="ngForm">
@@ -72,10 +72,10 @@
               required>
             <mat-error *ngIf="salary.invalid">חובה להכניס משכורת</mat-error>
           </mat-form-field>
-          <button mat-raised-button color="link" type="submit" id="submit-button">אישור</button>
+          <button mat-raised-button color="link" type="submit" id="submit-button">הוסף משכורת</button>
         </form>
       </div>
     </div>
   </div>
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 </div>
-<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>

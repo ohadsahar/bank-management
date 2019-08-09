@@ -7,21 +7,55 @@ body {
   text-align: right;
   padding: 20px;
 }
+
 .mat-form-field-appearance-legacy .mat-form-field-wrapper {
   width: 50%;
   text-align: right;
   margin: auto;
 }
 
-.list-of-salary table {
-  width: 100%;
-  table-layout: fixed;
-  direction: rtl;
+.salary-management .mat-form-field {
+  text-align: right !important;
+  font-weight: bold;
+  color: white;
+}
+
+table {
+  border: none;
+}
+
+th.mat-header-cell:first-of-type {
+  text-align: center !important;
 }
 
 table th {
   font-weight: bold !important;
+}
+.list-of-salary {
+  margin: auto;
+  display: grid;
+}
+.list-of-salary th {
+  text-align: center !important;
+}
+
+.list-of-salary td {
+  width: 10%;
+  border: 0.5px solid #ddd;
+  padding: 8px;
   text-align: center;
+  word-break: break-all;
+}
+
+.mat-paginator-container,
+.mat-elevation-z8 {
+  font-weight: bold;
+}
+
+td:hover {
+  background-image: linear-gradient(#AB3428, #f5eaeab7, #ffffff);
+  color: black;
+  font-weight: bold;
 }
 
 .form-salary {
@@ -32,13 +66,8 @@ table th {
 #submit-button {
   margin: auto;
   display: block;
-}
-
-.mat-paginator-container,
-.mat-elevation-z8 {
-  background-image: linear-gradient(45deg,#72092ff0, #ab5e03fa, #72092ff0);
-  color: white;
-  font-weight: bold;
+  font-weight: 500;
+  margin-bottom: 2%;
 }
 
 .salary-input {
@@ -53,20 +82,6 @@ th.mat-header-cell {
 .mat-raised-button {
   margin: auto;
   display: block;
-}
-
-.list-of-salary th {
-  text-align: center;
-  color: white;
-}
-
-.list-of-salary td {
-  width: 10%;
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: center;
-  word-break: break-all;
-  color: white;
 }
 
 i {

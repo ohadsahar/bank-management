@@ -1,7 +1,7 @@
 <ng4-loading-spinner [threshold]="isLoading" [timeout]="9999999" [loadingText]="'Please wait...'" [zIndex]="9999">
 </ng4-loading-spinner>
-<div class="bank-component" *ngIf="!isLoading">
-  <div class="row">
+<div class="bank-component">
+  <div class="row" *ngIf="!isLoading">
     <div class="col-sm-12 col-md-12 col-lg-12">
       <div class="purchase-list">
         <div class="search-section">
@@ -9,7 +9,7 @@
             <input matInput (keyup)="applyFilter($event.target.value)" placeholder="חיפוש חופשי">
           </mat-form-field>
         </div>
-        <h1 class="current-status">עו"ש: {{currentCash}} <i class="fas fa-shekel-sign"></i>  </h1>
+        <h1 class="current-status">עו"ש: {{currentCash}} <i class="fas fa-shekel-sign"></i> </h1>
         <div class="list-of-transactions">
           <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort
             (matSortChange)="sortData($event)">
@@ -32,11 +32,14 @@
                 <div *ngIf="editEnable && editoptionsable[i]" class="edit-section">
                   <mat-form-field class="new-transaction">
                     <mat-select [(ngModel)]="bankEditTransaction.cardName" value="{{bankEditTransaction.cardName}}">
-                      <mat-option *ngFor="let card of cards" [value]="card.value">
-                        {{card?.value}}
+                      <mat-option *ngFor="let card of cards" [value]="card?.cardName">
+                        {{card?.cardName}}
                       </mat-option>
                     </mat-select>
-                    <mat-placeholder class="placeholder">שם הכרטיס</mat-placeholder>
+                    <mat-placeholder class="placeholder" *ngIf="bankEditTransaction.cardName.length > 0">
+                      {{bankEditTransaction.cardName}}</mat-placeholder>
+                    <mat-placeholder class="placeholder" *ngIf="bankEditTransaction.cardName.length <= 0">שם הכרטיס
+                    </mat-placeholder>
                     <mat-error>חובה למלא שם כרטיס</mat-error>
                   </mat-form-field>
                 </div>
@@ -136,8 +139,10 @@
                   [(ngModel)]="bankEditTransaction.purchaseDate" value="bankEditTransaction.purchaseDate" required>
                 <mat-datepicker-toggle matSuffix [for]="picker" style="color: white"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
-                <mat-placeholder class="placeholder" *ngIf="bankEditTransaction.purchaseDate.length <= 0"> בחר תאריך</mat-placeholder>
-                <mat-placeholder class="placeholder" *ngIf="bankEditTransaction.purchaseDate.length > 0"> {{bankEditTransaction.purchaseDate}}</mat-placeholder>
+                <mat-placeholder class="placeholder" *ngIf="bankEditTransaction.purchaseDate.length <= 0"> בחר תאריך
+                </mat-placeholder>
+                <mat-placeholder class="placeholder" *ngIf="bankEditTransaction.purchaseDate.length > 0">
+                  {{bankEditTransaction.purchaseDate}}</mat-placeholder>
               </mat-form-field>
             </div>
           </td>
@@ -147,9 +152,8 @@
         </table>
       </div>
       <i class="fas fa-plus" (click)="registerNewTransactionDialog()"></i>
-
     </div>
   </div>
 </div>
-</div>
 <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</div>

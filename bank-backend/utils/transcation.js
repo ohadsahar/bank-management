@@ -106,21 +106,19 @@ async function archivePayment(transaction) {
 }
 async function paymentsTime(transactionData) {
   const dayOfMonth = moment().get('date');
-  if (dayOfMonth === 2 || dayOfMonth === 10 || dayOfMonth === 15 || dayOfMonth === 8) {
-    await transactionData.forEach((transaction) => {
-      if (transaction.billingDate === dayOfMonth) {
-        // eslint-disable-next-line no-param-reassign
-        transaction.numberofpayments += 1;
-        if (transaction.numberofpayments === transaction.leftPayments) {
-          archivePayment(transaction);
-          // eslint-disable-next-line no-underscore-dangle
-          deletePayment(transaction._id);
-        } else {
-          update(transaction);
-        }
+  await transactionData.forEach((transaction) => {
+    if (transaction.billingDate === dayOfMonth) {
+      // eslint-disable-next-line no-param-reassign
+      transaction.numberofpayments += 1;
+      if (transaction.numberofpayments === transaction.leftPayments) {
+        archivePayment(transaction);
+        // eslint-disable-next-line no-underscore-dangle
+        deletePayment(transaction._id);
+      } else {
+        update(transaction);
       }
-    });
-  }
+    }
+  });
 }
 async function allBushinessNames(transcations) {
   let groupByBusinessName = lodash.uniqBy(transcations, 'name');

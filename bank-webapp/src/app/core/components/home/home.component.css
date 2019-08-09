@@ -15,6 +15,7 @@ body {
 .home-component .quick-information {
   background-color: #ebebeb;
   height: 60vh;
+  padding: 10px;
 }
 
 .home-component .mat-card-title {

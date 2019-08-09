@@ -1,3 +1,4 @@
+
 .cards-management-component {
   direction: rtl;
   padding: 20px;
@@ -27,6 +28,7 @@ th.mat-header-cell:first-of-type {
 
 table th {
   font-weight: bold !important;
+  border: 0.5px solid #ddd;
 }
 
 .cards-management-component th {
@@ -96,5 +98,9 @@ i {
     padding: 20px;
     width: 100%;
     margin-top: 3%;
+  }
+
+  .cards-management-component td {
+    font-size: 11px;
   }
 }

@@ -10,9 +10,15 @@ th.mat-header-cell:first-of-type {
   text-align: center !important;
 }
 
+th.mat-header-cell {
+  text-align: center !important;
+  padding: 10px;
+}
+
 .payment-component {
   padding: 20px;
   font-weight: bold;
+  direction: rtl;
 }
 
 .payment-component .purchase-list {
@@ -28,9 +34,6 @@ table {
   width: 100%;
 }
 
-th.mat-header-cell:first-of-type {
-  text-align: center !important;
-}
 
 .mat-paginator-container,
 .mat-elevation-z8 {
@@ -39,7 +42,14 @@ th.mat-header-cell:first-of-type {
 
 table th {
   font-weight: bold !important;
+  border: 0.5px solid #ddd;
 }
+
+th.mat-header-cell {
+  text-align: center !important;
+  padding: 10px;
+}
+
 
 .list-of-transactions th {
   text-align: center !important;
@@ -71,6 +81,10 @@ td:hover {
   direction: rtl;
   width: 100%;
 
+}
+
+.mat-sort-header-container {
+  justify-content: center;
 }
 
 .placeholder {
@@ -150,9 +164,9 @@ i {
 
 }
 
-.mat-tab-group {
 
-  direction: rtl;
+.mat-paginator-container {
+  direction: ltr;
 }
 
 
@@ -169,5 +183,21 @@ i {
 
   .payment-component .purchase-list .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
     width: 100%;
+  }
+
+  .payment-component td {
+    font-size: 11px;
+  }
+
+  .payment-component {
+    padding: 3px;
+  }
+
+  td.mat-cell, td.mat-footer-cell, th.mat-header-cell {
+    font-size: 10px;
+  }
+
+  .list-of-transactions td {
+    font-size: 8px;
   }
 }

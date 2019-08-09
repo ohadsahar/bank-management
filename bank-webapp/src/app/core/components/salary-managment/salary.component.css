@@ -1,6 +1,8 @@
 html,
 body {
   height: 100%;
+  font-family: 'Varela Round', sans-serif;
+  direction: rtl;
 }
 
 .salary-management {
@@ -30,11 +32,14 @@ th.mat-header-cell:first-of-type {
 
 table th {
   font-weight: bold !important;
+  border: 0.5px solid #ddd;
 }
+
 .list-of-salary {
   margin: auto;
   display: grid;
 }
+
 .list-of-salary th {
   text-align: center !important;
 }
@@ -66,7 +71,7 @@ td:hover {
 #submit-button {
   margin: auto;
   display: block;
-  font-weight: 500;
+  font-weight: bold;
   margin-bottom: 2%;
 }
 
@@ -98,4 +103,23 @@ i {
 .fa-edit:before,
 .fa-check-double:before {
   padding: 10px;
+}
+
+.mat-paginator-container {
+  direction: ltr;
+}
+
+@media only screen and (max-width: 800px) {
+
+  .mat-paginator-container {
+    font-size: 10px;
+  }
+
+  .list-of-salary th {
+    font-size: 10px;
+  }
+
+  .list-of-salary td {
+    font-size: 8px;
+  }
 }

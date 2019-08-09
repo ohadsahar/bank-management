@@ -139,7 +139,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
         this.messageService.failedMessage(error, 'Dismiss');
       });
   }
-  deleteTransaction(transactionId: string): void {
+  deleteTransaction(transactionId: string, eachMonth: number): void {
     this.loading();
     this.store.dispatch(new transactionActions.DeleteTransaction(transactionId));
     const dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.ngUnsubscribe))

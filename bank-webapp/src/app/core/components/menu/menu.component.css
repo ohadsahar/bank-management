@@ -1,3 +1,6 @@
+.mobile-menu{
+  padding: 10px !important;
+}
 ::ng-deep .mat-tab-label {
   color: white;
   font-weight: bold;
@@ -14,6 +17,7 @@
 .bg-light {
   background-color: #ab3428b5 !important;
   direction: rtl;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .navbar-light .navbar-toggler {

@@ -4,7 +4,7 @@
 
 th.mat-header-cell {
   text-align: center !important;
-  padding: 40px;
+  padding: 10px;
 }
 
 .mat-sort-header-container {
@@ -46,12 +46,14 @@ th.mat-header-cell {
   font-weight: bold;
   color: white;
 }
+
 table {
   border: none;
 }
 
 table th {
   font-weight: bold !important;
+  border: 0.5px solid #ddd;
 }
 
 .list-of-transactions th {
@@ -203,11 +205,6 @@ i {
     overflow-x: scroll;
   }
 
-  .list-of-transactions th,
-  td {
-    font-size: 10px;
-  }
-
   td.mat-cell,
   td.mat-footer-cell,
   th.mat-header-cell {
@@ -221,5 +218,14 @@ i {
 
   .bank-component .purchase-list .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
     width: 100%;
+  }
+
+
+  .list-of-transactions th {
+    font-size: 10px;
+  }
+
+  .list-of-transactions td {
+    font-size: 8px;
   }
 }

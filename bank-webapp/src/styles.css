@@ -119,7 +119,7 @@ ul {
 }
 
 .cdk-text-field-autofill-monitored:not(:-webkit-autofill) {
-  color: white;
+  color: black;
 }
 
 .mat-form-field-appearance-legacy .mat-form-field-prefix .mat-icon-button,
@@ -127,6 +127,7 @@ ul {
   color: black;
 }
 
-.cdk-text-field-autofill-monitored:not(:-webkit-autofill) {
+.placeholder {
   color: white;
 }
+

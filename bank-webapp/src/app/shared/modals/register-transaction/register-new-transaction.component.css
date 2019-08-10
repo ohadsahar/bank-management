@@ -7,7 +7,7 @@
   width: 29%;
   padding: 8px;
   overflow-x: hidden;
-  background-image: linear-gradient(#EBEBD3, #ab342891, #AB3428);
+  background-color: #3D518C;
 }
 
 .input-new-transaction .mat-form-field {

@@ -70,12 +70,14 @@
   <section class="card-form">
     <form #cardForm="ngForm" (submit)="createNewCard(cardForm)" ngForm>
       <mat-form-field class="full-width">
-        <input matInput type="text" name="cardName" #cardName="ngModel" ngModel placeholder="שם הכרטיס" required>
+        <input matInput type="text" name="cardName" #cardName="ngModel" ngModel  required>
+        <mat-placeholder class="placeholder">שם הכרטיס</mat-placeholder>
         <mat-error *ngIf="cardName.invalid">חובה להכניס את שם הכרטיס</mat-error>
       </mat-form-field>
       <mat-form-field class="full-width">
-        <input matInput type="number" name="billingDate" #billingDate="ngModel" ngModel placeholder="תאריך חיוב"
+        <input matInput type="number" name="billingDate" #billingDate="ngModel" ngModel
           required>
+          <mat-placeholder class="placeholder">תאריך חיוב</mat-placeholder>
         <mat-error *ngIf="billingDate.invalid">חובה להכניס את יום החיוב</mat-error>
       </mat-form-field>
       <button type="submit" mat-raised-button color="link" style="font-weight: bold;">צור כרטיס חדש</button>

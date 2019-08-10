@@ -10,7 +10,7 @@ h2 {
 ::ng-deep .mat-dialog-container {
 
   width: 100%;
-  background-image: linear-gradient(#AB3428, #ab342891, #ab342891);
+  background-color: #3D518C;
   color: white;
 }
 

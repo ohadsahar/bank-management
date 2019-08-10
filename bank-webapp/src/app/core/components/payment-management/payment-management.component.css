@@ -10,17 +10,11 @@ th.mat-header-cell:first-of-type {
   text-align: center !important;
 }
 
-th.mat-header-cell {
-  text-align: center !important;
-  padding: 10px;
-}
-
 .payment-component  .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
   width: 30%;
 }
 
 .payment-component {
-  padding: 20px;
   font-weight: bold;
   direction: rtl;
 }
@@ -31,47 +25,6 @@ th.mat-header-cell {
 
 .payment-component .purchase-list .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
   width: 30%;
-}
-
-table {
-  border: none;
-  width: 100%;
-}
-
-
-.mat-paginator-container,
-.mat-elevation-z8 {
-  font-weight: bold;
-}
-
-table th {
-  font-weight: bold !important;
-  border: 0.5px solid #ddd;
-}
-
-th.mat-header-cell {
-  text-align: center !important;
-  padding: 10px;
-}
-
-
-.list-of-transactions th {
-  text-align: center !important;
-}
-
-.list-of-transactions td {
-  width: 10%;
-  border: 0.5px solid #ddd;
-  padding: 8px;
-  text-align: center;
-  word-break: break-all;
-}
-
-
-td:hover {
-  background-image: linear-gradient(#AB3428, #f5eaeab7, #ffffff);
-  color: black;
-  font-weight: bold;
 }
 
 .mat-option {
@@ -91,11 +44,6 @@ td:hover {
   justify-content: center;
 }
 
-.placeholder {
-  color: black !important;
-  font-weight: bold;
-  text-align: right
-}
 
 .mat-form-field-appearance-legacy .mat-form-field-wrapper {
   width: 100%;
@@ -130,13 +78,6 @@ td:hover {
 
 .edit-section .placeholder {
   font-weight: 100;
-}
-
-
-.money-management-area {
-  display: inline-flex;
-  margin: auto;
-  display: block;
 }
 
 h1 {
@@ -187,28 +128,9 @@ i {
     padding: 0px !important;
   }
 
-  .list-of-transactions {
-    overflow-x: scroll;
-  }
 
   .payment-component .purchase-list .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
     width: 100%;
-  }
-
-  .payment-component td {
-    font-size: 11px;
-  }
-
-  .payment-component {
-    padding: 3px;
-  }
-
-  td.mat-cell, td.mat-footer-cell, th.mat-header-cell {
-    font-size: 10px;
-  }
-
-  .list-of-transactions td {
-    font-size: 8px;
   }
 
   .payment-component  .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {

@@ -25,7 +25,7 @@
             </section>
             <mat-expansion-panel *ngFor="let item of displayedRows$ | async; let i = index">
               <mat-expansion-panel-header class="mat-row">
-                  <span class="mat-cell">{{i}}</span>
+                  <span class="mat-cell">{{i + 1}}</span>
                 <span class="mat-cell">{{item?.cardName}}</span>
                 <span class="mat-cell">{{item?.typeProduct}}</span>
                 <span class="mat-cell">{{item?.numberofpayments}} \ {{item?.leftPayments}}<br><i

@@ -131,3 +131,44 @@ ul {
   color: white;
 }
 
+
+@media only screen and (max-width: 800px) {
+
+  .fa-plus:before {
+    font-size: 25px;
+  }
+
+  .bank-component .purchase-list .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+    width: 100%;
+  }
+
+  .mat-sort-header-container {
+    justify-content: center;
+    font-weight: bold;
+    font-size: 13px !important;
+  }
+
+  .mat-cell,
+  .mat-header-cell {
+    flex: 1;
+    overflow: hidden;
+    word-wrap: break-word;
+    font-size: 10px;
+  }
+
+  ul {
+    direction: rtl;
+    font-size: 10px;
+  }
+
+  .bank-component .mat-form-field {
+    width: 100%;
+  }
+
+  .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+    width: 100%;
+    text-align: right;
+    font-weight: bold;
+  }
+
+}

@@ -1,3 +1,4 @@
+import { MatExpansionModule } from '@angular/material';
 import { PaymentManagementRouting } from './payment-management-routing.module';
 import { AngularMaterialModule } from './../../../../angular-material.module';
 import { CommonModule } from '@angular/common';
@@ -15,7 +16,8 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
     CommonModule,
     AngularMaterialModule,
     PaymentManagementRouting,
-    Ng4LoadingSpinnerModule
+    Ng4LoadingSpinnerModule,
+    MatExpansionModule,
   ],
 })
 

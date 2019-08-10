@@ -5,6 +5,7 @@ import { BankManagmentComponent } from './../bank-managment.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
+import { MatExpansionModule } from '@angular/material';
 
 
 @NgModule({
@@ -14,6 +15,7 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
     AngularMaterialModule,
     BankManagementRouting,
     FormsModule,
+    MatExpansionModule,
     Ng4LoadingSpinnerModule.forRoot()
   ]
 })

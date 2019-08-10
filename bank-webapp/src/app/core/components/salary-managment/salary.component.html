@@ -1,81 +1,89 @@
 <ng4-loading-spinner [threshold]="isLoading" [timeout]="9999999" [loadingText]="'Please wait...'" [zIndex]="9999">
 </ng4-loading-spinner>
-<div class="salary-management">
-  <div class="row" *ngIf="!isLoading">
-    <div class="col-sm-12 col-md-12 col-lg-12">
-      <div class="list-of-salary">
-        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort (matSortChange)="sortData($event)">
-          <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef> <i class="fab fa-cc-visa"></i> אפשרויות </th>
-            <td mat-cell *matCellDef="let element; let i = index">
-              <i class="fas fa-trash" (click)="deleteSalary(element._id)"></i>
-              <i class="fas fa-edit" (click)="editSalary(element);editoptionsable[i] = !editoptionsable[i]"
-                *ngIf="!editoptionsable[i] && !updateAble"></i>
-              <i class="fas fa-check-double" *ngIf="editEnable && editoptionsable[i]"
-                (click)="updateSalary();editoptionsable[i] = !editoptionsable[i]"></i>
-              <i class="fas fa-times" *ngIf="editEnable && editoptionsable[i]"
-                (click)="cancelUpdate();editoptionsable[i] = !editoptionsable[i]"></i>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="salary">
-            <th mat-header-cell *matHeaderCellDef> <i class="fab fa-cc-visa"></i> משכורת </th>
-            <td mat-cell *matCellDef="let element; let i = index">
-              <div *ngIf="!editoptionsable[i]">{{element?.salary}}</div>
-              <div *ngIf="editEnable && editoptionsable[i]" class="edit-section">
-                <mat-form-field class="new-transaction">
-                  <input matInput [(ngModel)]="salaryEditData.salary" value="{{salaryEditData?.salary}}">
-                  <mat-placeholder class="placeholder">משכורת</mat-placeholder>
-                  <mat-error>חובה להכניס משכורת</mat-error>
-                </mat-form-field>
-              </div>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="monthOfSalary">
-            <th mat-header-cell *matHeaderCellDef> <i class="fab fa-product-hunt"></i> משכורת עבור חודש </th>
-            <td mat-cell *matCellDef="let element; let  i = index">
-              <div *ngIf="!editoptionsable[i]">{{element?.monthOfSalary}}</div>
-              <div *ngIf="editEnable && editoptionsable[i]" class="edit-section">
-                <mat-form-field class="new-transaction">
-                  <input matInput [(ngModel)]="salaryEditData.monthOfSalary" value="{{salaryEditData?.monthOfSalary}}">
-                  <mat-placeholder class="placeholder">חובה לבחור חודש</mat-placeholder>
-                  <mat-error>אנא בחר חודש</mat-error>
-                </mat-form-field>
-              </div>
-            </td>
-          </ng-container>
 
-          <ng-container matColumnDef="yearOfSalary">
-            <th mat-header-cell *matHeaderCellDef> <i class="fab fa-product-hunt"></i> משכורת עבור חודש </th>
-            <td mat-cell *matCellDef="let element; let  i = index">
-              <div *ngIf="!editoptionsable[i]">{{element?.yearOfSalary}}</div>
-              <div *ngIf="editEnable && editoptionsable[i]" class="edit-section">
-                <mat-form-field class="new-transaction">
-                  <input matInput [(ngModel)]="salaryEditData.yearOfSalary" value="{{salaryEditData?.yearOfSalary}}">
-                  <mat-placeholder class="placeholder">חובה לבחור שנה</mat-placeholder>
-                  <mat-error>אנא בחר שנה</mat-error>
-                </mat-form-field>
-              </div>
-            </td>
-          </ng-container>
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
-      </div>
-    </div>
-  </div>
-  <div class="form-salary" *ngIf="!isLoading">
+<div class="cards-management-component">
+  <section class="cards-list">
     <div class="row">
-      <div class="col-sm-12 col-md-12 col-lg-12">
-        <form name="salaryForm" (submit)="registerSalary(salaryForm)" #salaryForm="ngForm">
-          <mat-form-field class="salary-input">
-            <input matInput name="salary" type="number" ngModel #salary="ngModel" placeholder="משכורת" value=""
-              required>
-            <mat-error *ngIf="salary.invalid">חובה להכניס משכורת</mat-error>
-          </mat-form-field>
-          <button mat-raised-button color="link" type="submit" id="submit-button">הוסף משכורת</button>
-        </form>
+      <div class="col-sm-12">
+        <mat-accordion displayMode="flat" multi class="mat-table">
+          <section matSort class="mat-elevation-z2 mat-header-row">
+            <span class="mat-header-cell" mat-sort-header="options">אפשרויות</span>
+            <span class="mat-header-cell" mat-sort-header="salary">משכורת</span>
+            <span class="mat-header-cell" mat-sort-header="monthOfSalary">תאריך המשכורת</span>
+          </section>
+          <mat-expansion-panel *ngFor="let item of displayedRows$ | async; let i = index">
+            <mat-expansion-panel-header class="mat-row">
+              <span class="mat-cell"> <i class="fas fa-trash" (click)="deleteSalary(item._id)"></i>
+                <i class="fas fa-edit" (click)="editSalary(item);editoptionsable[i] = !editoptionsable[i]"
+                  *ngIf="!editoptionsable[i] && !updateAble"></i>
+                <i class="fas fa-check-double" *ngIf="editEnable && editoptionsable[i]"
+                  (click)="updateSalary();editoptionsable[i] = !editoptionsable[i]"></i>
+                <i class="fas fa-times" *ngIf="editEnable && editoptionsable[i]"
+                  (click)="cancelUpdate();editoptionsable[i] = !editoptionsable[i]"></i>
+              </span>
+              <span class="mat-cell">{{item?.salary}}</span>
+              <span class="mat-cell">{{item?.monthOfSalary}} / {{item?.yearOfSalary}}</span>
+            </mat-expansion-panel-header>
+            <div *ngIf="!editoptionsable[i]">
+              <ul>
+                <p class="mat-cell">סכום המשכורת: {{item?.salary}}</p>
+                <p class="mat-cell">תאריך קבלת המשכורת: {{item?.monthOfSalary}} / {{item?.yearOfSalary}}</p>
+              </ul>
+            </div>
+            <section *ngIf="editoptionsable[i]" class="edit-section">
+              <h1>עריכת משכורת</h1>
+              <div class="row">
+                <div class="col-sm-12">
+                  <mat-form-field class="new-transaction">
+                    <input matInput [(ngModel)]="salaryEditData.salary" value="{{salaryEditData?.salary}}">
+                    <mat-placeholder class="placeholder" *ngIf="salaryEditData?.salary.length <= 0 ">משכורת
+                    </mat-placeholder>
+                    <mat-placeholder class="placeholder" *ngIf="salaryEditData?.salary.length > 0 ">
+                      {{salaryEditData?.salary}}</mat-placeholder>
+                    <mat-error>חובה להכניס משכורת</mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-12">
+                  <mat-form-field class="new-transaction">
+                    <input matInput [(ngModel)]="salaryEditData.monthOfSalary"
+                      value="{{salaryEditData?.monthOfSalary}}">
+                    <mat-placeholder class="placeholder" *ngIf="salaryEditData?.monthOfSalary.length <= 0 ">חודש קבלת
+                      המשכורת</mat-placeholder>
+                    <mat-placeholder class="placeholder" *ngIf="salaryEditData?.monthOfSalary.length > 0 ">
+                      {{monthOfSalary?.salary}}</mat-placeholder>
+                    <mat-error>חובה להכניס משכורת</mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-12">
+                  <mat-form-field class="new-transaction">
+                    <input matInput [(ngModel)]="salaryEditData.yearOfSalary" value="{{salaryEditData?.yearOfSalary}}">
+                    <mat-placeholder class="placeholder">חובה לבחור שנה</mat-placeholder>
+                    <mat-placeholder class="placeholder" *ngIf="salaryEditData?.yearOfSalary.length <= 0 ">שנת קבלת
+                      המשכורת</mat-placeholder>
+                    <mat-placeholder class="placeholder" *ngIf="salaryEditData?.yearOfSalary.length > 0 ">
+                      {{yearOfSalary?.salary}}</mat-placeholder>
+                  </mat-form-field>
+                </div>
+              </div>
+            </section>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <mat-paginator #paginator [length]="totalRows$ | async" [pageIndex]="0" [pageSize]="10"
+          [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
       </div>
     </div>
+  </section>
+</div>
+<div class="form-salary" *ngIf="!isLoading">
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <form name="salaryForm" (submit)="registerSalary(salaryForm)" #salaryForm="ngForm">
+        <mat-form-field class="salary-input">
+          <input matInput name="salary" type="number" ngModel #salary="ngModel" placeholder="משכורת" value="" required>
+          <mat-error *ngIf="salary.invalid">חובה להכניס משכורת</mat-error>
+        </mat-form-field>
+        <button mat-raised-button color="link" type="submit" id="submit-button">הוסף משכורת</button>
+      </form>
+    </div>
   </div>
-  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 </div>

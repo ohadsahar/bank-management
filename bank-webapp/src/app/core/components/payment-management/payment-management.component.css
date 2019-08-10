@@ -15,6 +15,10 @@ th.mat-header-cell {
   padding: 10px;
 }
 
+.payment-component  .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+  width: 30%;
+}
+
 .payment-component {
   padding: 20px;
   font-weight: bold;
@@ -169,6 +173,12 @@ i {
   direction: ltr;
 }
 
+.placeholder {
+  color: white !important;
+  font-weight: bold;
+  text-align: right;
+  word-break: break-all;
+}
 
 @media only screen and (max-width: 800px) {
 
@@ -199,5 +209,9 @@ i {
 
   .list-of-transactions td {
     font-size: 8px;
+  }
+
+  .payment-component  .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+    width: 100%;
   }
 }

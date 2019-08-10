@@ -1,3 +1,4 @@
+import { MatExpansionModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { AngularMaterialModule } from './../../../angular-material.module';
 import { NgModule } from '@angular/core';
@@ -15,7 +16,8 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
     AngularMaterialModule,
     FormsModule,
     SalaryRoutingModule,
-    Ng4LoadingSpinnerModule
+    Ng4LoadingSpinnerModule,
+    MatExpansionModule
   ]
 })
 export class SalaryModule {

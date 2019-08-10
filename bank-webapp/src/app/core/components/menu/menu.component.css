@@ -15,9 +15,8 @@
 }
 
 .bg-light {
-  background-color: #ab3428b5 !important;
+  background-color: transparent !important;
   direction: rtl;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .navbar-light .navbar-toggler {

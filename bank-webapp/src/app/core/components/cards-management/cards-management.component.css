@@ -1,58 +1,37 @@
-
 .cards-management-component {
-  direction: rtl;
-  padding: 20px;
   text-align: right;
 }
 
-.cards-management-component table {
+.mat-form-field-appearance-legacy .mat-form-field-wrapper {
   width: 100%;
+  text-align: right;
+  font-weight: bold;
 }
-.cards-management-component .mat-form-field {
+
+
+.edit-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+
+  width: 70% !important;
+}
+
+h1 {
+  text-align: center;
+  font-size: 21px;
+}
+
+.cards-management-component .edit-section .mat-form-field {
   text-align: right !important;
   font-weight: bold;
   color: white;
-}
-table {
-  border: none;
-}
-
-th.mat-header-cell:first-of-type {
-  text-align: center !important;
-}
-
-.mat-paginator-container,
-.mat-elevation-z8 {
-  font-weight: bold;
-}
-
-table th {
-  font-weight: bold !important;
-  border: 0.5px solid #ddd;
-}
-
-.cards-management-component th {
-  text-align: center !important;
-}
-
-.cards-management-component td {
-  width: 10%;
-  border: 0.5px solid #ddd;
-  padding: 8px;
-  text-align: center;
-  word-break: break-all;
-}
-
-td:hover {
-  background-image: linear-gradient(#AB3428, #f5eaeab7, #ffffff);
-  color: black;
-  font-weight: bold;
+  width: 50%;
+  float: right;
 }
 
 .cards-management-component .full-width {
   text-align: center;
   width: 100%;
 }
+
 .cards-management-component .card-form {
   margin: auto;
   display: block;
@@ -61,10 +40,12 @@ td:hover {
   width: 50%;
   margin-top: 3%;
 }
+
 ::ng-deep .cards-management-component .mat-form-field-appearance-legacy .mat-form-field-wrapper {
   width: 30%;
   margin: auto;
 }
+
 .card-form {
   -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -80,27 +61,34 @@ i {
   padding: 10px;
 }
 
-.edit-card {
-  width: 100%;
-  text-align: right;
-}
 
 @media only screen and (max-width: 800px) {
-  ::ng-deep .cards-management-component .mat-form-field-appearance-legacy .mat-form-field-wrapper {
-    width: 100%;
-    margin: auto;
+
+
+
+  .mat-sort-header-container {
+    justify-content: center;
+    font-weight: bold;
+    font-size: 13px !important;
   }
 
-  .cards-management-component .card-form {
-    margin: auto;
-    display: block;
-    text-align: center;
-    padding: 20px;
-    width: 100%;
-    margin-top: 3%;
+  .mat-cell,
+  .mat-header-cell {
+    flex: 1;
+    overflow: hidden;
+    word-wrap: break-word;
+    font-size: 10px;
   }
 
-  .cards-management-component td {
-    font-size: 11px;
+  ul {
+    direction: rtl;
+    font-size: 10px;
   }
+
+  .cards-management-component .mat-form-field {
+    width: 100%;
+  }
+
+
+
 }

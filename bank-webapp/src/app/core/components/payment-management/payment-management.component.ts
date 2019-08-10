@@ -1,17 +1,24 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatDialog, MatPaginator, MatSort, MatTableDataSource, Sort } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort, MatTableDataSource, Sort, PageEvent } from '@angular/material';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
-import { Subject, Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, Subscription, combineLatest, of, Observable } from 'rxjs';
+import { takeUntil, map } from 'rxjs/operators';
 import { topItemTrigger } from 'src/app/shared/animations/payment/payment.animation';
 import * as fromRoot from '../../../app.reducer';
 import { Bank } from '../../../shared/models/bank-data.model';
 import * as transactionActions from '../../../store/actions/transaction.actions';
 import { LoginService } from './../../services/login.service';
 import { MessageService } from './../../services/message.service';
+import { fromMatSort, fromMatPaginator, paginateRows } from 'src/app/table-util';
+
+type SortFn<U> = (a: U, b: U) => number;
+interface PropertySortFns<U> {
+  [prop: string]: SortFn<U>;
+}
+
 @Component({
   selector: 'app-payment-management',
   templateUrl: './payment-management.component.html',
@@ -28,6 +35,10 @@ export class PaymentManagementComponent implements OnInit {
   myControl = new FormControl();
   public dataToSubscribe: Subscription;
   public ngbSubscribe: Subject<void> = new Subject<void>();
+  displayedRows$: Observable<any[]>;
+  totalRows$: Observable<number>;
+  public sortEvents$: Observable<Sort>;
+  public pageEvents$: Observable<PageEvent>;
   isLoading: boolean;
   constructor(
     private spinnerService: Ng4LoadingSpinnerService,
@@ -39,16 +50,13 @@ export class PaymentManagementComponent implements OnInit {
   ) {
     this.isLoading = false;
   }
-  dataSource = new MatTableDataSource();
-  dataSourceOldTransactions = new MatTableDataSource();
-  displayedColumns: string[] = [
-    'id', 'cardName', 'name', 'type', 'price', 'numberofpayments', 'eachMonth', 'leftPayments', 'purchaseDate'
-  ];
 
   ngOnInit() {
     this.onLoadSite();
   }
   onLoadSite(): void {
+    this.sortEvents$ = fromMatSort(this.sort);
+    this.pageEvents$ = fromMatPaginator(this.paginator);
     this.getAllTransactions();
   }
   getAllTransactions(): void {
@@ -67,9 +75,6 @@ export class PaymentManagementComponent implements OnInit {
         this.loaded();
         this.messageService.failedMessage(error, 'Dismiss');
       });
-  }
-  applyFilter(filterValue: string): void {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
   sortData(sort: Sort) {
     this.sortedData = this.allTransactions;
@@ -91,9 +96,55 @@ export class PaymentManagementComponent implements OnInit {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
   updateTable(): void {
-    this.dataSource = new MatTableDataSource(this.allTransactions);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    const rows$ = of(this.allTransactions);
+    this.totalRows$ = rows$.pipe(map(rows => rows.length));
+    this.displayedRows$ = rows$.pipe(this.sortRows(this.sortEvents$), paginateRows(this.pageEvents$));
+  }
+  sortRows<U>(
+    sort$: Observable<Sort>,
+    sortFns: PropertySortFns<U> = {},
+    useDefault = true
+  ): (obs$: Observable<U[]>) => Observable<U[]> {
+    return (rows$: Observable<U[]>) => combineLatest(
+      rows$,
+      sort$.pipe(this.toSortFn(sortFns, useDefault)),
+      (rows, sortFn) => {
+        if (!sortFn) { return rows; }
+
+        const copy = rows.slice();
+        return copy.sort(sortFn);
+      }
+    );
+  }
+  toSortFn<U>(sortFns: PropertySortFns<U> = {}, useDefault = true): (sort$: Observable<Sort>) => Observable<undefined | SortFn<U>> {
+    return (sort$) => sort$.pipe(
+      map(sort => {
+        if (!sort.active || sort.direction === '') { return undefined; }
+
+        let sortFn = sortFns[sort.active];
+        if (!sortFn) {
+          if (!useDefault) {
+            throw new Error(`Unknown sort property [${sort.active}]`);
+          }
+          sortFn = (a: U, b: U) => this.defaultSort((a as any)[sort.active], (b as any)[sort.active]);
+        }
+        return sort.direction === 'asc' ? sortFn : (a: U, b: U) => sortFn(b, a);
+      })
+    );
+  }
+  defaultSort(a: any, b: any): number {
+    a = a === undefined ? null : a;
+    b = b === undefined ? null : b;
+    if (a === b) { return 0; }
+    if (a === null) { return -1; }
+    if (b === null) { return 1; }
+    if (a > b) {
+      return 1;
+    } else if (a < b) {
+      return -1;
+    } else {
+      return 0;
+    }
   }
   loading() {
     this.isLoading = true;

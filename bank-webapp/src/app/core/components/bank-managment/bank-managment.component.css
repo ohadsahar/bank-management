@@ -1,16 +1,4 @@
-.bank-component {
-  padding: 20px;
-}
 
-th.mat-header-cell {
-  text-align: center !important;
-  padding: 10px;
-}
-
-.mat-sort-header-container {
-  justify-content: center;
-
-}
 
 .fa-times:before {
   margin-right: 16px;
@@ -34,48 +22,14 @@ th.mat-header-cell {
   width: 30%;
 }
 
-.list-of-transactions table {
-  width: 100%;
-  table-layout: fixed;
-  direction: rtl;
-  border-radius: 10px;
-}
-
 .bank-component .mat-form-field {
-  text-align: right !important;
   font-weight: bold;
   color: white;
+  width: 50%;
+  float: right;
 }
 
-table {
-  border: none;
-}
-
-table th {
-  font-weight: bold !important;
-  border: 0.5px solid #ddd;
-}
-
-.list-of-transactions th {
-  text-align: center !important;
-}
-
-.list-of-transactions td {
-  width: 10%;
-  border: 0.5px solid #ddd;
-  padding: 8px;
-  text-align: center;
-  word-break: break-all;
-}
-
-.mat-paginator-container,
-.mat-elevation-z8 {
-  font-weight: bold;
-}
-
-td:hover {
-  background-image: linear-gradient(#AB3428, #f5eaeab7, #ffffff);
-  color: black;
+.transaction-list {
   font-weight: bold;
 }
 
@@ -107,16 +61,14 @@ td:hover {
 
 
 .placeholder {
-  color: black !important;
+  color: white !important;
   font-weight: bold;
   text-align: right;
   word-break: break-all;
 }
 
-
-
 .mat-form-field-appearance-legacy .mat-form-field-wrapper {
-  width: 70%;
+  width: 15%;
   text-align: right;
   font-weight: bold;
 }
@@ -185,32 +137,14 @@ i {
   color: black;
   font-weight: bold;
 }
-
 .mat-select-value-text {
   color: black;
 }
 
+
+
+
 @media only screen and (max-width: 800px) {
-
-  .mat-paginator-container {
-    font-size: 10px;
-  }
-
-  .list-of-transactions table {
-
-    width: 500px !important;
-  }
-
-  .list-of-transactions {
-    overflow-x: scroll;
-  }
-
-  td.mat-cell,
-  td.mat-footer-cell,
-  th.mat-header-cell {
-    font-size: 10px;
-
-  }
 
   .fa-plus:before {
     font-size: 25px;
@@ -220,12 +154,33 @@ i {
     width: 100%;
   }
 
+  .mat-sort-header-container {
+    justify-content: center;
+    font-weight: bold;
+    font-size: 13px !important;
+  }
 
-  .list-of-transactions th {
+  .mat-cell,
+  .mat-header-cell {
+    flex: 1;
+    overflow: hidden;
+    word-wrap: break-word;
     font-size: 10px;
   }
 
-  .list-of-transactions td {
-    font-size: 8px;
+  ul {
+    direction: rtl;
+    font-size: 10px;
   }
+
+  .bank-component .mat-form-field {
+    width: 100%;
+  }
+
+  .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+    width: 100%;
+    text-align: right;
+    font-weight: bold;
+  }
+
 }

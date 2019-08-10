@@ -1,21 +1,30 @@
+import { map } from 'rxjs/operators';
+import { Observable, of, combineLatest } from 'rxjs';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { MessageService } from './../../services/message.service';
 import { EditCardModel } from './../../../shared/models/edit-card.model';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource, MatSort, MatPaginator, PageEvent, Sort } from '@angular/material';
 import { LoginService } from '@app/services/login.service';
 import { CardService } from './../../services/card.service';
 import { NgForm } from '@angular/forms';
 import { CardsModel } from './../../../shared/models/cards.model';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { fromMatSort, fromMatPaginator, paginateRows } from 'src/app/table-util';
 
-
+type SortFn<U> = (a: U, b: U) => number;
+interface PropertySortFns<U> {
+  [prop: string]: SortFn<U>;
+}
 @Component({
   selector: 'app-cards-management',
   templateUrl: './cards-management.component.html',
   styleUrls: ['./cards-management.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 
 export class CardsManagementComponent implements OnInit {
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   public cards: CardsModel[];
   editCardForm = new EditCardModel('', '', '', null);
@@ -24,8 +33,12 @@ export class CardsManagementComponent implements OnInit {
   isLoading: boolean;
   dataSource = new MatTableDataSource(this.cards);
   editoptionsable: any = {};
+  displayedRows$: Observable<any[]>;
+  totalRows$: Observable<number>;
+  public sortEvents$: Observable<Sort>;
+  public pageEvents$: Observable<PageEvent>;
   constructor(private cardService: CardService, private loginService: LoginService, private messageService: MessageService,
-              private spinnerService: Ng4LoadingSpinnerService) {
+    private spinnerService: Ng4LoadingSpinnerService) {
     this.isLoading = false;
     this.cards = [];
   }
@@ -34,6 +47,8 @@ export class CardsManagementComponent implements OnInit {
     this.onLoadComponent();
   }
   onLoadComponent() {
+    this.sortEvents$ = fromMatSort(this.sort);
+    this.pageEvents$ = fromMatPaginator(this.paginator);
     this.currentUsername = this.loginService.getUsernameAndId().username;
     this.getAllCards();
   }
@@ -79,8 +94,10 @@ export class CardsManagementComponent implements OnInit {
       }
     );
   }
-  updateTable() {
-    this.dataSource = new MatTableDataSource(this.cards);
+  updateTable(): void {
+    const rows$ = of(this.cards);
+    this.totalRows$ = rows$.pipe(map(rows => rows.length));
+    this.displayedRows$ = rows$.pipe(this.sortRows(this.sortEvents$), paginateRows(this.pageEvents$));
   }
   editCard(card: CardsModel) {
     this.editCardForm._id = card._id;
@@ -109,6 +126,52 @@ export class CardsManagementComponent implements OnInit {
       return true;
     }
     return false;
+  }
+  sortRows<U>(
+    sort$: Observable<Sort>,
+    sortFns: PropertySortFns<U> = {},
+    useDefault = true
+  ): (obs$: Observable<U[]>) => Observable<U[]> {
+    return (rows$: Observable<U[]>) => combineLatest(
+      rows$,
+      sort$.pipe(this.toSortFn(sortFns, useDefault)),
+      (rows, sortFn) => {
+        if (!sortFn) { return rows; }
+
+        const copy = rows.slice();
+        return copy.sort(sortFn);
+      }
+    );
+  }
+  toSortFn<U>(sortFns: PropertySortFns<U> = {}, useDefault = true): (sort$: Observable<Sort>) => Observable<undefined | SortFn<U>> {
+    return (sort$) => sort$.pipe(
+      map(sort => {
+        if (!sort.active || sort.direction === '') { return undefined; }
+
+        let sortFn = sortFns[sort.active];
+        if (!sortFn) {
+          if (!useDefault) {
+            throw new Error(`Unknown sort property [${sort.active}]`);
+          }
+          sortFn = (a: U, b: U) => this.defaultSort((a as any)[sort.active], (b as any)[sort.active]);
+        }
+        return sort.direction === 'asc' ? sortFn : (a: U, b: U) => sortFn(b, a);
+      })
+    );
+  }
+  defaultSort(a: any, b: any): number {
+    a = a === undefined ? null : a;
+    b = b === undefined ? null : b;
+    if (a === b) { return 0; }
+    if (a === null) { return -1; }
+    if (b === null) { return 1; }
+    if (a > b) {
+      return 1;
+    } else if (a < b) {
+      return -1;
+    } else {
+      return 0;
+    }
   }
   loading() {
     this.isLoading = true;

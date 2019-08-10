@@ -3,13 +3,12 @@ body {
   height: 100%;
   font-family: 'Varela Round', sans-serif !important;
   overflow-x: hidden;
-  background-image: linear-gradient(#AB3428, #ab342891, #EBEBD3);
+  background-color: #3D518C !important;
   height: 100%;
 }
 
-.mat-cell,
-.mat-footer-cell {
-  color: rgba(77, 62, 62, 0.87) !important;
+ul {
+  font-family: 'Varela Round', sans-serif !important;
 }
 
 .mat-form-field-appearance-legacy .mat-form-field-infix {
@@ -18,10 +17,6 @@ body {
 
 body {
   margin: 0;
-}
-
-th.mat-header-cell:first-of-type {
-  text-align: center !important;
 }
 
 ::-webkit-scrollbar {
@@ -41,4 +36,97 @@ th.mat-header-cell:first-of-type {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.mat-sort-header-container {
+  justify-content: center;
+  font-weight: bold;
+  font-size: 16px !important;
+}
+
+.mat-accordion .mat-header-row {
+  padding-left: 1.5rem;
+  padding-right: 2rem;
+  border-bottom: none;
+  direction: rtl;
+}
+
+.mat-expansion-panel-header.mat-row {
+  border-bottom: none;
+  direction: rtl;
+  text-align: center;
+}
+
+.mat-table {
+  display: block;
+}
+
+.mat-header-row {
+  min-height: 56px;
+}
+
+.mat-row {
+  min-height: 48px;
+}
+
+.mat-row,
+.mat-header-row {
+  display: flex;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  align-items: center;
+  padding: 0 24px;
+  box-sizing: border-box;
+  font-weight: bold;
+}
+
+.mat-row,
+.mat-header-row::after {
+  display: inline-block;
+  min-height: inherit;
+  content: '';
+}
+
+.mat-cell,
+.mat-header-cell {
+  flex: 1;
+  overflow: hidden;
+  word-wrap: break-word;
+  font-size: 13px;
+}
+
+.new-transaction {
+  width: 100%;
+}
+
+.edit-section .mat-form-field {
+  display: flex;
+}
+
+ul {
+  direction: rtl;
+  font-size: 13px;
+}
+
+.mat-expansion-panel-body ul {
+  text-align: right;
+}
+
+.edit-section .mat-expansion-panel-body {
+  margin: auto;
+  display: block;
+  float: right;
+}
+
+.cdk-text-field-autofill-monitored:not(:-webkit-autofill) {
+  color: white;
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-prefix .mat-icon-button,
+.mat-form-field-appearance-legacy .mat-form-field-suffix .mat-icon-button {
+  color: black;
+}
+
+.cdk-text-field-autofill-monitored:not(:-webkit-autofill) {
+  color: white;
 }

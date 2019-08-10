@@ -1,13 +1,15 @@
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatDialog, MatPaginator, MatSort, MatTableDataSource, Sort } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort, PageEvent, Sort } from '@angular/material';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as moment from 'moment';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
-import { Observable, Subject, Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { combineLatest, Observable, of, Subject, Subscription } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 import { RegisterNewTransactionModalComponent } from 'src/app/shared/modals/register-transaction/register-new-transaction.component';
+import { CardsModel } from 'src/app/shared/models/cards.model';
+import { fromMatPaginator, fromMatSort, paginateRows } from 'src/app/table-util';
 import * as fromRoot from '../../../app.reducer';
 import { Bank } from '../../../shared/models/bank-data.model';
 import { BankValues } from '../../../shared/models/bank.model';
@@ -17,7 +19,11 @@ import { bottomSideItemTrigger, upSideItemTrigger } from './../../../shared/anim
 import { LoginService } from './../../services/login.service';
 import { ShareDataService } from './../../services/share-data.service';
 import { WebSocketService } from './../../services/web-socket.service';
-import { CardsModel } from 'src/app/shared/models/cards.model';
+
+type SortFn<U> = (a: U, b: U) => number;
+interface PropertySortFns<U> {
+  [prop: string]: SortFn<U>;
+}
 
 @Component({
   selector: 'app-bank-managment',
@@ -27,8 +33,8 @@ import { CardsModel } from 'src/app/shared/models/cards.model';
   animations: [upSideItemTrigger, bottomSideItemTrigger]
 })
 export class BankManagmentComponent implements OnInit, OnDestroy {
-  @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   public sortedData: Bank[];
   public allTransactions: Bank[];
   options: string[] = [];
@@ -48,7 +54,10 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   public editoptionsable: any = {};
   public deletedId: string;
   currentCash: number;
-
+  displayedRows$: Observable<any[]>;
+  totalRows$: Observable<number>;
+  public sortEvents$: Observable<Sort>;
+  public pageEvents$: Observable<PageEvent>;
   purchaseD: string;
   today: Date;
   monthDifference: number;
@@ -56,19 +65,15 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   public cancelBankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null, null);
   public bankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null, null);
   constructor(private messageService: MessageService, private store: Store<fromRoot.State>,
-    public router: Router, public dialog: MatDialog, private loginService: LoginService,
-    private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService,
-    private webSocketService: WebSocketService) {
+              public router: Router, public dialog: MatDialog, private loginService: LoginService,
+              private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService,
+              private webSocketService: WebSocketService) {
     this.isLoading = false;
     this.counter = 0;
     this.numberOfPayments = 0;
     this.editEnable = false;
     this.updateAble = false;
   }
-  dataSource = new MatTableDataSource();
-  displayedColumns: string[] = [
-    'id', 'cardName', 'name', 'type', 'price', 'numberofpayments', 'eachMonth', 'leftPayments', 'purchaseDate'
-  ];
   cards: CardsModel[] = [];
   categories: any[];
 
@@ -80,6 +85,8 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.shareDataService.currentCashToPass.subscribe(response => {
       this.currentCash = response;
     });
+    this.sortEvents$ = fromMatSort(this.sort);
+    this.pageEvents$ = fromMatPaginator(this.paginator);
     this.getAllTransactions();
     this.startSocketing();
   }
@@ -221,29 +228,9 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.bankEditTransaction.numberofpayments = this.cancelBankEditTransaction.numberofpayments;
   }
   updateTable(): void {
-    this.dataSource = new MatTableDataSource(this.allTransactions);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-  applyFilter(filterValue: string): void {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-  sortData(sort: Sort) {
-    this.sortedData = this.allTransactions;
-    const data = this.allTransactions.slice();
-    if (!sort.active || sort.direction === '') {
-      this.sortedData = data;
-      return;
-    }
-    this.sortedData = data.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
-      switch (sort.active) {
-        case 'price': return this.compare(a.price, b.price, isAsc);
-        default: return 0;
-      }
-    });
-    this.allTransactions = this.sortedData;
-    this.updateTable();
+    const rows$ = of(this.allTransactions);
+    this.totalRows$ = rows$.pipe(map(rows => rows.length));
+    this.displayedRows$ = rows$.pipe(this.sortRows(this.sortEvents$), paginateRows(this.pageEvents$));
   }
   compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
@@ -281,6 +268,56 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.registerNewTransactionNgrx.unsubscribe();
     this.ngUnsubscribe.unsubscribe();
   }
+  applyFilter(filterValue: string): void {
+    // this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+  sortRows<U>(
+    sort$: Observable<Sort>,
+    sortFns: PropertySortFns<U> = {},
+    useDefault = true
+  ): (obs$: Observable<U[]>) => Observable<U[]> {
+    return (rows$: Observable<U[]>) => combineLatest(
+      rows$,
+      sort$.pipe(this.toSortFn(sortFns, useDefault)),
+      (rows, sortFn) => {
+        if (!sortFn) { return rows; }
+
+        const copy = rows.slice();
+        return copy.sort(sortFn);
+      }
+    );
+  }
+  toSortFn<U>(sortFns: PropertySortFns<U> = {}, useDefault = true): (sort$: Observable<Sort>) => Observable<undefined | SortFn<U>> {
+    return (sort$) => sort$.pipe(
+      map(sort => {
+        if (!sort.active || sort.direction === '') { return undefined; }
+
+        let sortFn = sortFns[sort.active];
+        if (!sortFn) {
+          if (!useDefault) {
+            throw new Error(`Unknown sort property [${sort.active}]`);
+          }
+          sortFn = (a: U, b: U) => this.defaultSort((a as any)[sort.active], (b as any)[sort.active]);
+        }
+        return sort.direction === 'asc' ? sortFn : (a: U, b: U) => sortFn(b, a);
+      })
+    );
+  }
+  defaultSort(a: any, b: any): number {
+    a = a === undefined ? null : a;
+    b = b === undefined ? null : b;
+    if (a === b) { return 0; }
+    if (a === null) { return -1; }
+    if (b === null) { return 1; }
+    if (a > b) {
+      return 1;
+    } else if (a < b) {
+      return -1;
+    } else {
+      return 0;
+    }
+  }
+
 
 }
 

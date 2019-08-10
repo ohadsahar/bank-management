@@ -1,85 +1,55 @@
 <ng4-loading-spinner [threshold]="isLoading" [timeout]="9999999" [loadingText]="'Please wait...'" [zIndex]="9999">
 </ng4-loading-spinner>
+
 <div class="payment-component">
-  <div class="row" *ngIf="!isLoading">
-    <div class="col-sm-12 col-md-12 col-lg-12">
-      <div class="purchase-list">
+    <div class="row">
+      <div class="col-sm-12">
         <div class="search-section">
           <mat-form-field id="search">
-            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="חיפוש חופשי">
+            <input matInput (keyup)="applyFilter($event.target.value)">
+            <mat-placeholder class="placeholder">חיפוש חופשי   <i class="fas fa-search-dollar" style="position: absolute; left: 0"></i></mat-placeholder>
           </mat-form-field>
-        </div>
-        <div class="list-of-transactions">
-          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort
-            (matSortChange)="sortData($event)">
-            <ng-container matColumnDef="id">
-              <th mat-header-cell *matHeaderCellDef> <i class="fab fa-cc-visa"></i> מס' עסקה </th>
-              <td mat-cell *matCellDef="let element; let i = index">
-                <div>{{i + 1}}</div>
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="cardName">
-              <th mat-header-cell *matHeaderCellDef> <i class="fab fa-cc-visa"></i> שם הכרטיס </th>
-              <td mat-cell *matCellDef="let element; let i = index">
-                <div>{{element?.cardName}}</div>
-              </td>
-            </ng-container>
-            <!-- Name Column -->
-            <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef> <i class="fab fa-product-hunt"></i> בית העסק </th>
-              <td mat-cell *matCellDef="let element; let  i = index">
-                <div>{{element?.name}}</div>
-              </td>
-            </ng-container>
-            <!-- Type of product  Column -->
-            <ng-container matColumnDef="type">
-              <th mat-header-cell *matHeaderCellDef><i class="fas fa-sitemap"></i> קטגוריה </th>
-              <td mat-cell *matCellDef="let element; let i = index">
-                <div>{{element?.typeProduct}}</div>
-              </td>
-            </ng-container>
-            <!-- Total price Column -->
-            <ng-container matColumnDef="price">
-              <th mat-sort-header="price" mat-header-cell *matHeaderCellDef> <i class="fas fa-shekel-sign"></i> מחיר
-                כללי
-              </th>
-              <td mat-cell *matCellDef="let element; let  i = index">
-                <div>{{element?.price}}</div>
-              </td>
-            </ng-container>
-            <!-- Payments Column -->
-            <ng-container matColumnDef="numberofpayments">
-              <th mat-sort-header="numberofpayments" mat-header-cell *matHeaderCellDef> <i
-                  class="fas fa-shopping-bag"></i>
-                מספר תשלומים שנשארו </th>
-              <td mat-cell *matCellDef="let element; let i = index">
-                <div>{{element?.numberofpayments}}</div>
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="eachMonth">
-              <th mat-sort-header="eachMonth" mat-header-cell *matHeaderCellDef> <i class="fas fa-cart-arrow-down"></i>
-                תשלום
-                חודשי </th>
-              <td mat-cell *matCellDef="let element"> <i class="fas fa-shekel-sign"></i> {{element?.eachMonth}} </td>
-            </ng-container>
-            <ng-container matColumnDef="leftPayments">
-              <th mat-sort-header="leftPayments" mat-header-cell *matHeaderCellDef><i class="fas fa-trophy"></i>
-                סה"כ תשלומים
-              </th>
-              <td mat-cell *matCellDef="let element"> {{element?.leftPayments}} </td>
-            </ng-container>
-            <ng-container matColumnDef="purchaseDate">
-              <th mat-sort-header="purchaseDate" mat-header-cell *matHeaderCellDef><i class="far fa-calendar-check"></i>
-                תאריך
-                קניה</th>
-              <td mat-cell *matCellDef="let element"> {{element?.purchaseDate}} </td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
         </div>
       </div>
     </div>
+    <section class="transaction-list">
+      <div class="row">
+        <div class="col-sm-12">
+          <mat-accordion displayMode="flat" multi class="mat-table">
+            <section matSort class="mat-elevation-z2 mat-header-row">
+              <span class="mat-header-cell" mat-sort-header="options">מס' מזהה</span>
+              <span class="mat-header-cell" mat-sort-header="cardName">כרטיס</span>
+              <span class="mat-header-cell" mat-sort-header="typeProduct">בית העסק</span>
+              <span class="mat-header-cell" mat-sort-header="leftPayments">תשלומים</span>
+              <span class="mat-header-cell" mat-sort-header="purchaseDate">תאריך רכישה</span>
+            </section>
+            <mat-expansion-panel *ngFor="let item of displayedRows$ | async; let i = index">
+              <mat-expansion-panel-header class="mat-row">
+                  <span class="mat-cell">{{i}}</span>
+                <span class="mat-cell">{{item?.cardName}}</span>
+                <span class="mat-cell">{{item?.typeProduct}}</span>
+                <span class="mat-cell">{{item?.numberofpayments}} \ {{item?.leftPayments}}<br><i
+                    class="fas fa-shekel-sign"></i> {{item?.eachMonth}} </span>
+                <span class="mat-cell">{{item?.purchaseDate}}</span>
+              </mat-expansion-panel-header>
+              <div >
+                <ul>
+                  <li>שם הכרטיס: {{item?.cardName}}</li>
+                  <li>בית העסק: {{item?.name}}</li>
+                  <li>קטגוריה: {{item?.typeProduct}}</li>
+                  <li> סה"כ לתשלום: {{item?.price}}</li>
+                  <li>חודש הרכישה: {{item?.monthPurchase}}</li>
+                  <li>שנת הרכישה: {{item?.yearOfTransaction}}</li>
+                  <li>תאריך לחיוב: {{item?.billingDate}}</li>
+                </ul>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+          <mat-paginator #paginator [length]="totalRows$ | async" [pageIndex]="0" [pageSize]="10"
+            [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
+      </div>
+    </section>
   </div>
-  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-</div>
+
+

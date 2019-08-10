@@ -1,50 +1,72 @@
 <ng4-loading-spinner [threshold]="isLoading" [timeout]="9999999" [loadingText]="'Please wait...'" [zIndex]="9999">
 </ng4-loading-spinner>
-<div class="cards-management-component" *ngIf="!isLoading">
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-    <ng-container matColumnDef="options">
-      <th mat-header-cell *matHeaderCellDef> <i class="fab fa-cc-visa"></i> אפשרויות </th>
-      <td mat-cell *matCellDef="let element; let i = index">
-        <i class="fas fa-trash" (click)="deleteCard(element._id)"></i>
-        <i class="fas fa-edit" (click)="editCard(element);editoptionsable[i] = !editoptionsable[i]"
-          *ngIf="!editoptionsable[i] && !updateAble"></i>
-        <i class="fas fa-check-double" *ngIf="editoptionsable[i]"
-          (click)="updateCard();editoptionsable[i] = !editoptionsable[i]"></i>
-        <i class="fas fa-times" *ngIf="editEnable && editoptionsable[i]"
-          (click)="cancelUpdate();editoptionsable[i] = !editoptionsable[i]"></i>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="cardName">
-      <th mat-header-cell *matHeaderCellDef>שם הכרטיס</th>
-      <td mat-cell *matCellDef="let element;let i = index">
-        <div *ngIf="!editoptionsable[i]">{{element?.cardName}}</div>
-        <div *ngIf="editoptionsable[i]">
-          <mat-form-field class="edit-card">
-            <input matInput type="text" name="cardName" [(ngModel)]="editCardForm.cardName"
-              [value]="editCardForm.cardName">
-            <mat-placeholder class="placeholder">שם כרטיס</mat-placeholder>
-            <mat-error>חובה למלא את סוג שם הכרטיס </mat-error>
-          </mat-form-field>
-        </div>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="billingDate">
-      <th mat-header-cell *matHeaderCellDef>תאריך חיוב</th>
-      <td mat-cell *matCellDef="let element; let i = index">
-          <div *ngIf="!editoptionsable[i]">{{element?.billingDate}} </div>
-          <div *ngIf="editoptionsable[i]">
-              <mat-form-field class="edit-card">
-                <input matInput type="number" name="billingDate" [(ngModel)]="editCardForm.billingDate"
-                  [value]="editCardForm.billingDate">
-                <mat-placeholder class="placeholder">יום החיוב</mat-placeholder>
-                <mat-error>חובה למלא את יום החיוב </mat-error>
-              </mat-form-field>
+
+<div class="cards-management-component">
+  <section class="cards-list">
+    <div class="row">
+      <div class="col-sm-12">
+        <mat-accordion displayMode="flat" multi class="mat-table">
+          <section matSort class="mat-elevation-z2 mat-header-row">
+            <span class="mat-header-cell" mat-sort-header="options">אפשרויות</span>
+            <span class="mat-header-cell" mat-sort-header="cardName">שם הכרטיס</span>
+            <span class="mat-header-cell" mat-sort-header="typeProduct">תאריך חיוב</span>
+          </section>
+          <mat-expansion-panel *ngFor="let item of displayedRows$ | async; let i = index">
+            <mat-expansion-panel-header class="mat-row">
+              <span class="mat-cell"> <i class="fas fa-trash" (click)="deleteCard(item._id)"></i>
+                <i class="fas fa-edit" (click)="editCard(item);editoptionsable[i] = !editoptionsable[i]"
+                  *ngIf="!editoptionsable[i] && !updateAble"></i>
+                <i class="fas fa-check-double" *ngIf="editoptionsable[i]"
+                  (click)="updateCard();editoptionsable[i] = !editoptionsable[i]"></i>
+                <i class="fas fa-times" *ngIf="editEnable && editoptionsable[i]"
+                  (click)="cancelUpdate();editoptionsable[i] = !editoptionsable[i]"></i>
+              </span>
+              <span class="mat-cell">{{item?.cardName}}</span>
+              <span class="mat-cell">{{item?.billingDate}}</span>
+            </mat-expansion-panel-header>
+            <div *ngIf="!editoptionsable[i]">
+              <ul>
+                <li>שם הכרטיס: {{item?.cardName}}</li>
+                <li>תאריך לחיוב: {{item?.billingDate}}</li>
+              </ul>
             </div>
-      </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+            <section *ngIf="editoptionsable[i]" class="edit-section">
+              <h1>עריכת כרטיס</h1>
+              <div class="row">
+                <div class="col-sm-12">
+                  <mat-form-field class="new-transaction">
+                    <mat-select [(ngModel)]="editCardForm.cardName" value="{{editCardForm.cardName}}">
+                      <mat-option *ngFor="let card of cards" [value]="card?.cardName">
+                        {{card?.cardName}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-placeholder class="placeholder" *ngIf="editCardForm.cardName.length > 0">
+                      {{editCardForm?.cardName}}</mat-placeholder>
+                    <mat-placeholder class="placeholder" *ngIf="editCardForm.cardName.length <= 0">שם הכרטיס
+                    </mat-placeholder>
+                    <mat-error>חובה למלא שם כרטיס</mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-12">
+                  <mat-form-field class="new-transaction edit-section" >
+                    <input type="text" aria-label="Number" matInput [(ngModel)]="editCardForm.billingDate"
+                      value="{{editCardForm.billingDate}}">
+                    <mat-placeholder class="placeholder">תאריך לחיוב</mat-placeholder>
+                    <mat-error>חובה למלא תאריך לחיוב</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </section>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <mat-paginator #paginator [length]="totalRows$ | async" [pageIndex]="0" [pageSize]="10"
+          [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="cards-management-component" *ngIf="!isLoading">
   <section class="card-form">
     <form #cardForm="ngForm" (submit)="createNewCard(cardForm)" ngForm>
       <mat-form-field class="full-width">

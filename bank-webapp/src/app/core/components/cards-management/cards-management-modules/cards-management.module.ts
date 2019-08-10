@@ -1,3 +1,4 @@
+import { MatExpansionModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -14,6 +15,7 @@ import { CardsManagementRouting } from './cards-management-routing.module';
     AngularMaterialModule,
     CardsManagementRouting,
     FormsModule,
+    MatExpansionModule,
     Ng4LoadingSpinnerModule.forRoot()
   ]
 })

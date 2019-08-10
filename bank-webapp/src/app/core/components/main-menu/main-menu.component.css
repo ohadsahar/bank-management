@@ -13,3 +13,9 @@ a {
 .navbar-light .navbar-toggler {
   border: none;
 }
+
+ul {
+  padding: 0px;
+  direction: ltr;
+  font-size: 15px;
+}

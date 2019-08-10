@@ -116,6 +116,7 @@ export class PaymentManagementComponent implements OnInit {
       }
     );
   }
+  applyFilter($event) {}
   toSortFn<U>(sortFns: PropertySortFns<U> = {}, useDefault = true): (sort$: Observable<Sort>) => Observable<undefined | SortFn<U>> {
     return (sort$) => sort$.pipe(
       map(sort => {

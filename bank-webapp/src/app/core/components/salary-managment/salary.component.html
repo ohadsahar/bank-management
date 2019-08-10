@@ -7,20 +7,11 @@
       <div class="col-sm-12">
         <mat-accordion displayMode="flat" multi class="mat-table">
           <section matSort class="mat-elevation-z2 mat-header-row">
-            <span class="mat-header-cell" mat-sort-header="options">אפשרויות</span>
             <span class="mat-header-cell" mat-sort-header="salary">משכורת</span>
             <span class="mat-header-cell" mat-sort-header="monthOfSalary">תאריך המשכורת</span>
           </section>
           <mat-expansion-panel *ngFor="let item of displayedRows$ | async; let i = index">
             <mat-expansion-panel-header class="mat-row">
-              <span class="mat-cell"> <i class="fas fa-trash" (click)="deleteSalary(item._id)"></i>
-                <i class="fas fa-edit" (click)="editSalary(item);editoptionsable[i] = !editoptionsable[i]"
-                  *ngIf="!editoptionsable[i] && !updateAble"></i>
-                <i class="fas fa-check-double" *ngIf="editEnable && editoptionsable[i]"
-                  (click)="updateSalary();editoptionsable[i] = !editoptionsable[i]"></i>
-                <i class="fas fa-times" *ngIf="editEnable && editoptionsable[i]"
-                  (click)="cancelUpdate();editoptionsable[i] = !editoptionsable[i]"></i>
-              </span>
               <span class="mat-cell">{{item?.salary}}</span>
               <span class="mat-cell">{{item?.monthOfSalary}} / {{item?.yearOfSalary}}</span>
             </mat-expansion-panel-header>
@@ -28,6 +19,10 @@
               <ul>
                 <p class="mat-cell">סכום המשכורת: {{item?.salary}}</p>
                 <p class="mat-cell">תאריך קבלת המשכורת: {{item?.monthOfSalary}} / {{item?.yearOfSalary}}</p>
+                <p> <i class="fas fa-trash" (click)="deleteSalary(item._id)"></i>
+                  <i class="fas fa-edit" (click)="editSalary(item);editoptionsable[i] = !editoptionsable[i]"
+                    *ngIf="!editoptionsable[i] && !updateAble"></i>
+             </p>
               </ul>
             </div>
             <section *ngIf="editoptionsable[i]" class="edit-section">
@@ -64,6 +59,10 @@
                       {{yearOfSalary?.salary}}</mat-placeholder>
                   </mat-form-field>
                 </div>
+                <p style="margin: auto"><i class="fas fa-check-double" *ngIf="editEnable && editoptionsable[i]"
+                  (click)="updateSalary();editoptionsable[i] = !editoptionsable[i]"></i>
+                <i class="fas fa-times" *ngIf="editEnable && editoptionsable[i]"
+                  (click)="cancelUpdate();editoptionsable[i] = !editoptionsable[i]"></i></p>
               </div>
             </section>
           </mat-expansion-panel>

@@ -39,9 +39,9 @@ export class HomePageComponent implements OnInit {
         this.minimumExpenseCurrentMonthCashType = response.message.resultOfCurrentCategoryExpense.minimumExpense.typeProduct;
         this.minimumExpenseCurrentMonthCash = response.message.resultOfCurrentCategoryExpense.minimumExpense.price;
       }
-      this.totalExpenseCurrentMonth = response.message.resultOfCurrentCategoryExpense.totalExpenseCash;
+      this.totalExpenseCurrentMonth = Number((response.message.resultOfCurrentCategoryExpense.totalExpenseCash).toFixed(2));
       if (response.message.resultOfCurrentCategoryExpense.largestExpense) {
-        this.categoryLargestExpenditure = response.message.resultOfCurrentCategoryExpense.largestExpense.price;
+        this.categoryLargestExpenditure = Number((response.message.resultOfCurrentCategoryExpense.largestExpense.price).toFixed(2));
         this.categoryLargestExpenditureCategory = response.message.
           resultOfCurrentCategoryExpense.largestExpense.typeProduct;
       }

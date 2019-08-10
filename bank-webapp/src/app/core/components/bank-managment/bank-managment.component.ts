@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { MatDialog, MatPaginator, MatSort, PageEvent, Sort } from '@angular/material';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -35,15 +34,10 @@ interface PropertySortFns<U> {
 export class BankManagmentComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  public sortedData: Bank[];
   public allTransactions: Bank[];
   options: string[] = [];
-  filteredOptions: Observable<string[]>;
-  myControl = new FormControl();
   private counter: number;
   public numberOfPayments: number;
-  public productSearch: string;
-  public totalCash: number;
   public editEnable: boolean;
   public updateAble: boolean;
   public isLoading: boolean;
@@ -65,9 +59,9 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   public cancelBankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null, null);
   public bankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null, null);
   constructor(private messageService: MessageService, private store: Store<fromRoot.State>,
-              public router: Router, public dialog: MatDialog, private loginService: LoginService,
-              private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService,
-              private webSocketService: WebSocketService) {
+    public router: Router, public dialog: MatDialog, private loginService: LoginService,
+    private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService,
+    private webSocketService: WebSocketService) {
     this.isLoading = false;
     this.counter = 0;
     this.numberOfPayments = 0;
@@ -232,9 +226,6 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.totalRows$ = rows$.pipe(map(rows => rows.length));
     this.displayedRows$ = rows$.pipe(this.sortRows(this.sortEvents$), paginateRows(this.pageEvents$));
   }
-  compare(a: number | string, b: number | string, isAsc: boolean) {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
-  }
   calculateEachMonthEdit($event): void {
     this.purchaseD = moment($event).format('L');
     this.today = new Date();
@@ -250,23 +241,19 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     }
     this.resetDate();
   }
-  resetDate() {
+  resetDate(): void  {
     this.endDate = null;
     this.today = null;
     this.purchaseD = null;
     this.monthDifference = 0;
   }
-  loading() {
+  loading(): void  {
     this.isLoading = true;
     this.spinnerService.show();
   }
-  loaded() {
+  loaded(): void {
     this.isLoading = false;
     this.spinnerService.hide();
-  }
-  ngOnDestroy() {
-    this.registerNewTransactionNgrx.unsubscribe();
-    this.ngUnsubscribe.unsubscribe();
   }
   applyFilter(filterValue: string): void {
     // this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -317,7 +304,9 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       return 0;
     }
   }
-
-
+  ngOnDestroy() {
+    this.registerNewTransactionNgrx.unsubscribe();
+    this.ngUnsubscribe.unsubscribe();
+  }
 }
 

@@ -1,5 +1,3 @@
-
-
 .fa-times:before {
   margin-right: 16px;
 }
@@ -16,10 +14,6 @@
 
 .mat-select-value {
   color: white !important;
-}
-
-.bank-component .purchase-list .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
-  width: 30%;
 }
 
 .bank-component .mat-form-field {
@@ -51,20 +45,6 @@
   text-align: right !important;
   font-weight: 500;
   font-size: 12px;
-}
-
-#search {
-  text-align: right;
-  direction: rtl;
-  width: 100%;
-}
-
-
-.placeholder {
-  color: white !important;
-  font-weight: bold;
-  text-align: right;
-  word-break: break-all;
 }
 
 .mat-form-field-appearance-legacy .mat-form-field-wrapper {
@@ -137,6 +117,13 @@ i {
   color: black;
   font-weight: bold;
 }
+
+#search {
+  text-align: right;
+  direction: rtl;
+  width: 100%;
+}
+
 .mat-select-value-text {
   color: black;
 }
@@ -150,9 +137,10 @@ i {
     font-size: 25px;
   }
 
-  .bank-component .purchase-list .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
-    width: 100%;
+  .current-status {
+    font-size: 21px;
   }
+
 
   .mat-sort-header-container {
     justify-content: center;
@@ -173,9 +161,6 @@ i {
     font-size: 10px;
   }
 
-  .bank-component .mat-form-field {
-    width: 100%;
-  }
 
   .mat-form-field-appearance-legacy .mat-form-field-wrapper {
     width: 100%;

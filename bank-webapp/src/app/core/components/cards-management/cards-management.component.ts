@@ -112,6 +112,7 @@ export class CardsManagementComponent implements OnInit {
         const index = this.cards.findIndex(card => card._id === response.message._id);
         this.cards[index] = response.message;
         this.updateTable();
+        this.messageService.successMessage('הכרטיס עודכן בהצלחה', 'Dismiss');
         this.loaded();
       },
         (error) => {

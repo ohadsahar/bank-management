@@ -128,12 +128,23 @@ ul {
 }
 
 .placeholder {
-  color: white;
+  color: white !important;
+  font-weight: bold;
+  text-align: right;
+  word-break: break-all;
 }
 
+.search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+  width: 25%;
+  margin: auto;
+  display: block;
+}
 
 @media only screen and (max-width: 800px) {
 
+  .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+    width: 100%;
+  }
   .fa-plus:before {
     font-size: 25px;
   }

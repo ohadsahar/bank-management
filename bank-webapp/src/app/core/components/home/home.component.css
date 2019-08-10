@@ -46,7 +46,9 @@ h1 {
   color: white;
   text-align: center;
 }
-
+ul li p {
+  font-size: 18px;
+}
 ul {
   list-style-type: none;
 }

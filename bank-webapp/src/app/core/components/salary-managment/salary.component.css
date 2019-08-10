@@ -108,6 +108,10 @@ i {
 .mat-paginator-container {
   direction: ltr;
 }
+h1 {
+  text-align: center;
+  font-size: 21px;
+}
 
 @media only screen and (max-width: 800px) {
 

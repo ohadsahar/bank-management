@@ -10,10 +10,6 @@ th.mat-header-cell:first-of-type {
   text-align: center !important;
 }
 
-.payment-component  .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
-  width: 30%;
-}
-
 .payment-component {
   font-weight: bold;
   direction: rtl;
@@ -36,7 +32,7 @@ th.mat-header-cell:first-of-type {
 #search {
   text-align: right;
   direction: rtl;
-  width: 100%;
+  width: 30%;
 
 }
 
@@ -44,11 +40,6 @@ th.mat-header-cell:first-of-type {
   justify-content: center;
 }
 
-
-.mat-form-field-appearance-legacy .mat-form-field-wrapper {
-  width: 100%;
-  text-align: right;
-}
 
 #search {
   text-align: right;
@@ -133,7 +124,7 @@ i {
     width: 100%;
   }
 
-  .payment-component  .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+  .payment-component .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
     width: 100%;
   }
 }

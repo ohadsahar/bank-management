@@ -143,6 +143,10 @@ ul {
   padding: 24px;
 }
 
+.mat-paginator-page-size-select {
+  width: 100% !important;
+}
+
 @media only screen and (max-width: 800px) {
 
   .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {

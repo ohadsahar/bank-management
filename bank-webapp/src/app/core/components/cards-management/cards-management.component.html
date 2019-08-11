@@ -1,13 +1,11 @@
 <ng4-loading-spinner [threshold]="isLoading" [timeout]="9999999" [loadingText]="'Please wait...'" [zIndex]="9999">
 </ng4-loading-spinner>
-
 <div class="cards-management-component">
   <section class="cards-list">
     <div class="row">
       <div class="col-sm-12">
         <mat-accordion displayMode="flat" multi class="mat-table">
           <section matSort class="mat-elevation-z2 mat-header-row">
-            <span class="mat-header-cell" mat-sort-header="options">אפשרויות</span>
             <span class="mat-header-cell" mat-sort-header="cardName">שם הכרטיס</span>
             <span class="mat-header-cell" mat-sort-header="typeProduct">תאריך חיוב</span>
           </section>

@@ -28,7 +28,6 @@ export class CardsManagementComponent implements OnInit {
 
   public cards: CardsModel[];
   editCardForm = new EditCardModel('', '', '', null);
-  displayedColumns: string[] = ['options', 'cardName', 'billingDate'];
   currentUsername: string;
   isLoading: boolean;
   dataSource = new MatTableDataSource(this.cards);

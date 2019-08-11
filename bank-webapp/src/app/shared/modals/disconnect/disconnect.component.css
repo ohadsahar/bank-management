@@ -10,7 +10,7 @@ h2 {
 ::ng-deep .mat-dialog-container {
 
   width: 100%;
-  background-color: #3D518C;
+  background-color: #3D518C !important;
   color: white;
 }
 

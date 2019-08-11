@@ -3,17 +3,19 @@
     <mat-dialog-content class="mat-typography">
       <form #loginData="ngForm" (submit)="login(loginData)">
         <mat-form-field class="example-full-width">
-          <input matInput name="username" #email="ngModel" ngModel type="email" placeholder="האיימיל שלך" required>
+          <input matInput name="username" #email="ngModel" ngModel type="email" required>
+          <mat-placeholder class="placeholder">האיימיל שלך</mat-placeholder>
           <mat-error *ngIf="email.invalid">האיימיל בפורמט לא נכון</mat-error>
         </mat-form-field>
         <mat-form-field class="example-full-width">
-          <input matInput name="password" minlength="8" autocomplete="password" ngModel #password="ngModel" placeholder="סיסמא"
+          <input matInput name="password" minlength="8" autocomplete="password" ngModel #password="ngModel"
             [type]="hide ? 'password' : 'text'" required>
           <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
             [attr.aria-pressed]="hide">
             <i class="fas fa-eye" *ngIf="!hide"></i>
             <i class="fas fa-eye-slash" *ngIf="hide"></i>
           </button>
+          <mat-placeholder class="placeholder">סיסמא</mat-placeholder>
           <mat-error *ngIf="password.invalid">הסיסמא חייבת להכיל בדיוק 8 תווים</mat-error>
         </mat-form-field>
         <mat-dialog-actions align="end">

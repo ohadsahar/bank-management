@@ -104,22 +104,28 @@ async function archivePayment(transaction) {
   });
   await transactionSave.save();
 }
-async function paymentsTime(transactionData) {
+async function paymentsTime(transactionData, allCardsUsername) {
   const dayOfMonth = moment().get('date');
-  if (dayOfMonth === 2 || dayOfMonth === 10 || dayOfMonth === 12 || dayOfMonth === 15) {
-    await transactionData.forEach((transaction) => {
-      if (transaction.billingDate === dayOfMonth) {
-        // eslint-disable-next-line no-param-reassign
-        transaction.numberofpayments += 1;
-        if (transaction.numberofpayments === transaction.leftPayments) {
-          archivePayment(transaction);
-          // eslint-disable-next-line no-underscore-dangle
-          deletePayment(transaction._id);
-        } else {
-          update(transaction);
-        }
-      }
+  const billingDatesArray = [];
+  if (allCardsUsername) {
+    allCardsUsername.forEach((element) => {
+      billingDatesArray.push(element.billingDate);
     });
+    if (billingDatesArray.includes(dayOfMonth)) {
+      await transactionData.forEach((transaction) => {
+        if (transaction.billingDate === dayOfMonth) {
+          // eslint-disable-next-line no-param-reassign
+          transaction.numberofpayments += 1;
+          if (transaction.numberofpayments === transaction.leftPayments) {
+            archivePayment(transaction);
+            // eslint-disable-next-line no-underscore-dangle
+            deletePayment(transaction._id);
+          } else {
+            update(transaction);
+          }
+        }
+      });
+    }
   }
 }
 async function allBushinessNames(transcations) {

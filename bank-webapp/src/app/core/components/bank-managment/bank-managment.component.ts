@@ -3,6 +3,7 @@ import { MatDialog, MatPaginator, MatSort, PageEvent, Sort } from '@angular/mate
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as moment from 'moment';
+import * as lodash from 'lodash';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { combineLatest, Observable, of, Subject, Subscription } from 'rxjs';
 import { map, takeUntil, filter } from 'rxjs/operators';
@@ -234,8 +235,6 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.displayedRows$ = rows$.pipe(this.sortRows(this.sortEvents$), paginateRows(this.pageEvents$));
   }
   calculateEachMonthEdit(): void {
-
-    console.log(this.bankEditTransaction.numberofpayments);
     if (this.bankEditTransaction.numberofpayments) {
       this.bankEditTransaction.eachMonth = this.bankEditTransaction.price / this.bankEditTransaction.leftPayments;
       this.bankEditTransaction.eachMonth = Number(this.bankEditTransaction.eachMonth.toFixed(2));
@@ -269,8 +268,14 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   applyFilter(filterValue: string): void {
     if (filterValue.length > 0) {
       this.dataSource.filter = filterValue.trim().toLowerCase();
+      this.currentCash = lodash(this.dataSource.filteredData).sumBy('eachMonth');
       this.updateTable(this.dataSource.filteredData);
     } else {
+      this.shareDataService.currentCashToPass.subscribe(response => {
+        this.currentCash = response;
+      }, (error) => {
+        this.messageService.failedMessage(error, 'Dismiss');
+      });
       this.updateTable(this.allTransactions);
     }
   }

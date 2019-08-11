@@ -21,9 +21,15 @@ h2 {
   text-align: center;
 }
 
+.mat-form-field-appearance-legacy .mat-form-field-wrapper {
+  width: 100%;
+  text-align: right;
+  font-weight: bold;
+}
+
 ::ng-deep .mat-dialog-container {
 
-  background-color: #fcfdff !important;
+  background-color: #3D518C !important;
 }
 
 .login-dialog .mat-dialog-content {

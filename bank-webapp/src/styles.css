@@ -4,7 +4,10 @@ body {
   font-family: 'Varela Round', sans-serif !important;
   overflow-x: hidden;
   background-color: #3D518C !important;
-  height: 100%;
+}
+
+body {
+  margin: 0;
 }
 
 ul {
@@ -13,10 +16,6 @@ ul {
 
 .mat-form-field-appearance-legacy .mat-form-field-infix {
   color: black;
-}
-
-body {
-  margin: 0;
 }
 
 ::-webkit-scrollbar {

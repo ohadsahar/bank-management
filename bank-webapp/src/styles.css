@@ -140,11 +140,16 @@ ul {
   display: block;
 }
 
+.search-section {
+  padding: 24px;
+}
+
 @media only screen and (max-width: 800px) {
 
   .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
     width: 100%;
   }
+
   .fa-plus:before {
     font-size: 25px;
   }

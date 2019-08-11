@@ -5,7 +5,7 @@ const validatorUtil = require('../utils/validator');
 const cardService = require('./card.service');
 
 async function register(transactionData) {
-  transactionData.purchaseDate = moment(transactionData.purchaseDate).format('L');
+  transactionData.purchaseDate = moment(new Date(transactionData.purchaseDate)).format('DD/MM/YYYY');
   const transactionToCreate = new TransactionModel({
     cardName: transactionData.cardName,
     username: transactionData.username,
@@ -25,6 +25,7 @@ async function register(transactionData) {
     transactionSaved: transactionToCreate,
   };
 }
+
 async function updatePurchaseDate(transactionData) {
   const resultOfValidateTransactionData = await validatorUtil.validateUpdateData(transactionData);
   await transactionUtil.update(resultOfValidateTransactionData);

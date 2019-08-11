@@ -48,7 +48,7 @@
 }
 
 .mat-form-field-appearance-legacy .mat-form-field-wrapper {
-  width: 15%;
+  width: 35%;
   text-align: right;
   font-weight: bold;
 }
@@ -127,8 +127,6 @@ i {
 .mat-select-value-text {
   color: black;
 }
-
-
 
 
 @media only screen and (max-width: 800px) {

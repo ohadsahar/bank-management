@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import * as moment from 'moment';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { combineLatest, Observable, of, Subject, Subscription } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { map, takeUntil, filter } from 'rxjs/operators';
 import { RegisterNewTransactionModalComponent } from 'src/app/shared/modals/register-transaction/register-new-transaction.component';
 import { CardsModel } from 'src/app/shared/models/cards.model';
 import { fromMatPaginator, fromMatSort, paginateRows } from 'src/app/table-util';
@@ -18,6 +18,8 @@ import { bottomSideItemTrigger, upSideItemTrigger } from './../../../shared/anim
 import { LoginService } from './../../services/login.service';
 import { ShareDataService } from './../../services/share-data.service';
 import { WebSocketService } from './../../services/web-socket.service';
+
+import { MatTableDataSource } from '@angular/material/table';
 
 type SortFn<U> = (a: U, b: U) => number;
 interface PropertySortFns<U> {
@@ -34,7 +36,9 @@ interface PropertySortFns<U> {
 export class BankManagmentComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  dataSource;
   public allTransactions: Bank[];
+  public originalTransactions: Bank[];
   options: string[] = [];
   private counter: number;
   public numberOfPayments: number;
@@ -146,6 +150,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     const dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((data) => {
         if (data.loaded) {
+          this.currentCash -= eachMonth;
           this.deletedId = transactionId;
           this.webSocketService.emit('delete-transaction', data.data);
           dataToSubscribe.unsubscribe();
@@ -158,7 +163,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   }
   updateTransaction(): void {
     this.loading();
-    this.bankEditTransaction.purchaseDate = moment(this.bankEditTransaction.purchaseDate).format('L');
+    this.bankEditTransaction.purchaseDate = moment(this.bankEditTransaction.purchaseDate).format('DD/MM/YYYY');
     this.store.dispatch(new transactionActions.UpdateTransaction(this.bankEditTransaction));
     this.dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((data) => {
@@ -173,14 +178,14 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       });
   }
   afterFetchedAllData(): void {
-    this.updateTable();
+    this.updateTable(this.allTransactions);
     this.loaded();
     this.dataToSubscribe.unsubscribe();
   }
   afterUpdate(): void {
     this.updateAble = false;
     this.messageService.successMessage('העסקה עודכנה בהצלחה', 'סגור');
-    this.updateTable();
+    this.updateTable(this.allTransactions);
   }
   registerNewTransactionDialog(): void {
     this.dialog.open(RegisterNewTransactionModalComponent);
@@ -188,12 +193,12 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   afterRegisterNewCard(): void {
     this.shareDataService.changeTransactions(this.allTransactions as any);
     this.messageService.successMessage('הקנייה התווספה בהצלחה', 'סגור');
-    this.updateTable();
+    this.updateTable(this.allTransactions);
   }
   afterDeleteTransaction(): void {
     this.shareDataService.changeTransactions(this.allTransactions as any);
     this.messageService.successMessage('העסקה נמחקה בהצלחה', 'סגור');
-    this.updateTable();
+    this.updateTable(this.allTransactions);
   }
   editTransaction(transactionData: Bank): void {
     this.updateAble = true;
@@ -221,17 +226,15 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.bankEditTransaction.eachMonth = this.cancelBankEditTransaction.eachMonth;
     this.bankEditTransaction.numberofpayments = this.cancelBankEditTransaction.numberofpayments;
   }
-  updateTable(): void {
-    const rows$ = of(this.allTransactions);
+  updateTable(allTransactions: Bank[]): void {
+    this.dataSource = new MatTableDataSource(allTransactions);
+    const rows$ = of(allTransactions);
     this.totalRows$ = rows$.pipe(map(rows => rows.length));
     this.displayedRows$ = rows$.pipe(this.sortRows(this.sortEvents$), paginateRows(this.pageEvents$));
   }
-  calculateEachMonthEdit($event): void {
-    this.purchaseD = moment($event).format('L');
-    this.today = new Date();
-    this.endDate = moment(this.purchaseD).add(this.bankEditTransaction.numberofpayments, 'months').format('L');
-    this.monthDifference = moment(this.today).diff(this.purchaseD, 'M');
-    this.bankEditTransaction.numberofpayments = this.monthDifference + 1;
+  calculateEachMonthEdit(): void {
+
+    console.log(this.bankEditTransaction.numberofpayments);
     if (this.bankEditTransaction.numberofpayments) {
       this.bankEditTransaction.eachMonth = this.bankEditTransaction.price / this.bankEditTransaction.leftPayments;
       this.bankEditTransaction.eachMonth = Number(this.bankEditTransaction.eachMonth.toFixed(2));
@@ -241,13 +244,20 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     }
     this.resetDate();
   }
-  resetDate(): void  {
+  calculateDate($event) {
+    this.purchaseD = moment($event).format('DD/MM/YYYY');
+    this.today = new Date();
+    this.endDate = moment(this.purchaseD).add(this.bankEditTransaction.numberofpayments, 'months').format('DD/MM/YYYY');
+    this.monthDifference = moment(this.today).diff(this.purchaseD, 'M');
+    this.bankEditTransaction.numberofpayments = this.monthDifference + 1;
+  }
+  resetDate(): void {
     this.endDate = null;
     this.today = null;
     this.purchaseD = null;
     this.monthDifference = 0;
   }
-  loading(): void  {
+  loading(): void {
     this.isLoading = true;
     this.spinnerService.show();
   }
@@ -256,7 +266,12 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.spinnerService.hide();
   }
   applyFilter(filterValue: string): void {
-    // this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (filterValue.length > 0) {
+      this.dataSource.filter = filterValue.trim().toLowerCase();
+      this.updateTable(this.dataSource.filteredData);
+    } else {
+      this.updateTable(this.allTransactions);
+    }
   }
   sortRows<U>(
     sort$: Observable<Sort>,

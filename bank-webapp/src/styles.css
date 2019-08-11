@@ -128,7 +128,7 @@ ul {
 }
 
 .placeholder {
-  color: white !important;
+  color: black !important;
   font-weight: bold;
   text-align: right;
   word-break: break-all;

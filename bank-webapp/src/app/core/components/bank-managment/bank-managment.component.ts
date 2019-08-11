@@ -225,6 +225,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.bankEditTransaction.leftPayments = this.cancelBankEditTransaction.leftPayments;
     this.bankEditTransaction.eachMonth = this.cancelBankEditTransaction.eachMonth;
     this.bankEditTransaction.numberofpayments = this.cancelBankEditTransaction.numberofpayments;
+    this.bankEditTransaction.purchaseDate = moment(this.bankEditTransaction.purchaseDate).format('DD/MM/YYYY');
   }
   updateTable(allTransactions: Bank[]): void {
     this.dataSource = new MatTableDataSource(allTransactions);

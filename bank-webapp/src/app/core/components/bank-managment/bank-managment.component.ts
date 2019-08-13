@@ -1,12 +1,13 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatPaginator, MatSort, PageEvent, Sort } from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import * as moment from 'moment';
 import * as lodash from 'lodash';
+import * as moment from 'moment';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { combineLatest, Observable, of, Subject, Subscription } from 'rxjs';
-import { map, takeUntil, filter } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { RegisterNewTransactionModalComponent } from 'src/app/shared/modals/register-transaction/register-new-transaction.component';
 import { CardsModel } from 'src/app/shared/models/cards.model';
 import { fromMatPaginator, fromMatSort, paginateRows } from 'src/app/table-util';
@@ -20,7 +21,6 @@ import { LoginService } from './../../services/login.service';
 import { ShareDataService } from './../../services/share-data.service';
 import { WebSocketService } from './../../services/web-socket.service';
 
-import { MatTableDataSource } from '@angular/material/table';
 
 type SortFn<U> = (a: U, b: U) => number;
 interface PropertySortFns<U> {
@@ -34,7 +34,7 @@ interface PropertySortFns<U> {
   encapsulation: ViewEncapsulation.None,
   animations: [upSideItemTrigger, bottomSideItemTrigger]
 })
-export class BankManagmentComponent implements OnInit, OnDestroy {
+export class BankManagmentComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   dataSource;
@@ -47,7 +47,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   public updateAble: boolean;
   public isLoading: boolean;
   public dataToSubscribe: Subscription;
-  public registerNewTransactionNgrx: Subject<void> = new Subject<void>();
+  public registerSubscribe$: Subject<void> = new Subject<void>();
   public updateTransaction$: Subject<void> = new Subject<void>();
   private ngUnsubscribe: Subject<void> = new Subject<void>();
   public editoptionsable: any = {};
@@ -64,9 +64,9 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   public cancelBankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null, null);
   public bankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null, null);
   constructor(private messageService: MessageService, private store: Store<fromRoot.State>,
-    public router: Router, public dialog: MatDialog, private loginService: LoginService,
-    private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService,
-    private webSocketService: WebSocketService) {
+              public router: Router, public dialog: MatDialog, private loginService: LoginService,
+              private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService,
+              private webSocketService: WebSocketService) {
     this.isLoading = false;
     this.counter = 0;
     this.numberOfPayments = 0;
@@ -133,12 +133,13 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   registerNewTransaction(result: any): void {
     this.loading();
     this.store.dispatch(new transactionActions.RegisterTransaction(result));
-    const dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.registerNewTransactionNgrx))
+    const dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.registerSubscribe$))
       .subscribe((data) => {
         if (data.loaded) {
+          console.log(data);
           this.webSocketService.emit('create-transaction', data.data);
-          dataToSubscribe.unsubscribe();
           this.loaded();
+          dataToSubscribe.unsubscribe();
         }
       }, (error) => {
         this.loaded();
@@ -324,10 +325,6 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     } else {
       return 0;
     }
-  }
-  ngOnDestroy() {
-    this.registerNewTransactionNgrx.unsubscribe();
-    this.ngUnsubscribe.unsubscribe();
   }
 }
 

@@ -1,5 +1,5 @@
 export interface ResponseRegisterModel {
 
-  message: string;
+  message: any[];
   success: boolean;
 }

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { LoginModalComponent } from 'src/app/shared/modals/login/login.component';
 import { RegisterUserModalComponent } from 'src/app/shared/modals/register-user/register-user.component';
+import { Route } from '@angular/router';
 
 
 @Component({
@@ -11,12 +12,13 @@ import { RegisterUserModalComponent } from 'src/app/shared/modals/register-user/
 })
 
 export class MainMenuComponent {
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog) {}
   register() {
     this.dialog.open(RegisterUserModalComponent);
   }
   login() {
     this.dialog.open(LoginModalComponent);
+
   }
 }
 

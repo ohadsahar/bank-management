@@ -93,12 +93,6 @@ i {
   cursor: pointer;
 }
 
-.placeholder {
-  color: black !important;
-  font-weight: bold;
-  text-align: right;
-  word-break: break-all;
-}
 
 .fa-edit:before,
 .fa-check-double:before {

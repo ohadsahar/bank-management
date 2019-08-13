@@ -24,7 +24,7 @@ async function register(req, res) {
     const registerData = req.body;
     const registerResult = await userManagementService.register(registerData);
     res.status(201).json({
-      message: registerResult.message,
+      message: registerResult,
       success: true,
     });
   } catch (error) {

@@ -2,8 +2,8 @@
   text-align: right;
 }
 
-.mat-form-field-appearance-legacy .mat-form-field-wrapper {
-  width: 100%;
+.cards-management-component .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+  width: 100% !important;
   text-align: right;
   font-weight: bold;
 }
@@ -64,8 +64,6 @@ i {
 
 @media only screen and (max-width: 800px) {
 
-
-
   .mat-sort-header-container {
     justify-content: center;
     font-weight: bold;
@@ -89,6 +87,10 @@ i {
     width: 100%;
   }
 
-
+  .cards-management-component .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+    width: 100%;
+    text-align: right;
+    font-weight: bold;
+  }
 
 }

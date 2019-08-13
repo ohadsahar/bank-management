@@ -22,6 +22,8 @@ import { RegisterUserModalComponent } from './shared/modals/register-user/regist
 import { BankManagementEffects } from './store/effects/bank-managment.effect';
 import { SalaryEffects } from './store/effects/salary.effect';
 import { TransactionEffect } from './store/effects/transaction.effect';
+import { CardsEffects } from './store/effects/cards.effect';
+
 if (environment.production) {
   enableProdMode();
 }
@@ -46,7 +48,7 @@ if (environment.production) {
     HttpClientModule,
     DeviceDetectorModule.forRoot(),
     StoreModule.forRoot(Reducers),
-    EffectsModule.forRoot([BankManagementEffects, TransactionEffect, SalaryEffects]),
+    EffectsModule.forRoot([BankManagementEffects, TransactionEffect, SalaryEffects, CardsEffects]),
     DeviceDetectorModule.forRoot(),
     Ng4LoadingSpinnerModule.forRoot()
   ],

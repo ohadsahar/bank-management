@@ -29,11 +29,15 @@ h2 {
 
 ::ng-deep .mat-dialog-container {
 
-  background-color: #3D518C !important;
+  background-color: white !important;
 }
 
+.placeholder {
+  color: black !important;
+}
 .login-dialog .mat-dialog-content {
   font-weight: bold;
+  color: black;
   font-size: 18px;
 
 }

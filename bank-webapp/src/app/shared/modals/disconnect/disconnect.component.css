@@ -10,8 +10,8 @@ h2 {
 ::ng-deep .mat-dialog-container {
 
   width: 100%;
-  background-color: #3D518C !important;
-  color: white;
+  background-color: white !important;
+  color: black !important;
 }
 
 .disconnect-dialog .mat-dialog-content {

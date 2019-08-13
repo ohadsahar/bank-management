@@ -1,3 +1,4 @@
+import { MatDialog } from '@angular/material';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
@@ -5,7 +6,6 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { LoginModel } from 'src/app/shared/models/login-data.model';
 import { environment } from 'src/environments/environment';
 import { AuthData } from './../../shared/models/auth-data.model';
-import { ResponseRegisterModel } from './../../shared/models/register-response.model';
 import { MessageService } from './message.service';
 
 const backendUrlLogin = environment.backendUrlLogin;
@@ -21,7 +21,7 @@ export class LoginService {
   private username: string;
   private id: string;
 
-  constructor(private http: HttpClient, private router: Router, private messageService: MessageService) {
+  constructor(private http: HttpClient, private router: Router, private messageService: MessageService, private dialog: MatDialog) {
     this.isLogged = false;
     this.changeStatus(false);
   }
@@ -44,13 +44,14 @@ export class LoginService {
         this.saveAuthData(this.token, this.expiryDate);
         this.authStatusListener.next(true);
         this.messageService.successMessage('התחברת בהצלחה!', 'סגור');
+        this.dialog.closeAll();
       }
     }, (error) => {
       this.messageService.failedMessage('שם המשתמש או הסיסמא לא נכונים', 'סגור');
     });
   }
   register(loginData: LoginModel) {
-    return this.http.post<{ message: ResponseRegisterModel }>(`${backendUrlLogin}/register`, loginData);
+    return this.http.post<{ message: any }>(`${backendUrlLogin}/register`, loginData);
   }
   getAuthStatusListener() {
     return this.authStatusListener.asObservable();

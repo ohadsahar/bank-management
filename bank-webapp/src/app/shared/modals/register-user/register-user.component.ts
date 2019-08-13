@@ -21,7 +21,9 @@ export class RegisterUserModalComponent {
     }
     if (validator.validateRegister(form.value)) {
       this.loginService.register(form.value).subscribe(response => {
-        this.registerMessage = response.message;
+        this.registerMessage = response.message.resultOfCreationNewUser.message;
+        const loginInfo = {username: response.message.registerData.username, password: response.message.registerData.password};
+        this.loginService.login(loginInfo);
       },
         (error) => {
 

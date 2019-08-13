@@ -4,7 +4,7 @@ const userManagementUtil = require('../utils/user-management');
 async function register(registerData) {
   validatorUtil.validateRegisterData(registerData);
   const resultOfCreationNewUser = await userManagementUtil.register(registerData);
-  return { message: resultOfCreationNewUser.message };
+  return { registerData, resultOfCreationNewUser };
 }
 
 module.exports = {

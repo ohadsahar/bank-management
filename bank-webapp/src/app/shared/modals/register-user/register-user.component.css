@@ -28,10 +28,15 @@ h2 {
   text-align: center;
 }
 
+.placeholder {
+  color: black !important;
+}
+
 p {
   direction: rtl;
   text-align: right;
 }
+
 ::ng-deep .mat-dialog-container {
 
   background-color: #fcfdff !important;
@@ -43,6 +48,9 @@ p {
 
 }
 
-::ng-deep .register-dialog .mat-form-field-appearance-legacy .mat-form-field-infix, h2, .mat-hint, button {
+::ng-deep .register-dialog .mat-form-field-appearance-legacy .mat-form-field-infix,
+h2,
+.mat-hint,
+button {
   font-family: 'Varela Round', sans-serif !important;
 }

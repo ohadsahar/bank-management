@@ -1,5 +1,5 @@
-import { map } from 'rxjs/operators';
-import { Observable, of, combineLatest } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
+import { Observable, of, combineLatest, Subject } from 'rxjs';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { MessageService } from './../../services/message.service';
 import { EditCardModel } from './../../../shared/models/edit-card.model';
@@ -10,6 +10,9 @@ import { NgForm } from '@angular/forms';
 import { CardsModel } from './../../../shared/models/cards.model';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { fromMatSort, fromMatPaginator, paginateRows } from 'src/app/table-util';
+import { Store } from '@ngrx/store';
+import * as fromRoot from '../../../app.reducer';
+import * as cardActions from '../../../store/actions/cards.actions';
 
 type SortFn<U> = (a: U, b: U) => number;
 interface PropertySortFns<U> {
@@ -30,14 +33,15 @@ export class CardsManagementComponent implements OnInit {
   editCardForm = new EditCardModel('', '', '', null);
   currentUsername: string;
   isLoading: boolean;
+  ngbSubscribe$: Subject<void> = new Subject<void>();
   dataSource = new MatTableDataSource(this.cards);
   editoptionsable: any = {};
   displayedRows$: Observable<any[]>;
   totalRows$: Observable<number>;
   public sortEvents$: Observable<Sort>;
   public pageEvents$: Observable<PageEvent>;
-  constructor(private cardService: CardService, private loginService: LoginService, private messageService: MessageService,
-    private spinnerService: Ng4LoadingSpinnerService) {
+  constructor(private loginService: LoginService, private messageService: MessageService,
+    private spinnerService: Ng4LoadingSpinnerService, private store: Store<fromRoot.State>) {
     this.isLoading = false;
     this.cards = [];
   }
@@ -57,41 +61,54 @@ export class CardsManagementComponent implements OnInit {
       return;
     }
     form.value.username = this.currentUsername;
-    this.cardService.createCard(form.value).subscribe(response => {
-      this.cards.push(response.message);
-      form.reset();
-      this.updateTable();
-      this.loaded();
-    }, (error) => {
-      this.messageService.failedMessage(error, ' Dismiss');
-    });
+    this.store.dispatch(new cardActions.CreateCard(form.value));
+    const dataToSubscribe = this.store.select(fromRoot.getCardsData).pipe(takeUntil(this.ngbSubscribe$))
+      .subscribe((data) => {
+        if (!data.loading) {
+          this.cards.push(data.data);
+          form.reset();
+          this.updateTable();
+          this.loaded();
+          dataToSubscribe.unsubscribe();
+        }
+      }, (error) => {
+        this.loaded();
+        this.messageService.failedMessage(error, ' Dismiss');
+      });
   }
   getAllCards() {
     this.loading();
-    this.cardService.getAllCards(this.currentUsername).subscribe(response => {
-      this.cards = response.message;
-      this.loaded();
-      this.updateTable();
-    },
-      (error) => {
+    this.store.dispatch(new cardActions.GetAllCards(this.currentUsername));
+    const dataToSubscribe = this.store.select(fromRoot.getCardsData).pipe(takeUntil(this.ngbSubscribe$))
+      .subscribe((data) => {
+        if (!data.loading) {
+          this.cards = data.data;
+          this.loaded();
+          this.updateTable();
+          dataToSubscribe.unsubscribe();
+        }
+      }, (error) => {
         this.loaded();
         this.messageService.failedMessage(error, ' Dismiss');
-      }
-    );
+      });
+
   }
   deleteCard(id: string) {
     this.loading();
-    this.cardService.deleteCard(id).subscribe(response => {
-      const deleteCards = this.cards.filter(card => card._id !== response.message);
-      this.cards = deleteCards;
-      this.updateTable();
-      this.loaded();
-    },
-      (error) => {
+    this.store.dispatch(new cardActions.DeleteCard(id));
+    const dataToSubscribe = this.store.select(fromRoot.getCardsData).pipe(takeUntil(this.ngbSubscribe$))
+      .subscribe((data) => {
+        if (!data.loading) {
+          const deleteCards = this.cards.filter(card => card._id !== data.data);
+          this.cards = deleteCards;
+          this.updateTable();
+          this.loaded();
+          dataToSubscribe.unsubscribe();
+        }
+      }, (error) => {
         this.loaded();
         this.messageService.failedMessage(error, ' Dismiss');
-      }
-    );
+      });
   }
   updateTable(): void {
     const rows$ = of(this.cards);
@@ -107,18 +124,21 @@ export class CardsManagementComponent implements OnInit {
   updateCard() {
     this.loading();
     if (this.validateCard()) {
-      this.cardService.updateCard(this.editCardForm).subscribe(response => {
-        const index = this.cards.findIndex(card => card._id === response.message._id);
-        this.cards[index] = response.message;
-        this.updateTable();
-        this.messageService.successMessage('הכרטיס עודכן בהצלחה', 'Dismiss');
-        this.loaded();
-      },
-        (error) => {
+      this.store.dispatch(new cardActions.UpdateCard(this.editCardForm));
+      const dataToSubscribe = this.store.select(fromRoot.getCardsData).pipe(takeUntil(this.ngbSubscribe$))
+        .subscribe((data) => {
+          if (!data.loading) {
+            const index = this.cards.findIndex(card => card._id === data.data._id);
+            this.cards[index] = data.data;
+            this.updateTable();
+            this.messageService.successMessage('הכרטיס עודכן בהצלחה', 'Dismiss');
+            this.loaded();
+            dataToSubscribe.unsubscribe();
+          }
+        }, (error) => {
           this.loaded();
           this.messageService.failedMessage(error, ' Dismiss');
-        }
-      );
+        });
     }
   }
   validateCard() {

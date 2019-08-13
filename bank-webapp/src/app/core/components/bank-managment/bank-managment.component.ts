@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { MatDialog, MatPaginator, MatSort, PageEvent, Sort } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -34,7 +34,7 @@ interface PropertySortFns<U> {
   encapsulation: ViewEncapsulation.None,
   animations: [upSideItemTrigger, bottomSideItemTrigger]
 })
-export class BankManagmentComponent implements OnInit {
+export class BankManagmentComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   dataSource;
@@ -64,9 +64,9 @@ export class BankManagmentComponent implements OnInit {
   public cancelBankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null, null);
   public bankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null, null);
   constructor(private messageService: MessageService, private store: Store<fromRoot.State>,
-              public router: Router, public dialog: MatDialog, private loginService: LoginService,
-              private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService,
-              private webSocketService: WebSocketService) {
+    public router: Router, public dialog: MatDialog, private loginService: LoginService,
+    private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService,
+    private webSocketService: WebSocketService) {
     this.isLoading = false;
     this.counter = 0;
     this.numberOfPayments = 0;
@@ -98,7 +98,6 @@ export class BankManagmentComponent implements OnInit {
     this.webSocketService.listen('transaction-before-added').subscribe(response => {
       this.registerNewTransaction(response.message);
     });
-
     this.webSocketService.listen('transaction-updated').subscribe(response => {
       const index = this.allTransactions.findIndex(transaction => transaction._id === response.message.bankData._id);
       this.allTransactions[index] = response.message.bankData;
@@ -136,10 +135,9 @@ export class BankManagmentComponent implements OnInit {
     const dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.registerSubscribe$))
       .subscribe((data) => {
         if (data.loaded) {
-          console.log(data);
           this.webSocketService.emit('create-transaction', data.data);
-          this.loaded();
           dataToSubscribe.unsubscribe();
+          this.loaded();
         }
       }, (error) => {
         this.loaded();
@@ -325,6 +323,13 @@ export class BankManagmentComponent implements OnInit {
     } else {
       return 0;
     }
+  }
+  ngOnDestroy() {
+    this.registerSubscribe$.unsubscribe();
+    this.updateTransaction$.complete();
+    this.updateTransaction$.unsubscribe();
+    this.ngUnsubscribe.complete();
+    this.ngUnsubscribe.unsubscribe();
   }
 }
 

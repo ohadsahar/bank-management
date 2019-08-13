@@ -10,8 +10,25 @@ import { PaymentTransactionArchiveService } from 'src/app/core/services/payment-
 
 export class TransactionEffect {
   constructor(private actions$: Actions, private bankService: BankTranscationService,
-              private paymentService: PaymentTransactionArchiveService) { }
+    private paymentService: PaymentTransactionArchiveService) { }
 
+
+  @Effect()
+  public allTransactions$ = this.actions$.pipe(ofType(transactionActions.GET_ALL_TRANSACTION))
+    .pipe(exhaustMap((action: transactionActions.GetAllTransactions) => {
+      return this.bankService.getTransactions(action.payload).pipe(map(transaction =>
+        new transactionActions.GetAllTransactionSuccess(transaction.message)),
+        catchError(error => of(new transactionActions.GetAllTransactionsFailed(error)
+        )));
+    }));
+  @Effect()
+  public allArchiveTransactions$ = this.actions$.pipe(ofType(transactionActions.GET_ALL_ARCHIVE_TRANSACTIONS))
+    .pipe(exhaustMap((action: transactionActions.GetAllArchiveTransactions) => {
+      return this.paymentService.getAllArchiveTransactions(action.payload).pipe(map(transactionArchive =>
+        new transactionActions.GetAllArchiveTransactionsSuccess(transactionArchive.message)),
+        catchError(error => of(new transactionActions.GetAllArchiveTransactionsFailed(error)
+        )));
+    }));
   @Effect()
   public registerTransaction$ = this.actions$.pipe(ofType(transactionActions.REGISTER_TRANSACTION))
     .pipe(exhaustMap((action: transactionActions.RegisterTransaction) =>
@@ -27,24 +44,6 @@ export class TransactionEffect {
       ),
     ),
     );
-  @Effect()
-  public allTransactions$ = this.actions$.pipe(ofType(transactionActions.GET_ALL_TRANSACTION))
-    .pipe(exhaustMap((action: transactionActions.GetAllTransactions) => {
-      return this.bankService.getTransactions(action.payload).pipe(map(transaction =>
-        new transactionActions.GetAllTransactionSuccess(transaction.message)),
-        catchError(error => of(new transactionActions.GetAllTransactionsFailed(error)
-        )));
-    }));
-
-  @Effect()
-  public allArchiveTransactions$ = this.actions$.pipe(ofType(transactionActions.GET_ALL_ARCHIVE_TRANSACTIONS))
-    .pipe(exhaustMap((action: transactionActions.GetAllArchiveTransactions) => {
-      return this.paymentService.getAllArchiveTransactions(action.payload).pipe(map(transactionArchive =>
-        new transactionActions.GetAllArchiveTransactionsSuccess(transactionArchive.message)),
-        catchError(error => of(new transactionActions.GetAllArchiveTransactionsFailed(error)
-        )));
-    }));
-
   @Effect()
   public deleteTransaction$ = this.actions$.pipe(ofType(transactionActions.DELETE_TRANSACTION))
     .pipe(exhaustMap((action: transactionActions.DeleteTransaction) => {

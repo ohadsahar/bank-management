@@ -8,6 +8,7 @@ async function create(req, res) {
   try {
     const transactionData = req.body;
     const resultOfRegister = await transactionService.register(transactionData);
+    console.log(resultOfRegister);
     res.status(201).json({
       message: resultOfRegister.transactionSaved,
       success: true,

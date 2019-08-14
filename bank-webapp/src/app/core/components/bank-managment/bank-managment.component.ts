@@ -127,12 +127,13 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       });
   }
   deleteTransaction(transactionId: string, eachMonth: number): void {
+    console.log(eachMonth);
     this.loading();
     this.store.dispatch(new transactionActions.DeleteTransaction(transactionId));
     const dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((data) => {
         if (data.loaded) {
-          this.currentCash -= Number((eachMonth).toFixed(2));
+          this.currentCash -= eachMonth;
           this.deletedId = transactionId;
           this.webSocketService.emit('delete-transaction', data.data);
           dataToSubscribe.unsubscribe();

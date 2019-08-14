@@ -114,14 +114,20 @@ async function paymentsTime(transactionData, allCardsUsername) {
     if (billingDatesArray.includes(dayOfMonth)) {
       await transactionData.forEach((transaction) => {
         if (transaction.billingDate === dayOfMonth) {
-          // eslint-disable-next-line no-param-reassign
-          transaction.numberofpayments += 1;
           if (transaction.numberofpayments === transaction.leftPayments) {
             archivePayment(transaction);
             // eslint-disable-next-line no-underscore-dangle
             deletePayment(transaction._id);
           } else {
-            update(transaction);
+            // eslint-disable-next-line no-param-reassign
+            transaction.numberofpayments += 1;
+            if (transaction.numberofpayments === transaction.leftPayments) {
+              archivePayment(transaction);
+              // eslint-disable-next-line no-underscore-dangle
+              deletePayment(transaction._id);
+            } else {
+              update(transaction);
+            }
           }
         }
       });

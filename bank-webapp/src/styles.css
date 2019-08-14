@@ -151,6 +151,17 @@ ul {
   width: 100% !important;
 }
 
+.mat-paginator-page-size {
+  direction: rtl;
+  font-weight: bold;
+  color: black;
+}
+
+.mat-expansion-panel-header {
+
+  height: 65px !important;
+}
+
 @media only screen and (max-width: 800px) {
 
   .search-section .mat-form-field-appearance-legacy .mat-form-field-wrapper {
@@ -187,12 +198,13 @@ ul {
     flex: 1;
     overflow: hidden;
     word-wrap: break-word;
-    font-size: 13px;
+    font-size: 12px !important;
   }
 
   ul {
     direction: rtl;
-    font-size: 15px;
+    font-size: 14px !important;
+    ;
   }
 
 }

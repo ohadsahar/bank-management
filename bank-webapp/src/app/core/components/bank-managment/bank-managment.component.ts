@@ -76,6 +76,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.onLoadSite();
+    this.paginator._intl.itemsPerPageLabel = 'מס העסקאות עבור עמוד זה';
   }
   onLoadSite(): void {
     this.loading();

@@ -69,20 +69,6 @@ i {
     font-weight: bold;
     font-size: 13px !important;
   }
-
-  .mat-cell,
-  .mat-header-cell {
-    flex: 1;
-    overflow: hidden;
-    word-wrap: break-word;
-    font-size: 10px;
-  }
-
-  ul {
-    direction: rtl;
-    font-size: 10px;
-  }
-
   .cards-management-component .mat-form-field {
     width: 100%;
   }

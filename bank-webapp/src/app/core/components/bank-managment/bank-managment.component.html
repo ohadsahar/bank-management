@@ -25,8 +25,8 @@
             <mat-expansion-panel-header class="mat-row">
               <span class="mat-cell">{{item?.cardName}}</span>
               <span class="mat-cell">{{item?.name}}</span>
-              <span class="mat-cell">{{item?.numberofpayments}} \ {{item?.leftPayments}}<br><i
-                  class="fas fa-shekel-sign"></i> {{item?.eachMonth}} </span>
+              <span class="mat-cell">{{item?.numberofpayments}} \ {{item?.leftPayments}}<br>{{item?.eachMonth}} <i
+                class="fas fa-shekel-sign"></i> </span>
               <span class="mat-cell">{{item?.purchaseDate}}</span>
             </mat-expansion-panel-header>
             <div *ngIf="!editoptionsable[i]">
@@ -34,7 +34,7 @@
                 <p>שם הכרטיס: {{item?.cardName}}</p>
                 <p>בית העסק: {{item?.name}}</p>
                 <p>קטגוריה: {{item?.typeProduct}}</p>
-                <p> סה"כ לתשלום: {{item?.price}}</p>
+                <p> סה"כ לתשלום: {{item?.price}} <i class="fas fa-shekel-sign"></i></p>
                 <p>חודש הרכישה: {{item?.monthPurchase}}</p>
                 <p>שנת הרכישה: {{item?.yearOfTransaction}}</p>
                 <p>תאריך לחיוב: {{item?.billingDate}}</p>

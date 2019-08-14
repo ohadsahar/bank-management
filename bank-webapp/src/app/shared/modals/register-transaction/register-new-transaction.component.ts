@@ -32,6 +32,8 @@ export class RegisterNewTransactionModalComponent implements OnInit {
   cards: CardsModel[] = [];
   options: OptionModel[];
   categories: CategoriesModel[];
+  copyOfCategories: CategoriesModel[];
+  copyOfOptions: OptionModel[];
 
   constructor(private loginService: LoginService, private shareDataService: ShareDataService,
     private webSocketService: WebSocketService, private store: Store<fromRoot.State>) { }
@@ -43,8 +45,10 @@ export class RegisterNewTransactionModalComponent implements OnInit {
   onLoadComponent() {
     this.shareDataService.currentOptions.subscribe(response => {
       this.options = response as any;
+      this.copyOfOptions = Object.assign(this.options, {});
       this.shareDataService.currentCategories.subscribe(data => {
         this.categories = data as any;
+        this.copyOfCategories = Object.assign(this.categories, {});
         this.shareDataService.currentCards.subscribe(cardsData => {
           this.cards = cardsData as any;
         });
@@ -109,7 +113,20 @@ export class RegisterNewTransactionModalComponent implements OnInit {
   addBillingDate(billingDate: number): void {
     this.bankTransaction.billingDate = billingDate;
   }
-
+  filterOptions($event) {
+    const value = $event.target.value;
+    this.options = this.options.filter(option => option.name.includes(value));
+    if (value === '') {
+      this.options = this.copyOfOptions;
+    }
+  }
+  filterCategory($event) {
+    const value = $event.target.value;
+    this.categories = this.categories.filter(option => option.typeProduct.includes(value));
+    if (value === '') {
+      this.categories = this.copyOfCategories;
+    }
+  }
 }
 
 

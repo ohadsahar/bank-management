@@ -16,7 +16,6 @@ import { Bank } from '../../../shared/models/bank-data.model';
 import { BankValues } from '../../../shared/models/bank.model';
 import * as transactionActions from '../../../store/actions/transaction.actions';
 import { MessageService } from '../../services/message.service';
-import { bottomSideItemTrigger, upSideItemTrigger } from './../../../shared/animations/bank-management/bank-management-animations.animations';
 import { LoginService } from './../../services/login.service';
 import { ShareDataService } from './../../services/share-data.service';
 import { WebSocketService } from './../../services/web-socket.service';
@@ -32,7 +31,6 @@ interface PropertySortFns<U> {
   templateUrl: './bank-managment.component.html',
   styleUrls: ['./bank-managment.component.css'],
   encapsulation: ViewEncapsulation.None,
-  animations: [upSideItemTrigger, bottomSideItemTrigger]
 })
 export class BankManagmentComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
@@ -64,9 +62,9 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   public cancelBankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null, null);
   public bankEditTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null, null);
   constructor(private messageService: MessageService, private store: Store<fromRoot.State>,
-    public router: Router, public dialog: MatDialog, private loginService: LoginService,
-    private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService,
-    private webSocketService: WebSocketService) {
+              public router: Router, public dialog: MatDialog, private loginService: LoginService,
+              private spinnerService: Ng4LoadingSpinnerService, private shareDataService: ShareDataService,
+              private webSocketService: WebSocketService) {
     this.isLoading = false;
     this.counter = 0;
     this.numberOfPayments = 0;

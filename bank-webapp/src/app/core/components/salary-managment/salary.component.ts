@@ -1,22 +1,21 @@
-import { MessageService } from './../../services/message.service';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { MatPaginator, MatSort, MatTableDataSource, Sort, PageEvent } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, PageEvent, Sort } from '@angular/material';
 import { Store } from '@ngrx/store';
 import { Chart } from 'chart.js';
-import { Subject, Subscription, combineLatest, of, Observable } from 'rxjs';
-import { takeUntil, map } from 'rxjs/operators';
+import * as moment from 'moment';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import { combineLatest, Observable, of, Subject, Subscription } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 import { SalaryData } from 'src/app/shared/models/edit-salary.model';
 import { SalaryModel } from 'src/app/shared/models/salary.model';
+import { fromMatPaginator, fromMatSort, paginateRows } from 'src/app/table-util';
 import * as fromRoot from '../../../app.reducer';
 import { SalaryService } from '../../services/salary.service';
+import { ShareDataService } from '../../services/share-data.service';
 import * as salaryActions from './../../../store/actions/salary.actions';
 import { LoginService } from './../../services/login.service';
-import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
-import { bottomItemTrigger, topItemTrigger } from 'src/app/shared/animations/salary/salary.animation';
-import { ShareDataService } from '../../services/share-data.service';
-import * as moment from 'moment';
-import { fromMatSort, fromMatPaginator, paginateRows } from 'src/app/table-util';
+import { MessageService } from './../../services/message.service';
 
 type SortFn<U> = (a: U, b: U) => number;
 interface PropertySortFns<U> {
@@ -28,7 +27,6 @@ interface PropertySortFns<U> {
   templateUrl: './salary.component.html',
   styleUrls: ['./salary.component.css'],
   encapsulation: ViewEncapsulation.None,
-  animations: [bottomItemTrigger, topItemTrigger]
 })
 export class SalaryComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;

@@ -1,18 +1,17 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatDialog, MatPaginator, MatSort, MatTableDataSource, Sort, PageEvent } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort, PageEvent, Sort } from '@angular/material';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
-import { Subject, Subscription, combineLatest, of, Observable } from 'rxjs';
-import { takeUntil, map } from 'rxjs/operators';
-import { topItemTrigger } from 'src/app/shared/animations/payment/payment.animation';
+import { combineLatest, Observable, of, Subject, Subscription } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
+import { fromMatPaginator, fromMatSort, paginateRows } from 'src/app/table-util';
 import * as fromRoot from '../../../app.reducer';
 import { Bank } from '../../../shared/models/bank-data.model';
 import * as transactionActions from '../../../store/actions/transaction.actions';
 import { LoginService } from './../../services/login.service';
 import { MessageService } from './../../services/message.service';
-import { fromMatSort, fromMatPaginator, paginateRows } from 'src/app/table-util';
 
 type SortFn<U> = (a: U, b: U) => number;
 interface PropertySortFns<U> {
@@ -24,7 +23,6 @@ interface PropertySortFns<U> {
   templateUrl: './payment-management.component.html',
   styleUrls: ['./payment-management.component.css'],
   encapsulation: ViewEncapsulation.None,
-  animations: [topItemTrigger]
 })
 
 export class PaymentManagementComponent implements OnInit {

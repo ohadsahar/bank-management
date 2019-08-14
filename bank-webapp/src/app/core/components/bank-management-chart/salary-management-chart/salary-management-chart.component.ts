@@ -4,14 +4,12 @@ import { SalaryService } from 'src/app/core/services/salary.service';
 import { ShareDataService } from '../../../services/share-data.service';
 import { Chart } from 'chart.js';
 import { Component, OnInit } from '@angular/core';
-import { topItemTrigger } from 'src/app/shared/animations/payment/payment.animation';
 import { LoginService } from '@app/services/login.service';
 
 @Component({
   selector: 'app-salary-chart',
   templateUrl: './salary-management-chart.component.html',
   styleUrls: ['./salary-management-chart.component.css'],
-  animations: [topItemTrigger]
 })
 
 export class SalaryManagementChartComponent implements OnInit {

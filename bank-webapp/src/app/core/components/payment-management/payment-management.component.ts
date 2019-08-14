@@ -79,6 +79,8 @@ export class PaymentManagementComponent implements OnInit {
     this.totalRows$ = rows$.pipe(map(rows => rows.length));
     this.displayedRows$ = rows$.pipe(this.sortRows(this.sortEvents$), paginateRows(this.pageEvents$));
   }
+
+  applyFilter($event) { }
   sortRows<U>(
     sort$: Observable<Sort>,
     sortFns: PropertySortFns<U> = {},

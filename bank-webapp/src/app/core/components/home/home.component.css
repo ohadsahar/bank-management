@@ -1,7 +1,3 @@
-body {
-  font-family: 'Varela Round', sans-serif;
-}
-
 .home-component {
   direction: rtl;
 }
@@ -33,7 +29,7 @@ h1 {
   display: block;
   bottom: 42%;
   margin-bottom: 2%;
-  font-family: 'Varela Round', sans-serif;
+
 }
 
 .info-card p {

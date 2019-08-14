@@ -22,7 +22,7 @@ h2 {
 }
 
 .mat-form-field-appearance-legacy .mat-form-field-wrapper {
-  width: 100%;
+  width: 100% !important;
   text-align: right;
   font-weight: bold;
 }
@@ -40,8 +40,4 @@ h2 {
   color: black;
   font-size: 18px;
 
-}
-
-::ng-deep .login-dialog .mat-form-field-appearance-legacy .mat-form-field-infix, h2, .mat-hint, button {
-  font-family: 'Varela Round', sans-serif !important;
 }

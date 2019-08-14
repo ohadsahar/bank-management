@@ -147,20 +147,6 @@ i {
     font-size: 13px !important;
   }
 
-  .mat-cell,
-  .mat-header-cell {
-    flex: 1;
-    overflow: hidden;
-    word-wrap: break-word;
-    font-size: 10px;
-  }
-
-  ul {
-    direction: rtl;
-    font-size: 10px;
-  }
-
-
   .mat-form-field-appearance-legacy .mat-form-field-wrapper {
     width: 100%;
     text-align: right;

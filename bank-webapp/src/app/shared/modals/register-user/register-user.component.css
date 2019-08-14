@@ -1,7 +1,3 @@
-.register-dialog {
-  font-family: 'Varela Round', sans-serif !important;
-}
-
 .example-full-width {
   width: 100%;
   text-align: right;
@@ -48,9 +44,3 @@ p {
 
 }
 
-::ng-deep .register-dialog .mat-form-field-appearance-legacy .mat-form-field-infix,
-h2,
-.mat-hint,
-button {
-  font-family: 'Varela Round', sans-serif !important;
-}

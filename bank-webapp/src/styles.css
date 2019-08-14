@@ -1,7 +1,6 @@
 html,
 body {
   height: 100%;
-  font-family: 'Varela Round', sans-serif !important;
   overflow-x: hidden;
   background-color: #3D518C !important;
 }
@@ -10,8 +9,13 @@ body {
   margin: 0;
 }
 
-ul {
+html * {
   font-family: 'Varela Round', sans-serif !important;
+}
+
+.fa,
+.fas {
+  font-family: 'Font Awesome 5 Free' !important;
 }
 
 .mat-form-field-appearance-legacy .mat-form-field-infix {
@@ -91,7 +95,12 @@ ul {
   flex: 1;
   overflow: hidden;
   word-wrap: break-word;
-  font-size: 13px;
+  font-size: 16px !important;
+}
+
+ul {
+  direction: rtl;
+  font-size: 15px;
 }
 
 .new-transaction {
@@ -100,11 +109,6 @@ ul {
 
 .edit-section .mat-form-field {
   display: flex;
-}
-
-ul {
-  direction: rtl;
-  font-size: 13px;
 }
 
 .mat-expansion-panel-body ul {
@@ -167,19 +171,6 @@ ul {
     font-size: 13px !important;
   }
 
-  .mat-cell,
-  .mat-header-cell {
-    flex: 1;
-    overflow: hidden;
-    word-wrap: break-word;
-    font-size: 10px;
-  }
-
-  ul {
-    direction: rtl;
-    font-size: 10px;
-  }
-
   .bank-component .mat-form-field {
     width: 100%;
   }
@@ -188,6 +179,20 @@ ul {
     width: 100%;
     text-align: right;
     font-weight: bold;
+  }
+
+
+  .mat-cell,
+  .mat-header-cell {
+    flex: 1;
+    overflow: hidden;
+    word-wrap: break-word;
+    font-size: 13px;
+  }
+
+  ul {
+    direction: rtl;
+    font-size: 15px;
   }
 
 }

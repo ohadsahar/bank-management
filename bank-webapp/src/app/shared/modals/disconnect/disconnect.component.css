@@ -20,10 +20,3 @@ h2 {
   text-align: right;
 
 }
-
-::ng-deep .disconnect-dialog .mat-form-field-appearance-legacy .mat-form-field-infix,
-h2,
-.mat-hint,
-button {
-  font-family: 'Varela Round', sans-serif !important;
-}

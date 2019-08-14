@@ -227,11 +227,12 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     this.resetDate();
   }
   calculateDate($event) {
-    this.purchaseD = moment($event).format('DD/MM/YYYY');
+    this.purchaseD = moment($event).format('L');
     this.today = new Date();
-    this.endDate = moment(this.purchaseD).add(this.bankEditTransaction.numberofpayments, 'months').format('DD/MM/YYYY');
+    this.endDate = moment(this.purchaseD).add(this.bankEditTransaction.numberofpayments, 'months').format('L');
     this.monthDifference = moment(this.today).diff(this.purchaseD, 'M');
     this.bankEditTransaction.numberofpayments = this.monthDifference + 1;
+    this.bankEditTransaction.purchaseDate = moment(this.purchaseD).format('DD/MM/YYYY');
   }
   resetDate(): void {
     this.endDate = null;

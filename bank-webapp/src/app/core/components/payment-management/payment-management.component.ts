@@ -76,25 +76,6 @@ export class PaymentManagementComponent implements OnInit {
         this.messageService.failedMessage(error, 'Dismiss');
       });
   }
-  sortData(sort: Sort) {
-    this.sortedData = this.allTransactions;
-    const data = this.allTransactions.slice();
-    if (!sort.active || sort.direction === '') {
-      this.sortedData = data;
-      return;
-    }
-    this.sortedData = data.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
-      switch (sort.active) {
-        case 'price': return this.compare(a.price, b.price, isAsc);
-        default: return 0;
-      }
-    });
-    this.allTransactions = this.sortedData;
-  }
-  compare(a: number | string, b: number | string, isAsc: boolean) {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
-  }
   updateTable(): void {
     const rows$ = of(this.allTransactions);
     this.totalRows$ = rows$.pipe(map(rows => rows.length));
@@ -116,7 +97,6 @@ export class PaymentManagementComponent implements OnInit {
       }
     );
   }
-  applyFilter($event) {}
   toSortFn<U>(sortFns: PropertySortFns<U> = {}, useDefault = true): (sort$: Observable<Sort>) => Observable<undefined | SortFn<U>> {
     return (sort$) => sort$.pipe(
       map(sort => {

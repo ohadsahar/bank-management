@@ -181,29 +181,6 @@ export class SalaryComponent implements OnInit {
     this.totalRows$ = rows$.pipe(map(rows => rows.length));
     this.displayedRows$ = rows$.pipe(this.sortRows(this.sortEvents$), paginateRows(this.pageEvents$));
   }
-  applyFilter(filterValue: string): void {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-  sortData(sort: Sort) {
-    this.sortedData = this.allSalary;
-    const data = this.allSalary.slice();
-    if (!sort.active || sort.direction === '') {
-      this.sortedData = data;
-      return;
-    }
-    this.sortedData = data.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
-      switch (sort.active) {
-        case 'salary': return this.compare(a.salary, b.salary, isAsc);
-        default: return 0;
-      }
-    });
-    this.allSalary = this.sortedData;
-  }
-  compare(a: number | string, b: number | string, isAsc: boolean) {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
-  }
-
   sortRows<U>(
     sort$: Observable<Sort>,
     sortFns: PropertySortFns<U> = {},
@@ -250,7 +227,6 @@ export class SalaryComponent implements OnInit {
       return 0;
     }
   }
-
   loading() {
     this.isLoading = true;
     this.spinnerService.show();

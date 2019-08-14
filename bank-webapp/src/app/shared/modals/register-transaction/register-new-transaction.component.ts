@@ -1,12 +1,16 @@
-import { CardsModel } from './../../models/cards.model';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { Store } from '@ngrx/store';
 import * as moment from 'moment';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import * as fromRoot from '../../../app.reducer';
 import { ShareDataService } from '../../../core/services/share-data.service';
+import * as transactionActions from '../../../store/actions/transaction.actions';
 import { BankValues } from '../../models/bank.model';
 import { LoginService } from './../../../core/services/login.service';
 import { WebSocketService } from './../../../core/services/web-socket.service';
+import { CardsModel } from './../../models/cards.model';
 import { CategoriesModel } from './../../models/categories.model';
 import { OptionModel } from './../../models/option.model';
 
@@ -24,13 +28,13 @@ export class RegisterNewTransactionModalComponent implements OnInit {
   private purchaseMonth: string;
   myControl = new FormControl();
   filteredOptions: Observable<string[]>;
-
+  public registerSubscribe$: Subject<void> = new Subject<void>();
   cards: CardsModel[] = [];
   options: OptionModel[];
   categories: CategoriesModel[];
 
   constructor(private loginService: LoginService, private shareDataService: ShareDataService,
-    private webSocketService: WebSocketService) { }
+    private webSocketService: WebSocketService, private store: Store<fromRoot.State>) { }
   public bankTransaction = new BankValues('', '', '', '', '', null, null, null, null, '', '', null, null);
 
   ngOnInit() {
@@ -60,11 +64,26 @@ export class RegisterNewTransactionModalComponent implements OnInit {
       this.bankTransaction.username = this.loginService.getUsernameAndId().username;
       this.categories.push({ typeProduct: this.bankTransaction.typeProduct });
       this.options.push({ name: this.bankTransaction.name });
-      this.webSocketService.emit('before-create-transaction', this.bankTransaction);
+      // this.webSocketService.emit('before-create-transaction', this.bankTransaction);
+      this.registerNewTransaction(this.bankTransaction);
       this.resetAfterRegister();
     }
     return false;
   }
+
+  registerNewTransaction(result: any): void {
+    this.store.dispatch(new transactionActions.RegisterTransaction(result));
+    const dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.registerSubscribe$))
+      .subscribe((data) => {
+        if (data.loaded) {
+          this.webSocketService.emit('create-transaction', data.data);
+          dataToSubscribe.unsubscribe();
+        }
+      }, (error) => {
+        // this.messageService.failedMessage(error, 'Dismiss');
+      });
+  }
+
   resetAfterRegister() {
     this.myControl.reset();
     const cardName = this.bankTransaction.cardName;
@@ -90,6 +109,7 @@ export class RegisterNewTransactionModalComponent implements OnInit {
   addBillingDate(billingDate: number): void {
     this.bankTransaction.billingDate = billingDate;
   }
+
 }
 
 

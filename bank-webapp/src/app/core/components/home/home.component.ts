@@ -37,7 +37,7 @@ export class HomePageComponent implements OnInit {
     this.homePageService.getQuickInformation(this.username).subscribe(response => {
       if (response.message.resultOfCurrentCategoryExpense.minimumExpense) {
         this.minimumExpenseCurrentMonthCashType = response.message.resultOfCurrentCategoryExpense.minimumExpense.typeProduct;
-        this.minimumExpenseCurrentMonthCash = response.message.resultOfCurrentCategoryExpense.minimumExpense.price;
+        this.minimumExpenseCurrentMonthCash = Number((response.message.resultOfCurrentCategoryExpense.minimumExpense.price).toFixed(2));
       }
       this.totalExpenseCurrentMonth = Number((response.message.resultOfCurrentCategoryExpense.totalExpenseCash).toFixed(2));
       if (response.message.resultOfCurrentCategoryExpense.largestExpense) {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatPaginator, MatSort, PageEvent, Sort } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -92,11 +92,8 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
   startSocketing() {
     this.webSocketService.listen('transaction-added').subscribe(response => {
       this.allTransactions.push(response.message);
-      this.currentCash += response.message.eachMonth;
+      this.currentCash += Number((response.message.eachMonth).toFixed(2));
       this.afterRegisterNewCard();
-    });
-    this.webSocketService.listen('transaction-before-added').subscribe(response => {
-      this.registerNewTransaction(response.message);
     });
     this.webSocketService.listen('transaction-updated').subscribe(response => {
       const index = this.allTransactions.findIndex(transaction => transaction._id === response.message.bankData._id);
@@ -129,28 +126,13 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
         this.messageService.failedMessage(error, 'Dismiss');
       });
   }
-  registerNewTransaction(result: any): void {
-    this.loading();
-    this.store.dispatch(new transactionActions.RegisterTransaction(result));
-    const dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.registerSubscribe$))
-      .subscribe((data) => {
-        if (data.loaded) {
-          this.webSocketService.emit('create-transaction', data.data);
-          dataToSubscribe.unsubscribe();
-          this.loaded();
-        }
-      }, (error) => {
-        this.loaded();
-        this.messageService.failedMessage(error, 'Dismiss');
-      });
-  }
   deleteTransaction(transactionId: string, eachMonth: number): void {
     this.loading();
     this.store.dispatch(new transactionActions.DeleteTransaction(transactionId));
     const dataToSubscribe = this.store.select(fromRoot.newTransactionData).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((data) => {
         if (data.loaded) {
-          this.currentCash -= eachMonth;
+          this.currentCash -= Number((eachMonth).toFixed(2));
           this.deletedId = transactionId;
           this.webSocketService.emit('delete-transaction', data.data);
           dataToSubscribe.unsubscribe();
@@ -271,7 +253,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
       this.updateTable(this.dataSource.filteredData);
     } else {
       this.shareDataService.currentCashToPass.subscribe(response => {
-        this.currentCash = response;
+        this.currentCash = Number((response).toFixed(2));
       }, (error) => {
         this.messageService.failedMessage(error, 'Dismiss');
       });
@@ -325,6 +307,7 @@ export class BankManagmentComponent implements OnInit, OnDestroy {
     }
   }
   ngOnDestroy() {
+    this.registerSubscribe$.complete();
     this.registerSubscribe$.unsubscribe();
     this.updateTransaction$.complete();
     this.updateTransaction$.unsubscribe();

@@ -8,16 +8,9 @@ function connect() {
         console.log(`Socket io is now live on port ${PORT}`);
     });
 }
-
 io.on('connection', function (socket) {
     socket.on('create-transaction', function (data) {
         io.emit('transaction-added', {
-            message: data
-        });
-    });
-
-    socket.on('before-create-transaction', function (data) {
-        io.emit('transaction-before-added', {
             message: data
         });
     });
